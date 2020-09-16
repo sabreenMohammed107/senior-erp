@@ -401,10 +401,12 @@
 
                                 <h3 style="text-align:right">الأصناف</h3>
                                 <button id="add" onclick="addRow()" disabled type="button" class="btn btn-primary waves-effect waves-light">إضافة صنف</button>
-                                <table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true" data-pagination-pre-text="السابق" data-pagination-next-text="التالي" data-show-export="true" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]" data-sort-name="index" data-sort-order="desc" data-search="true" style="direction:rtl" data-toggle="table" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="true" data-show-fullscreen="true" data-show-columns-toggle-all="true">
-                                    <thead>
-                                        <tr>
-                                            <th data-field="index" data-sortable="true">#</th>
+								<table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true" data-pagination-pre-text="السابق" data-pagination-next-text="التالي" data-show-export="false" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]" data-sort-name="index" data-sort-order="desc" data-search="false" style="direction:rtl" data-toggle="table" data-show-columns="false" data-show-pagination-switch="false" data-show-refresh="false" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="false" data-show-fullscreen="true" data-show-columns-toggle-all="true">
+									<thead>
+										<tr>
+											<th data-field="state" data-checkbox="false"></th>
+											<th data-field="index">#</th>
+                               
                                             <th>كود البند</th>
                                             <th>إسم البند</th>
                                             <th> UOM</th>
@@ -412,7 +414,7 @@
                                             <th> رقم الباتش</th>
                                             <th>تاريخ الصلاحية</th>
                                             <th>الكمية الحالية</th>
-                                            <th> قيمه البونص</th>
+                                            <!-- <th> قيمه البونص</th> -->
                                             <th> كميه الصنف</th>
 
                                             <th>سعر الصنف</th>
@@ -456,6 +458,12 @@
         $('#rows').html('');
         $('#rows').html('');
 
+        $('#total_items_price').val('');
+        $('#total_items_discount').val('');
+        $('#total_items_vat').val('');
+        $('#total_items_finalqty').val('');
+        $('#total_items_all').val('');
+
 
         $('#clientPerson').val('').trigger('chosen:updated');
         $('#orderPersons').val('').trigger('chosen:updated');
@@ -470,6 +478,12 @@
 
         $('#clientPerson').val('').trigger('chosen:updated');
         $('#orderPersons').val('').trigger('chosen:updated');
+        $('#total_items_price').val('');
+        $('#total_items_discount').val('');
+        $('#total_items_vat').val('');
+        $('#total_items_finalqty').val('');
+        $('#total_items_all').val('');
+
 
     }
 
@@ -541,7 +555,7 @@
     function addRow() {
         index = $('#puchasetable > tbody > tr').length;
         var rowCount = $('#puchasetable > tbody > tr').length;
-
+alert(index);
         order = $('#orderPersons option:selected').val();
         stock = $('#stock_id option:selected').val();
         var rows = [];
@@ -557,7 +571,7 @@
             url: "{{url('addInvoiceRow/fetch')}}",
 
             success: function(data) {
-
+             
                 $('#rows').append(data);
                 $('#select' + rowCount).select2();
 

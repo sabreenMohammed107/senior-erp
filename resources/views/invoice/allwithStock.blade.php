@@ -11,13 +11,15 @@ $counterrrr = 0;
 @foreach($orderItems as $i=> $itemo)
 
 <tr data-id="{{$counter}}">
+<td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}"  value="{{$counter}}" ></td>
+
     <td>
     <input type="number" style="display: none;" value="{{$itemo->ORDER_ITEM_ID ?? 0}}" name="item_order_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
 
     </td>
     <td>
-        <input type="hidden" name="selectup{{$counter}}" value="{{$itemo->item->ITEM_ID ?? 0}}" >
-    {{$itemo->item->ITEM_CODE ?? ''}}--{{$counter}}
+        <input type="hidden" name="selectup{{$counter}}" style="width: 200px" value="{{$itemo->item->ITEM_ID ?? 0}}" >
+    {{$itemo->item->ITEM_CODE ?? ''}}
 
     </td>
    
@@ -26,20 +28,20 @@ $counterrrr = 0;
 
  
     <td id="uom{{$counter}}" class="uom">{{$itemo->item->DEFAULT_UOM_ID ?? ''}}</td>
-  
+    <?php
+     $date = date_create($itemo->EXPIRED_DATE);
+    ?>
 
     <?php
                 $data = DB::table('stocks_items_total')->where('ITEM_ID', $itemo->ITEM_ID)->get();
 
         ?>
         <td>
-       {{$itemo->BATCH_NO}} /{{$itemo->EXPIRED_DATE}}/{{$itemo->ITEM_QTY}}</option>
+            <input type="text" style="width: 200px" value="{{$itemo->BATCH_NO}} - {{ date_format($date, "d-m-Y")}} - {{$itemo->ITEM_QTY}}" readonly>
      
         </td>
     <td id="batchNum{{$counter}}" class="batchNum">{{$itemo->BATCH_NO}} </td>
-    <?php
-     $date = date_create($itemo->EXPIRED_DATE);
-    ?>
+   
     <td id="batchDate{{$counter}}" class="batchDate">
         {{ date_format($date, "d-m-Y")}} </td>
     <td id="batchqty{{$counter}}" class="batchqty">{{$itemo->ITEM_QTY}} </td>
@@ -47,18 +49,16 @@ $counterrrr = 0;
     <input type="hidden" value="{{ date_format($date, "d-m-Y")}}" name="batchDate1up{{$counter}}"> </td>
     <input type="hidden" value="{{$itemo->ITEM_QTY}}" name="batchqty1up{{$counter}}"> </td>
    
-    <td>
-       0
-    </td>
+    
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" oninput="itemQty({{$counter}})" value="{{$itemo->ITEM_QTY ?? ''}}" name="qtyup{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
+            <input type="number" style="width: 200px" readonly oninput="itemQty({{$counter}})" value="{{$itemo->ITEM_QTY ?? ''}}" name="qtyup{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
         </div>
     </td>
    
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" id="itemprice{{$counter}}" value="{{$itemo->ITEM_PRICE ?? ''}}" name="itempriceup{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control item_price" placeholder="">
+            <input type="number" style="width: 200px" readonly step="0.01" id="itemprice{{$counter}}" value="{{$itemo->ITEM_PRICE ?? ''}}" name="itempriceup{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control item_price" placeholder="">
         </div>
     </td>
 
@@ -67,12 +67,12 @@ $counterrrr = 0;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" value="{{$itemo->ITEM_DISC_PERC ?? ''}}" oninput="disPer({{$counter}})" name="perup{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
+            <input type="number" style="width: 200px" readonly step="0.01" value="{{$itemo->ITEM_DISC_PERC ?? ''}}" oninput="disPer({{$counter}})" name="perup{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
         </div>
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" value="{{$itemo->ITEM_DISC_VALUE ??''}}" oninput="disval({{$counter}})" name="disvalup{{$counter}}" id="disval{{$counter}}" class="form-control item_disval" placeholder="">
+            <input type="number" style="width: 200px" readonly step="0.01" value="{{$itemo->ITEM_DISC_VALUE ??''}}" oninput="disval({{$counter}})" name="disvalup{{$counter}}" id="disval{{$counter}}" class="form-control item_disval" placeholder="">
         </div>
     </td>
     <td id="final{{$counter}}" class="total_item_final">
@@ -80,20 +80,22 @@ $counterrrr = 0;
     </td>
     <td id="totalvat{{$counter}}" class="input-mark-inner mg-b-22 vat_tax_value">
     <input type="hidden" value="" name="totalvat1{{$counter}}"> 
+    {{$itemo->item->VAT_VALUE ?? ''}}
     </td>
     <td  id="totalcit{{$counter}}" class="input-mark-inner mg-b-22 comm_industr_tax">
     <input type="hidden" value="" name="totalcit1{{$counter}}"> 
+    {{$itemo->FINAL_LINE_COST  *  $itemo->item->VAT_VALUE }}
 
     
     </td>
     <td id="finalAll{{$counter}}" class="total_item_final">
-        {{$itemo->FINAL_LINE_COST ?? ''}}
+        {{ $itemo->FINAL_LINE_COST - ($itemo->FINAL_LINE_COST  *  $itemo->item->VAT_VALUE)}}
     </td>
    
     <td>
 
         <div class="product-buttons">
-            <button type="button" data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            <!-- <button type="button" data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button> -->
         </div>
         <!--Delete-->
         <div id="del{{$counter}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">

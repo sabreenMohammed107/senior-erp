@@ -5,9 +5,11 @@
     <td>
 
     </td>
+    <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$rowCount}}"  value="{{$rowCount}}" ></td>
+
     <td>
 
-<select id="select{{$rowCount}}" name="select{{$rowCount}}" name="dropname" onchange="editSelectVal({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+<select id="select{{$rowCount}}" style="width: 200px" name="select{{$rowCount}}" name="dropname" onchange="editSelectVal({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
     <option value="">Select</option>
     @foreach ($items as $Item)
     <option value="{{$Item->ITEM_ID}}">{{$Item->ITEM_CODE}}/{{$Item->ITEM_AR_NAME}}</option>
@@ -19,7 +21,7 @@
 <td id="uom{{$rowCount}}" class="uom">حبة</td>
 <td id="ar_name{{$rowCount}}" class="ar_name">إسم البند</td>
 <td>
-        <select id="selectBatch{{$rowCount}}" name="selectBatch{{$rowCount}}" qty onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+        <select id="selectBatch{{$rowCount}}" style="width: 200px" name="selectBatch{{$rowCount}}" qty onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
 
         </select></td>
     <td id="batchNum{{$rowCount}}" class="batchNum"> </td>
@@ -30,19 +32,19 @@
     <input type="hidden" value="" name="batchqty1{{$rowCount}}"> </td>
     <input type="hidden" value="" name="itemprice1{{$rowCount}}"> </td>
 
+   {{-- <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" style="width: 200px" oninput="itemBons({{$rowCount}})" value="" name="bonas{{$rowCount}}" id="bonas{{$rowCount}}" class="form-control item_bonas" placeholder="">
+        </div>
+    </td>--}}
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" oninput="itemBons({{$rowCount}})" value="" name="bonas{{$rowCount}}" id="bonas{{$rowCount}}" class="form-control item_bonas" placeholder="">
+            <input type="number" style="width: 200px" oninput="itemQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  class="form-control item_quantity" placeholder="">
         </div>
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" oninput="itemQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  class="form-control item_quantity" placeholder="">
-        </div>
-    </td>
-    <td>
-        <div class="input-mark-inner mg-b-22">
-            <input type="number"  id="itemprice{{$rowCount}}" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
+            <input type="number" style="width: 200px" id="itemprice{{$rowCount}}" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
         </div>
     </td>
 
@@ -50,10 +52,10 @@
         0
     </td>
     <td> <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" oninput="disPer({{$rowCount}})" name="per{{$rowCount}}" id="per{{$rowCount}}"   class="form-control item_dis" placeholder="">
+            <input type="number" style="width: 200px" step="0.01" oninput="disPer({{$rowCount}})" name="per{{$rowCount}}" id="per{{$rowCount}}"   class="form-control item_dis" placeholder="">
         </div></td>
     <td><div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" oninput="disval({{$rowCount}})" name="disval{{$rowCount}}" id="disval{{$rowCount}}"  class="form-control item_disval" placeholder="">
+            <input type="number" style="width: 200px" step="0.01" oninput="disval({{$rowCount}})" name="disval{{$rowCount}}" id="disval{{$rowCount}}"  class="form-control item_disval" placeholder="">
         </div></td>
         <td id="final{{$rowCount}}" class="total_item_final">
         {{$itemo->FINAL_LINE_COST ?? ''}}

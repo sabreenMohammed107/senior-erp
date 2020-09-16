@@ -417,8 +417,7 @@ class OrdersController extends Controller
                 'ITEM_QTY' => $request->get('qtyup' . $i),
                 'ITEM_PRICE' => $request->get('itempriceup' . $i),
                 'TOTAL_LINE_COST' => $priceup,
-                'CURRENCY_ID' => $request->get('CURRENCY_ID'),
-
+              
                 'NOTES' => $request->get('detNoteup' . $i),
                 'ITEM_DISC_PERC' =>  $request->get('perup' . $i),
                 'ITEM_DISC_VALUE' => $request->get('disvalup' . $i),
@@ -460,6 +459,7 @@ class OrdersController extends Controller
             'ORDER_VALUE' => $request->get('total_items_price'),
             'TOTAL_DISC_VALUE' => $request->get('total_items_discount'),
             'TOTAL_FINAL_COST' => $request->get('LOCAL_NET_INVOICE'),
+            'CURRENCY_ID' => $request->get('CURRENCY_ID'),
 
             'Notes' =>  $request->get('notes'),
         ];
