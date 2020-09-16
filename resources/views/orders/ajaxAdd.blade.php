@@ -1,9 +1,10 @@
 <tr data-id="{{$rowCount}}">
-    <input type="hidden" name="rowCount" value="{{$rowCount}}" >
-    <td></td>
+    <!-- <input type="hidden" name="rowCount" value="{{$rowCount}}" > -->
+    <td ></td>
+    <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$rowCount}}" name="rowCount" value="{{$rowCount}}" ></td>
     <td>
-
-        <select id="select{{$rowCount}}" name="select{{$rowCount}}" name="dropname" onchange="editSelectVal({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+   
+        <select id="select{{$rowCount}}" name="select{{$rowCount}}" name="dropname" onchange="editSelectVal({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" >
             <option value="">Select</option>
             @foreach ($items as $Item)
             <option value="{{$Item->ITEM_ID}}">{{$Item->ITEM_CODE}}/{{$Item->ITEM_AR_NAME}}</option>
@@ -15,7 +16,7 @@
     <td id="uom{{$rowCount}}" class="uom">حبة</td>
     <td id="ar_name{{$rowCount}}" class="ar_name">إسم البند</td>
     <td>
-        <select id="selectBatch{{$rowCount}}" name="selectBatch{{$rowCount}}" qty onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+        <select id="selectBatch{{$rowCount}}" name="selectBatch{{$rowCount}}" qty onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" >
 
         </select></td>
     <td id="batchNum{{$rowCount}}" class="batchNum"> </td>
@@ -26,9 +27,10 @@
             <input type="number" oninput="itemQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  class="form-control item_quantity" placeholder="">
         </div>
     </td>
+   
     <td>
-        <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" id="itemprice{{$rowCount}}" value="700.00" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
+        <div class="input-mark-inner mg-b-22" >
+          <input type="number" step="0.01" id="itemprice{{$rowCount}}" value="" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
         </div>
     </td>
 

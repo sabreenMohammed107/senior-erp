@@ -182,7 +182,7 @@ class OrdersController extends Controller
         $stocks = DB::table('stocks')->get();
         $persons = DB::table('persons')->where('PERSON_TYPE_ID', 1)->get();
         $currencies = DB::table('currency')->get();
-        
+
         return view($this->viewName . 'new', compact('stocks', 'persons', 'branch', 'currencies'));
     }
 
@@ -257,8 +257,6 @@ class OrdersController extends Controller
 
             ];
             array_push($details, $detail);
-
-            
         }
         // Master
         $personObj = DB::table('persons')->where('PERSON_ID', $request->get('person_name'))->first();
@@ -276,7 +274,7 @@ class OrdersController extends Controller
             'ORDER_TYPE_ID' => 1,
             'ORDER_DESCRIPTION' => $request->get('decOrder'),
 
-
+            'CURRENCY_ID' => $request->get('CURRENCY_ID'),
             'SALES_REP_ID' => $saleCode->REP_ID ?? 0,
             'MARKETING_REP_ID' => $MarktCode->REP_ID ?? 0,
             'ORDER_DATE' => Carbon::parse($request->get('order_date')),
@@ -289,23 +287,23 @@ class OrdersController extends Controller
         // DB::beginTransaction();
         // try {
 
-            $order = DB::table('orders')->insertGetId($data);
-            foreach ($details as $Item) {
+        $order = DB::table('orders')->insertGetId($data);
+        foreach ($details as $Item) {
 
-                $Item['ORDER_ID'] = $order;
-                $Invoice_Item = DB::table('order_items')->insert($Item);
-            }
-            $request->session()->flash('flash_success', "تم اضافة أمر بيع :");
-            // DB::commit();
-            //static user this will be logined
-            $user = User::where('id', 1)->first();
-            $branches = $user->branch;
-            $row = new Admin_branch();
-            $branch_id = 0;
-            $orders = Order::where('branch_id', $branch_id)->get();
-            $stocks = DB::table('stocks')->get();
+            $Item['ORDER_ID'] = $order;
+            $Invoice_Item = DB::table('order_items')->insert($Item);
+        }
+        $request->session()->flash('flash_success', "تم اضافة أمر بيع :");
+        // DB::commit();
+        //static user this will be logined
+        $user = User::where('id', 1)->first();
+        $branches = $user->branch;
+        $row = new Admin_branch();
+        $branch_id = 0;
+        $orders = Order::where('branch_id', $branch_id)->get();
+        $stocks = DB::table('stocks')->get();
 
-            return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
+        return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
         // } catch (\Throwable $th) {
         //     // throw $th;
         //     DB::rollBack();
@@ -341,7 +339,7 @@ class OrdersController extends Controller
      */
     public function edit($id)
     {
-        $orderObj =Order::where('ORDER_ID', $id)->first();
+        $orderObj = Order::where('ORDER_ID', $id)->first();
 
         $orderItems = Order_items::where('ORDER_ID', $id)->get();
         $stocks = DB::table('stocks')->get();
@@ -352,14 +350,14 @@ class OrdersController extends Controller
         $branch = Admin_branch::where('id', $orderObj->branch_id)->first();
         $items = DB::table('items')->whereIN('ITEM_CATEGORY_ID', $sub)->get();
         $personObj = DB::table('persons')->where('PERSON_ID', $orderObj->PERSON_ID)->first();
-        $saleCode=NULL;
-        $MarktCode=NULL;
+        $saleCode = NULL;
+        $MarktCode = NULL;
         if ($personObj) {
             $saleCode = DB::table('representatives')->where('REP_ID', $personObj->SALES_REP_ID)->first();
 
             $MarktCode = DB::table('representatives')->where('REP_ID', $personObj->MARKETING_REP_ID)->first();
         }
-        return view($this->viewName . 'edit', compact('stocks','branch', 'persons', 'orderObj','saleCode','MarktCode', 'currencies', 'items', 'orderItems'));
+        return view($this->viewName . 'edit', compact('stocks', 'branch', 'persons', 'orderObj', 'saleCode', 'MarktCode', 'currencies', 'items', 'orderItems'));
     }
 
     /**
@@ -391,7 +389,7 @@ class OrdersController extends Controller
                 'NOTES' => $request->get('detNote' . $i),
                 'ITEM_DISC_PERC' =>  $request->get('per' . $i),
                 'ITEM_DISC_VALUE' => $request->get('disval' . $i),
-                'FINAL_LINE_COST' => ($request->get('itemprice' . $i) * $request->get('qty' . $i))-($request->get('disval' . $i)),
+                'FINAL_LINE_COST' => ($request->get('itemprice' . $i) * $request->get('qty' . $i)) - ($request->get('disval' . $i)),
 
             ];
             if ($request->get('qty' . $i)) {
@@ -419,10 +417,12 @@ class OrdersController extends Controller
                 'ITEM_QTY' => $request->get('qtyup' . $i),
                 'ITEM_PRICE' => $request->get('itempriceup' . $i),
                 'TOTAL_LINE_COST' => $priceup,
+                'CURRENCY_ID' => $request->get('CURRENCY_ID'),
+
                 'NOTES' => $request->get('detNoteup' . $i),
                 'ITEM_DISC_PERC' =>  $request->get('perup' . $i),
                 'ITEM_DISC_VALUE' => $request->get('disvalup' . $i),
-                'FINAL_LINE_COST' =>( $request->get('itempriceup' . $i) * $request->get('qtyup' . $i)) -( $request->get('disvalup' . $i)),
+                'FINAL_LINE_COST' => ($request->get('itempriceup' . $i) * $request->get('qtyup' . $i)) - ($request->get('disvalup' . $i)),
 
             ];
             array_push($detailsUpdate, $detailUpdate);
@@ -460,7 +460,7 @@ class OrdersController extends Controller
             'ORDER_VALUE' => $request->get('total_items_price'),
             'TOTAL_DISC_VALUE' => $request->get('total_items_discount'),
             'TOTAL_FINAL_COST' => $request->get('LOCAL_NET_INVOICE'),
-           
+
             'Notes' =>  $request->get('notes'),
         ];
         // DB::beginTransaction();

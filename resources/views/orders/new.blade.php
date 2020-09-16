@@ -74,383 +74,386 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <form action="{{route('orders.store')}}" id="formid" method="post" >
-                    @csrf
-				<div class="mg-b-23">
-					<div class="">
+				<form action="{{route('orders.store')}}" id="formid" method="post">
+					@csrf
+					<div class="mg-b-23">
+						<div class="">
 
-						<a href="{{route('orders.index')}}" class="btn btn-primary waves-effect waves-light">إلغاء</a>
+							<a href="{{route('orders.index')}}" class="btn btn-primary waves-effect waves-light">إلغاء</a>
 
-						<button class="btn btn-primary waves-effect waves-light"  type="submit">حــفـظ</button>
+							<button class="btn btn-primary waves-effect waves-light" type="submit">حــفـظ</button>
 
-					</div>
-				</div>
-				<input type="hidden" value="{{$branch->id ?? 0}}" name="branch" class="form-control" placeholder="">
-
-				<div class="sparkline13-list">
-					<div class="sparkline13-hd">
-						<div class="main-sparkline13-hd">
-							<h1 style="direction:rtl">إضافة أصناف أمر البيع</h1><br />
 						</div>
 					</div>
-                     <div class="sparkline13-graph">
-					<div class="datatable-dashv1-list custom-datatable-overright" style="direction:rtl">
-						<div class="form-group-inner" style="margin-right:10px;">
-							<div class="row" style="text-align:right !important;direction:rtl !important">
-								<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 shadow">
-									<div class="row">
+					<input type="hidden" value="{{$branch->id ?? 0}}" name="branch" class="form-control" placeholder="">
 
-										<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-											<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-												<div class="input-mark-inner mg-b-22">
-													<input type="text" value="{{$branch->ar_name ?? ''}}" readonly class="form-control" placeholder=" ">
-												</div>
-											</div>
-											<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-												<div class="input-mask-title">
-													<label><b>إسم الفرع </b></label>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-											<div class="row">
-												<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
-													<div class="input-mark-inner mg-b-22">
-														<input type="text" readonly value="{{$branch->code ?? ''}}" class="form-control" placeholder=" ">
-													</div>
-												</div>
-												<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
-													<div class="input-mask-title">
-														<label><b> كود الفرع </b></label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-
-										<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-											<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-												<div class="input-mark-inner mg-b-22">
-													<input type="text" readonly value="" id="marketMan" class="form-control" placeholder="">
-												</div>
-											</div>
-											<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-												<div class="input-mask-title">
-													<label><b>مسئول التسويق</b></label>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-											<div class="row">
-												<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
-													<div class="input-mark-inner mg-b-22">
-														<input type="text" value="" id="marketCode" readonly class="form-control" placeholder="">
-													</div>
-												</div>
-												<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
-													<div class="input-mask-title">
-														<label><b>كود التسويق</b></label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-											<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-												<div class="input-mark-inner mg-b-22">
-													<input type="text" readonly value="" id="saleMan" class="form-control" placeholder="">
-												</div>
-											</div>
-											<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-												<div class="input-mask-title">
-													<label><b>مسئول المبيعات</b></label>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-											<div class="row">
-												<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
-													<div class="input-mark-inner mg-b-22">
-														<input type="text" id="saleCode" readonly class="form-control" placeholder="">
-													</div>
-												</div>
-												<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
-													<div class="input-mask-title">
-														<label><b>كود المبيعات</b></label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-											<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-												<div class="input-mark-inner mg-b-22">
-													<input type="text" id="stock_name" readonly class="form-control" placeholder=" ">
-												</div>
-											</div>
-											<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-												<div class="input-mask-title">
-													<label><b>إسم المخزن</b></label>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-											<div class="row">
-												<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
-													<div class="input-mark-inner mg-b-22">
-														<select id="stock_id" name="stock_id" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
-															<option value="">Select</option>
-															@foreach($stocks as $stock)
-															<option value="{{$stock->STOCK_ID}}">{{$stock->STOCK_AR_NAME}} / {{$stock->STOCK_CODE}}</option>
-
-															@endforeach
-														</select>
-														<input type="hidden" id="output" />
-													</div>
-												</div>
-												<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
-													<div class="input-mask-title">
-														<label><b>كود المخزن</b></label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-											<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-												<div class="input-mark-inner mg-b-22">
-													<input type="text" id="person_name" name="person_name" readonly class="form-control" placeholder="">
-												</div>
-											</div>
-											<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-												<div class="input-mask-title">
-													<label><b>إسم العميل</b></label>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-											<div class="row">
-												<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
-													<div class="input-mark-inner mg-b-22">
-														<select id="person_id" name="person_id" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
-															<option value="">Select</option>
-															@foreach($persons as $person)
-															<option value="{{$person->PERSON_ID}}">{{$person->PERSON_NAME}} / {{$person->PERSON_CODE}}</option>
-															@endforeach
-
-														</select> </div>
-												</div>
-												<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
-													<div class="input-mask-title">
-														<label><b>كود العميل</b></label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-											<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-												<div class="input-mark-inner mg-b-22">
-													<input type="text" readonly class="form-control" placeholder="">
-												</div>
-											</div>
-											<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-												<div class="input-mask-title">
-													<label><b>سعر التحويل</b></label>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-											<div class="row">
-												<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
-													<div class="input-mark-inner mg-b-22">
-														<select data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
-                                                            <option value="">Select</option>
-                                                            @foreach($currencies as $cur)
-                                                            <option value="{{$cur->CURRENCY_ID}}">{{$cur->CURRENCY_NAME}}</option>
-															@endforeach
-														</select> </div>
-												</div>
-												<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
-													<div class="input-mask-title">
-														<label><b>كود العملة</b></label>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-
-								</div>
-								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 shadow">
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="date" id="order_delev" name="order_delev" class="form-control" placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>تاريخ الإستلام</b></label>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="text" id="decOrder" name="decOrder" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>وصف أمر البيع</b></label>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="text" id="total_items_price" name="total_items_price" readonly class="form-control" placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>قيمة أمرالبيع</b></label>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="number" id="total_items_discount" name="total_items_discount" readonly class="form-control" placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>إجمالي الخصم</b></label>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="number" id="total_items_final" name="LOCAL_NET_INVOICE" readonly class="form-control" placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>صافي القيمة</b></label>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 shadow">
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="text" readonly class="form-control" placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>رقم أمر البيع</b></label>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="date" id="order_date" name="order_date" class="form-control" placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>تاريخ أمر البيع</b></label>
-											</div>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="text" readonly class="form-control" placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>حالة أمرالبيع</b></label>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-											<div class="input-mark-inner mg-b-22">
-												<input type="text" class="form-control" readonly placeholder="">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>قرار أمرالبيع</b></label>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-
-										<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-
-											<div class="input-mark-inner mg-b-22">
-												<input type="text" class="form-control" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
-											</div>
-										</div>
-										<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-											<div class="input-mask-title">
-												<label><b>ملاحظات</b></label>
-											</div>
-										</div>
-									</div>
-
-								</div>
+					<div class="sparkline13-list">
+						<div class="sparkline13-hd">
+							<div class="main-sparkline13-hd">
+								<h1 style="direction:rtl">إضافة أصناف أمر البيع</h1><br />
 							</div>
-
 						</div>
+						<div class="sparkline13-graph">
+							<div class="datatable-dashv1-list custom-datatable-overright" style="direction:rtl">
+								<div class="form-group-inner" style="margin-right:10px;">
+									<div class="row res-rtl" style="display: flex ">
+										<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 shadow">
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="text" readonly class="form-control" placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>رقم أمر البيع</b></label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="date" id="order_date" name="order_date" class="form-control" placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>تاريخ أمر البيع</b></label>
+													</div>
+												</div>
+											</div>
 
-						<h3 style="text-align:right">الأصناف</h3>
-						<button id="add" onclick="addRow()" type="button" class="btn btn-primary waves-effect waves-light">إضافة صنف</button>
-						<table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true" data-pagination-pre-text="السابق" data-pagination-next-text="التالي" data-show-export="true" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]" data-sort-name="index" data-sort-order="desc" data-search="true" style="direction:rtl" data-toggle="table" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="true" data-show-fullscreen="true" data-show-columns-toggle-all="true">
-							<thead>
-								<tr>
-									<th data-field="state" data-checkbox="true"></th>
-									<th data-field="index">كود البند</th>
-									<th>UOM</th>
-									<th>إسم البند</th>
-									<th>الباتش</th>
-									<th> رقم الباتش</th>
-									<th>تاريخ الصلاحية</th>
-									<th>الكمية الحالية</th>
-									<th>كمية الصنف</th>
-									<th>سعر الصنف</th>
-									<th>الإجمالي</th>
-									<th>نسبة الخصم</th>
-									<th>قيمة الخصم</th>
-									<th>السعر النهائي</th>
-									<th>ملاحظات</th>
-									<th>حذف</th>
-								</tr>
-							</thead>
-							<tbody id="rows">
-							</tbody>
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="text" readonly class="form-control" placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>حالة أمرالبيع</b></label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="text" class="form-control" readonly placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>قرار أمرالبيع</b></label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+
+													<div class="input-mark-inner mg-b-22">
+														<input type="text" class="form-control" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>ملاحظات</b></label>
+													</div>
+												</div>
+											</div>
+
+										</div>
+										<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 shadow">
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="date" id="order_delev" name="order_delev" class="form-control" placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>تاريخ الإستلام</b></label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="text" id="decOrder" name="decOrder" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>وصف أمر البيع</b></label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="text" id="total_items_price" name="total_items_price" readonly class="form-control" placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>قيمة أمرالبيع</b></label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="number" id="total_items_discount" name="total_items_discount" readonly class="form-control" placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>إجمالي الخصم</b></label>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+													<div class="input-mark-inner mg-b-22">
+														<input type="number" id="total_items_final" name="LOCAL_NET_INVOICE" readonly class="form-control" placeholder="">
+													</div>
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+													<div class="input-mask-title">
+														<label><b>صافي القيمة</b></label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 shadow">
+										<div class="row">
+												<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+													<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
+														<div class="input-mark-inner mg-b-22">
+															<input type="text" value="{{$branch->ar_name ?? ''}}" readonly class="form-control" placeholder=" ">
+														</div>
+													</div>
+													<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+														<div class="input-mask-title">
+															<label><b>إسم الفرع </b></label>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+													<div class="row">
+														<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
+															<div class="input-mark-inner mg-b-22">
+																<input type="text" readonly value="{{$branch->code ?? ''}}" class="form-control" placeholder=" ">
+															</div>
+														</div>
+														<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
+															<div class="input-mask-title">
+																<label><b> كود الفرع </b></label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+
+												<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+													<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
+														<div class="input-mark-inner mg-b-22">
+															<input type="text" readonly value="" id="marketMan" class="form-control" placeholder="">
+														</div>
+													</div>
+													<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+														<div class="input-mask-title">
+															<label><b>مسئول التسويق</b></label>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+													<div class="row">
+														<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
+															<div class="input-mark-inner mg-b-22">
+																<input type="text" value="" id="marketCode" readonly class="form-control" placeholder="">
+															</div>
+														</div>
+														<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
+															<div class="input-mask-title">
+																<label><b>كود التسويق</b></label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+													<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
+														<div class="input-mark-inner mg-b-22">
+															<input type="text" readonly value="" id="saleMan" class="form-control" placeholder="">
+														</div>
+													</div>
+													<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+														<div class="input-mask-title">
+															<label><b>مسئول المبيعات</b></label>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+													<div class="row">
+														<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
+															<div class="input-mark-inner mg-b-22">
+																<input type="text" id="saleCode" readonly class="form-control" placeholder="">
+															</div>
+														</div>
+														<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
+															<div class="input-mask-title">
+																<label><b>كود المبيعات</b></label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+													<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
+														<div class="input-mark-inner mg-b-22">
+															<input type="text" id="stock_name" readonly class="form-control" placeholder=" ">
+														</div>
+													</div>
+													<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+														<div class="input-mask-title">
+															<label><b>إسم المخزن</b></label>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+													<div class="row">
+														<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
+
+															<div class="input-mark-inner mg-b-22">
+																<select id="stock_id" name="stock_id" data-placeholder="Choose a Country..." class="chosen-select">
+																	<option value="">Select</option>
+																	@foreach($stocks as $stock)
+																	<option value="{{$stock->STOCK_ID}}">{{$stock->STOCK_AR_NAME}} / {{$stock->STOCK_CODE}}</option>
+
+																	@endforeach
+																</select>
+																<input type="hidden" id="output" />
+															</div>
+														</div>
+														<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
+															<div class="input-mask-title">
+																<label><b>كود المخزن</b></label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+													<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
+														<div class="input-mark-inner mg-b-22">
+															<input type="text" id="person_name" name="person_name" readonly class="form-control" placeholder="">
+														</div>
+													</div>
+													<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+														<div class="input-mask-title">
+															<label><b>إسم العميل</b></label>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+													<div class="row">
+														<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
+															<div class="input-mark-inner mg-b-22">
+																<select id="person_id" name="person_id" data-placeholder="Choose a Country..." class="chosen-select">
+																	<option value="">Select</option>
+																	@foreach($persons as $person)
+																	<option value="{{$person->PERSON_ID}}">{{$person->PERSON_NAME}} / {{$person->PERSON_CODE}}</option>
+																	@endforeach
+
+																</select> </div>
+														</div>
+														<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
+															<div class="input-mask-title">
+																<label><b>كود العميل</b></label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+													<div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
+														<div class="input-mark-inner mg-b-22">
+															<input type="text" readonly class="form-control" placeholder="">
+														</div>
+													</div>
+													<div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
+														<div class="input-mask-title">
+															<label><b>سعر التحويل</b></label>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+													<div class="row">
+														<div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
+															<div class="input-mark-inner mg-b-22">
+																<select data-placeholder="Choose a Country..." name="CURRENCY_ID" class="chosen-select">
+																	<option value="">Select</option>
+																	@foreach($currencies as $cur)
+																	<option value="{{$cur->CURRENCY_ID}}">{{$cur->CURRENCY_NAME}}</option>
+																	@endforeach
+																</select> </div>
+														</div>
+														<div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
+															<div class="input-mask-title">
+																<label><b>كود العملة</b></label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+										</div>
+
+
+									</div>
+
+								</div>
+
+								<h3 style="text-align:right">الأصناف</h3>
+								<button id="add" onclick="addRow()" type="button" class="btn btn-primary waves-effect waves-light">إضافة صنف</button>
+								<table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true" data-pagination-pre-text="السابق" data-pagination-next-text="التالي" data-show-export="false" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]" data-sort-name="index" data-sort-order="desc" data-search="false" style="direction:rtl" data-toggle="table" data-show-columns="false" data-show-pagination-switch="false" data-show-refresh="false" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="false" data-show-fullscreen="true" data-show-columns-toggle-all="true">
+									<thead>
+										<tr>
+											<th data-field="state" data-checkbox="false"></th>
+											<th data-field="index">#</th>
+											<th>كود البند</th>
+											<th>UOM</th>
+											<th>إسم البند</th>
+											<th>الباتش</th>
+											<th> رقم الباتش</th>
+											<th>تاريخ الصلاحية</th>
+											<th>الكمية الحالية</th>
+											<th>كمية الصنف</th>
+											<th>سعر الصنف</th>
+											<th>الإجمالي</th>
+											<th>نسبة الخصم</th>
+											<th>قيمة الخصم</th>
+											<th>السعر النهائي</th>
+											<th>ملاحظات</th>
+											<th>حذف</th>
+										</tr>
+									</thead>
+									<tbody id="rows">
+									</tbody>
 
 
 
-						</table>
-					</div>
-                </div>
-</form>
+								</table>
+							</div>
+						</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -464,42 +467,42 @@
 @endsection
 @section('scripts')
 <script>
-    $('select[name="person_id"]').on('change', function() {
+	$('select[name="person_id"]').on('change', function() {
 
-        var select_value = $(this).val();
+		var select_value = $(this).val();
 
-$.ajax({
-    type: 'GET',
-    data: {
+		$.ajax({
+			type: 'GET',
+			data: {
 
-        select_value: select_value
+				select_value: select_value
 
-    },
-    url: "{{route('editSelectValPerson.fetch')}}",
+			},
+			url: "{{route('editSelectValPerson.fetch')}}",
 
-    success: function(data) {
-        var result = $.parseJSON(data);
+			success: function(data) {
+				var result = $.parseJSON(data);
 
-        $("#saleCode").val(result[0]);
-        $("#saleMan").val(result[1]);
-        $("#marketCode").val(result[2]);
-        $("#marketMan").val(result[3]);
-        $("#person_name").val($('#person_id option:selected').text());
-      
-    },
-    error: function(request, status, error) {
+				$("#saleCode").val(result[0]);
+				$("#saleMan").val(result[1]);
+				$("#marketCode").val(result[2]);
+				$("#marketMan").val(result[3]);
+				$("#person_name").val($('#person_id option:selected').text());
 
-        $("#saleCode").val('');
-        $("#saleMan").val('');
-        $("#marketCode").val('');
-        $("#marketMan").val('');
-        $("#person_name").val($('#person_id option:selected').text());
-      
-    }
-});
+			},
+			error: function(request, status, error) {
+
+				$("#saleCode").val('');
+				$("#saleMan").val('');
+				$("#marketCode").val('');
+				$("#marketMan").val('');
+				$("#person_name").val($('#person_id option:selected').text());
+
+			}
+		});
 
 
-});
+	});
 
 
 
@@ -511,17 +514,18 @@ $.ajax({
 
 			$('#rows').html('');
 		}
-        $("#stock_name").val($('#stock_id option:selected').text());
+		$("#stock_name").val($('#stock_id option:selected').text());
 
 
 	});
 	$('#formid').on('keyup keypress', function(e) {
-  var keyCode = e.keyCode || e.which;
-  if (keyCode === 13) { 
-    e.preventDefault();
-    return false;
-  }
-});
+		var keyCode = e.keyCode || e.which;
+		if (keyCode === 13) {
+			e.preventDefault();
+			return false;
+		}
+	});
+
 	function addRow(url) {
 		index = $('#puchasetable > tbody > tr').length;
 		stock_id = $('#stock_id option:selected').val();
@@ -537,10 +541,11 @@ $.ajax({
 			url: "{{url('addRow/fetch')}}",
 
 			success: function(data) {
-
-				$('#rows').append(data);
-				$('#puchasetable > tbody > tr').last().find('input').first().focus();
 				$('#select' + index).select2();
+				$('#rows').append(data);
+				$('#firstTT' + index).focus();
+				$('#select' + index).select2();
+
 
 			},
 			error: function(request, status, error) {
@@ -562,7 +567,7 @@ $.ajax({
 		$('#puchasetable').bootstrapTable('destroy');
 		$('#rows').html(trs);
 		console.log(trs);
-        console.log(index);
+		console.log(index);
 		$('#puchasetable').bootstrapTable();
 		headCalculations(index);
 	}
@@ -626,7 +631,8 @@ $.ajax({
 				$("#batchNum" + index + "").text(result[0]);
 				$("#batchDate" + index + "").text(result[1]);
 				$("#batchqty" + index + "").text(result[2]);
-				$("#itemprice" + index + "").val(result[3]);
+				// $("#itemprice" + index + "").text(result[3]);
+
 				headCalculations(index);
 
 
@@ -702,7 +708,7 @@ $.ajax({
 
 		$("#qty" + index).attr('value', qty);
 	}
-	
+
 
 	// headCalculations(index);
 	function headCalculations(index) {
@@ -739,12 +745,8 @@ $.ajax({
 		$('#total_items_price').val(total.toFixed(2));
 		$('#total_items_discount').val(discount.toFixed(2));
 		$('#total_items_final').val(final.toFixed(2));
-	
+
 
 	}
-
-
-
-
 </script>
 @endsection

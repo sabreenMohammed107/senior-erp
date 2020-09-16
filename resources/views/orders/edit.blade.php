@@ -272,7 +272,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+                                                                <select data-placeholder="Choose a Country..." name="CURRENCY_ID" class="chosen-select" tabindex="-1">
                                                                     <option value="">Select</option>
                                                                     @foreach($currencies as $cur)
                                                                     <option value="{{$cur->CURRENCY_ID}}">{{$cur->CURRENCY_NAME}}</option>
