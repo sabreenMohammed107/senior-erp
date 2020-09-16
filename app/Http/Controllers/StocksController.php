@@ -12,6 +12,8 @@ use App\User;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 
+use Notification;
+use App\Notifications\MyFirstNotification;
 class StocksController extends Controller
 {
     protected $object;
@@ -98,6 +100,21 @@ public function branchFetch(Request $request)
         ];
             try {
                 $stock = DB::table('stocks')->insertGetId($data);
+
+                $user = User::first();
+  
+                $details = [
+                    'greeting' => 'Hi Artisan',
+                    'body' => 'This is my first notification from ItSolutionStuff.com',
+                    'thanks' => 'Thank you for using ItSolutionStuff.com tuto!',
+                    'actionText' => 'View My Site',
+                    'actionURL' => url('/'),
+                    'stock_id' => $stock
+                ];
+          
+                Notification::send($user, new MyFirstNotification($details));
+               
+          
             } catch (QueryException $q) {
     
                 return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
@@ -187,5 +204,24 @@ public function branchFetch(Request $request)
             return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
         }
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+    }
+
+
+    public function sendNotification()
+    {
+        $user = User::first();
+  
+        $details = [
+            'greeting' => 'Hi Artisan',
+            'body' => 'This is my first notification from ItSolutionStuff.com',
+            'thanks' => 'Thank you for using ItSolutionStuff.com tuto!',
+            'actionText' => 'View My Site',
+            'actionURL' => url('/'),
+            'order_id' => 101
+        ];
+  
+        Notification::send($user, new MyFirstNotification($details));
+   
+        dd('done');
     }
 }

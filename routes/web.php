@@ -64,6 +64,7 @@ Route::post('/approveOrder', 'OrderApprovalController@approveOrder')->name('appr
 
 Route::post('/rejectOrder', 'OrderApprovalController@rejectOrder')->name('rejectOrder');
 
+/*********************************************************************** */
 
 
 
@@ -71,3 +72,8 @@ Route::post('/rejectOrder', 'OrderApprovalController@rejectOrder')->name('reject
 
 
 
+
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index')->name('home');
