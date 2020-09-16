@@ -98,7 +98,8 @@
 														<h1>الإشعارات</h1>
 													</div>
 													<ul class="notification-menu" style="direction: rtl; text-align:right">
-														@foreach (Auth::user()->unreadNotifications as $Notification)
+														@if(Auth::user())
+													@foreach (Auth::user()->unreadNotifications as $Notification)
 														<li >
 															@if ($Notification->read_at == NULL)
 															<a href="#">
@@ -112,6 +113,7 @@
 														</li>
 
 														@endforeach
+														@endif
 
 													</ul>
 													<div class="notification-view">
