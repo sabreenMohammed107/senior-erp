@@ -98,7 +98,7 @@
 															<select data-placeholder="Choose a Country..."  name="select_branch" class="chosen-select" tabindex="-1">
                                                                 <option value="">Select</option>
                                                                 @foreach($branches as $type)
-																<option value="{{$type->id}}">{{$type->ar_name}}</option>
+																<option value="{{$type->id}}">{{$type->code}} - {{$type->ar_name}}</option>
 																@endforeach
 															</select>
 														</div>

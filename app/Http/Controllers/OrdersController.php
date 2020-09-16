@@ -277,17 +277,17 @@ class OrdersController extends Controller
             'ORDER_DESCRIPTION' => $request->get('decOrder'),
 
 
-            'SALES_REP_ID' => $saleCode->REP_ID ?? '',
-            'MARKETING_REP_ID' => $MarktCode->REP_ID ?? '',
+            'SALES_REP_ID' => $saleCode->REP_ID ?? 0,
+            'MARKETING_REP_ID' => $MarktCode->REP_ID ?? 0,
             'ORDER_DATE' => Carbon::parse($request->get('order_date')),
             'RECEIVED_DATE_SUGGESTED' => Carbon::parse($request->get('order_delev')),
             'ORDER_VALUE' => $request->get('total_items_price'),
             'TOTAL_DISC_VALUE' => $request->get('total_items_discount'),
-            'TOTAL_FINAL_COST' => $request->get('total_items_final'),
-            'branch_id' => 1,
+            'TOTAL_FINAL_COST' => $request->get('LOCAL_NET_INVOICE'),
+            'branch_id' =>  $request->get('branch'),
         ];
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
             $order = DB::table('orders')->insertGetId($data);
             foreach ($details as $Item) {
@@ -296,7 +296,7 @@ class OrdersController extends Controller
                 $Invoice_Item = DB::table('order_items')->insert($Item);
             }
             $request->session()->flash('flash_success', "تم اضافة أمر بيع :");
-            DB::commit();
+            // DB::commit();
             //static user this will be logined
             $user = User::where('id', 1)->first();
             $branches = $user->branch;
@@ -306,20 +306,20 @@ class OrdersController extends Controller
             $stocks = DB::table('stocks')->get();
 
             return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
-        } catch (\Throwable $th) {
-            // throw $th;
-            DB::rollBack();
-            $request->session()->flash('flash_danger', "حدث خطأ ما يرجي اعادة المحاولة");
-            //static user this will be logined
-            $user = User::where('id', 1)->first();
-            $branches = $user->branch;
-            $row = new Admin_branch();
-            $branch_id = 0;
-            $orders = Order::where('branch_id', $branch_id)->get();
-            $stocks = DB::table('stocks')->get();
+        // } catch (\Throwable $th) {
+        //     // throw $th;
+        //     DB::rollBack();
+        //     $request->session()->flash('flash_danger', "حدث خطأ ما يرجي اعادة المحاولة");
+        //     //static user this will be logined
+        //     $user = User::where('id', 1)->first();
+        //     $branches = $user->branch;
+        //     $row = new Admin_branch();
+        //     $branch_id = 0;
+        //     $orders = Order::where('branch_id', $branch_id)->get();
+        //     $stocks = DB::table('stocks')->get();
 
-            return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
-        }
+        //     return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
+        // }
     }
 
     /**
@@ -459,8 +459,8 @@ class OrdersController extends Controller
             'RECEIVED_DATE_SUGGESTED' => Carbon::parse($request->get('order_delev')),
             'ORDER_VALUE' => $request->get('total_items_price'),
             'TOTAL_DISC_VALUE' => $request->get('total_items_discount'),
-            'TOTAL_FINAL_COST' => $request->get('total_items_final'),
-            'branch_id' => 1,
+            'TOTAL_FINAL_COST' => $request->get('LOCAL_NET_INVOICE'),
+           
             'Notes' =>  $request->get('notes'),
         ];
         // DB::beginTransaction();

@@ -131,7 +131,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly value="{{$MarktCode->REP_AR_NAME ?? ''}}" id="marketMan" class="form-control" placeholder="محمد عادل">
+                                                            <input type="text" readonly value="{{$MarktCode->REP_AR_NAME ?? ''}}" id="marketMan" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -144,7 +144,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" value="" id="marketCode" value="{{$MarktCode->REP_CODE ?? ''}}" readonly class="form-control" placeholder="204">
+                                                                <input type="text" value="" id="marketCode" value="{{$MarktCode->REP_CODE ?? ''}}" readonly class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
@@ -159,7 +159,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly value="{{$saleCode->REP_AR_NAME ?? ''}}" id="saleMan" class="form-control" placeholder="أحمد علي">
+                                                            <input type="text" readonly value="{{$saleCode->REP_AR_NAME ?? ''}}" id="saleMan" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -172,7 +172,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" value="{{$saleCode->REP_CODE ?? ''}}" id="saleCode" readonly class="form-control" placeholder="105">
+                                                                <input type="text" value="{{$saleCode->REP_CODE ?? ''}}" id="saleCode" readonly class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
@@ -187,7 +187,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="stock_name" value="{{$orderObj->stock->STOCK_AR_NAME ?? ''}}" readonly class="form-control" placeholder="مخزن القاهرة">
+                                                            <input type="text" id="stock_name" value="{{$orderObj->stock->STOCK_AR_NAME ?? ''}}" readonly class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -224,7 +224,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="person_name" value="{{$orderObj->person->PERSON_NAME ?? ''}}" name="person_name" readonly class="form-control" placeholder="شركة سمارت تك">
+                                                            <input type="text" id="person_name" value="{{$orderObj->person->PERSON_NAME ?? ''}}" name="person_name" readonly class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -259,7 +259,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly class="form-control" placeholder="15.6">
+                                                            <input type="text" readonly class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -298,7 +298,7 @@
                                                         <?php
                                                         $date = date_create($orderObj->RECEIVED_DATE_SUGGESTED);
                                                         ?>
-                                                        <input type="date" id="order_delev" value="{{ date_format($date, 'd-m-Y')}}" name="order_delev" class="form-control" \>
+                                                        <input type="date" id="order_delev" value="{{ date_format($date, 'Y-m-d')}}" name="order_delev" class="form-control" \>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -346,7 +346,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="number" id="total_items_final" value="{{$orderObj->TOTAL_FINAL_COST}}" name="total_items_final" readonly class="form-control" placeholder="2250">
+                                                        <input type="number" id="total_items_final" value="{{$orderObj->TOTAL_FINAL_COST}}" name="LOCAL_NET_INVOICE" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -360,7 +360,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control" placeholder="102/225">
+                                                        <input type="text" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -375,7 +375,7 @@
                                                         <?php
                                                         $date2 = date_create($orderObj->ORDER_DATE);
                                                         ?>
-                                                        <input type="date" id="order_date" value="{{$orderObj->ORDER_DATE}} " name="order_date" class="form-control">
+                                                        <input type="date" id="order_date" value="{{ date_format($date2, 'Y-m-d')}}" name="order_date" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -388,7 +388,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control" placeholder="قيد التنفيذ">
+                                                        <input type="text" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -400,7 +400,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" readonly placeholder="تمت الموافقة">
+                                                        <input type="text" class="form-control" readonly placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -414,7 +414,7 @@
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" value="{{$orderObj->NOTES}}" name="notes" id="notes" placeholder="الملاحظات" style="height:80px;margin-bottom:10px;">
+                                                        <input type="text" class="form-control" value="{{$orderObj->NOTES}}" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
