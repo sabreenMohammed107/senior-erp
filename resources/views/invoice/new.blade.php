@@ -333,7 +333,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                                     <div class="bt-df-checkbox">
-                                                        <input class="radio-checked" type="radio" onclick="stocks()" value="option1" id="optionsRadios1" name="optionsRadios">
+                                                        <input class="radio-checked" disabled type="radio" onclick="stocks()" value="option1" id="optionsRadios1" name="optionsRadios">
                                                         <label><b>عام</b></label>
                                                         <input class="" type="radio" value="option2" checked="" onclick="orders()" id="optionsRadios2" name="optionsRadios">
                                                         <label><b>أمر بيع</b></label>
