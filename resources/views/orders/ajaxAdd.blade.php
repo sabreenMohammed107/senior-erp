@@ -28,7 +28,7 @@
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" id="itemprice{{$rowCount}}" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
+            <input type="number" step="0.01" id="itemprice{{$rowCount}}" value="700.00" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
         </div>
     </td>
 

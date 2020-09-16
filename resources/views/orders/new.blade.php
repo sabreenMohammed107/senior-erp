@@ -525,10 +525,11 @@ $.ajax({
 	function addRow(url) {
 		index = $('#puchasetable > tbody > tr').length;
 		stock_id = $('#stock_id option:selected').val();
+		var rowCount = $('#puchasetable > tbody > tr').length;
 		$.ajax({
 			type: 'GET',
 			data: {
-				rowcount: index,
+				rowcount: rowCount,
 				stock: stock_id
 
 
