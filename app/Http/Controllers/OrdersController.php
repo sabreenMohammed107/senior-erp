@@ -391,7 +391,7 @@ class OrdersController extends Controller
                 'NOTES' => $request->get('detNote' . $i),
                 'ITEM_DISC_PERC' =>  $request->get('per' . $i),
                 'ITEM_DISC_VALUE' => $request->get('disval' . $i),
-                'FINAL_LINE_COST' => $disc,
+                'FINAL_LINE_COST' => ($request->get('itemprice' . $i) * $request->get('qty' . $i))-($request->get('disval' . $i)),
 
             ];
             if ($request->get('qty' . $i)) {
@@ -422,7 +422,7 @@ class OrdersController extends Controller
                 'NOTES' => $request->get('detNoteup' . $i),
                 'ITEM_DISC_PERC' =>  $request->get('perup' . $i),
                 'ITEM_DISC_VALUE' => $request->get('disvalup' . $i),
-                'FINAL_LINE_COST' => $discup,
+                'FINAL_LINE_COST' =>( $request->get('itempriceup' . $i) * $request->get('qtyup' . $i)) -( $request->get('disvalup' . $i)),
 
             ];
             array_push($detailsUpdate, $detailUpdate);

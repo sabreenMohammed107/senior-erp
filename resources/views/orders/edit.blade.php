@@ -770,7 +770,7 @@
                 console.log(request.responseText);
             }
         });
-        headCalculations();
+        // headCalculations();
     }
 </script>
 @endsection
