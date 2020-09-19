@@ -479,7 +479,7 @@
             return 'Search';
         },
         formatNoMatches: function () {
-            return 'لا توجد بيانات مطابقة ...';
+            return 'No matching records found';
         },
         formatPaginationSwitch: function () {
             return 'Hide/Show pagination';

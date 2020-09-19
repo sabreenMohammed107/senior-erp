@@ -18,7 +18,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
         'code', 'image', 'job',
-        'ar_fullName', 'en_fullName', 'mobile',
+        'ar_full_name', 'en_full_name', 'mobile',
         'lock_date', 'active'
     ];
 
@@ -41,12 +41,13 @@ class User extends Authenticatable
     ];
 
 
+
     public function branch()
     {
-        return $this->belongsToMany(Models\Admin_branch::class,'users_branches','user_id','branch_id');
+        return $this->belongsToMany(Models\branch::class,'users_branches','user_id','branch_id');
     }
     public function stock()
     {
-        return $this->belongsToMany(Models\Stocks::class,'users_stocks','USER_ID','STOCK_ID');
+        return $this->belongsToMany(Models\branch::class,'users_stocks','user_id','stock_id');
     }
 }

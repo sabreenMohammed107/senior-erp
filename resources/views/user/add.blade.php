@@ -59,7 +59,7 @@
                                                         <label class="">صورة</label>
                                                             
                                                                 <div id="uploadOne" class="img-upload">
-                                                                    <img src="{{ asset('webassets/img/default.png')}}" alt="" style="width: 200px;height:150px;border: 1px dashed #CCC;">
+                                                                    <img src="{{asset('webassets/img/default.png')}}" alt="" style="width: 200px;height:150px;border: 1px dashed #CCC;">
                                                                     <div class="upload-icon">
                                                                         <input type="file" name="image" class="upload">
                                                                         <i class="fa fa-camera"></i>

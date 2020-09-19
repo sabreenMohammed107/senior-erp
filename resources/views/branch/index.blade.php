@@ -9,7 +9,7 @@
 		<div class="breadcome-heading">
 			<form action="{{route('branch.search')}}" method="POST" id="xx" class="sr-input-func">
 				@csrf
-				<input type="text" placeholder="...إبحث هنا" name="searchData" class="search-int form-control" style="text-align:right">
+				<input type="text" placeholder="...إبحث هنا" oninput="searching()" id="searchData" name="searchData" class="search-int form-control" style="text-align:right">
 				<a onclick="document.getElementById('xx').submit()"><i class="fa fa-search"></i></a>
 			</form>
 		</div>
@@ -137,4 +137,32 @@
 	</div>
 </div>
 <!--/Add Company-->
+@endsection
+@section('scripts')
+<script>
+	function searching() {
+		var search = $('#searchData').val();
+
+	
+		$.ajax({
+			type: 'POST',
+			data: {
+				searchData: search,
+				"_token": "{{ csrf_token() }}",
+			},
+			url: "{{route('branch.search')}}",
+
+			success: function(data) {
+			
+				$('#resultr').html(data);
+
+
+			},
+			error: function(request, status, error) {
+				alert("error");
+			}
+
+		});
+	}
+</script>
 @endsection

@@ -11,7 +11,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <ul class="breadcome-menu">
             <li>
-                <a href="{{route('users.index')}}"></a> المستخدم<span class="bread-slash"> / </span>
+                <a href="{{route('users.index')}}">المستخدم<span class="bread-slash"> / </span></a> 
             </li>
             <li>
                 <span class="bread-blod"> تعديل بيانات المستخدم </span>
@@ -26,6 +26,8 @@
 <!-- Single pro tab review Start-->
 <div class="single-pro-review-area mt-t-30 mg-b-15">
     <div class="container-fluid">
+    <a href="{{route('users.index')}}" title="New" class="btn btn-primary waves-effect waves-light mg-b-15"> رجوع</a>
+
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="product-payment-inner-st">
@@ -62,7 +64,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="">الاسم بالكامل عربى </label>
-                                                            <input name="ar_fullName" value="{{$row->ar_fullName}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
+                                                            <input name="ar_fullName" value="{{$row->ar_full_name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
                                                         </div>
 
                                                         <div class="form-group res-mg-t-15">
@@ -74,7 +76,7 @@
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <div class="form-group">
                                                             <label class="">رقم التليفون</label>
-                                                            <input name="mobile" value="{{$row->name}}" type="number" class="form-control" placeholder="رقم التليفون">
+                                                            <input name="mobile" value="{{$row->mobile}}" type="number" class="form-control" placeholder="رقم التليفون">
                                                         </div>
 
                                                         <div class="form-group">
@@ -86,7 +88,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label class=""> الاسم بالكامل انجليزى</label>
-                                                            <input name="en_fullName" value="{{$row->name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
+                                                            <input name="en_fullName" value="{{$row->en_full_name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="">صورة</label>

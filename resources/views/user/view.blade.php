@@ -45,7 +45,7 @@
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <div class="form-group">
                                                             <label class="">رقم التليفون</label>
-                                                            <input name="mobile" readonly value="{{$row->name}}" type="number" class="form-control" placeholder="رقم التليفون">
+                                                            <input name="mobile" readonly value="{{$row->mobile}}" type="number" class="form-control" placeholder="رقم التليفون">
                                                         </div>
 
                                                         <div class="form-group">
@@ -57,7 +57,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label class=""> الاسم بالكامل انجليزى</label>
-                                                            <input name="en_fullName" readonly value="{{$row->name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
+                                                            <input name="en_fullName" readonly value="{{$row->en_full_name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="">صورة</label>
@@ -89,7 +89,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label class="">الاسم بالكامل عربى </label>
-                                                            <input name="ar_fullName" readonly value="{{$row->ar_fullName}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
+                                                            <input name="ar_fullName" readonly value="{{$row->ar_full_name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
                                                         </div>
 
                                                         <div class="form-group res-mg-t-15">
