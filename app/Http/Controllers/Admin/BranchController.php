@@ -20,6 +20,7 @@ class BranchController extends Controller
 
 
         $this->object = $object;
+        
         $this->viewName = 'branch.';
         $this->routeName = 'branch.';
 
