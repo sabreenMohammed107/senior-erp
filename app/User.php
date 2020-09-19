@@ -44,10 +44,10 @@ class User extends Authenticatable
 
     public function branch()
     {
-        return $this->belongsToMany(Models\branch::class,'users_branches','user_id','branch_id');
+        return $this->belongsToMany(Models\Branch::class,'users_branches','user_id','branch_id');
     }
     public function stock()
     {
-        return $this->belongsToMany(Models\branch::class,'users_stocks','user_id','stock_id');
+        return $this->belongsToMany(Models\Branch::class,'users_stocks','user_id','stock_id');
     }
 }
