@@ -11,7 +11,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <ul class="breadcome-menu">
             <li>
-                <a href="{{route('users.index')}}">المستخدم<span class="bread-slash"> / </span></a> 
+                <a href="{{route('users.index')}}">المستخدم<span class="bread-slash"> / </span></a>
             </li>
             <li>
                 <span class="bread-blod"> تعديل بيانات المستخدم </span>
@@ -46,7 +46,7 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row res-rtl" style="display: flex ;">
-                                                  
+
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <div class="form-group">
                                                             <label class=""> بريد الكترونى</label>
@@ -151,13 +151,14 @@
                                                                             @endforeach
                                                                         </select>
                                                                         <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="payment-adress" style="margin: 15px;">
-                                                            <button type="submit" class="btn btn-primary waves-effect waves-light">تعديل المستخدم</button>
-                                                            <a class="btn btn-primary waves-effect waves-light" href="{{route('users.index')}}">إلغــاء</a>
+                                                                            <div class="col-lg-12">
+                                                                                <div class="payment-adress" style="margin: 15px;">
+                                                                                    <button type="submit" class="btn btn-primary waves-effect waves-light">تعديل المستخدم</button>
+                                                                                    <a class="btn btn-primary waves-effect waves-light" href="{{route('users.index')}}">إلغــاء</a>
 
-                                                        </div>
-                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -205,13 +206,14 @@
 
                                                                         </select>
                                                                         <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="payment-adress" style="margin: 15px;">
-                                                            <button type="submit" class="btn btn-primary waves-effect waves-light">تعديل المستخدم</button>
-                                                            <a class="btn btn-primary waves-effect waves-light" href="{{route('users.index')}}">إلغــاء</a>
+                                                                            <div class="col-lg-12">
+                                                                                <div class="payment-adress" style="margin: 15px;">
+                                                                                    <button type="submit" class="btn btn-primary waves-effect waves-light">تعديل المستخدم</button>
+                                                                                    <a class="btn btn-primary waves-effect waves-light" href="{{route('users.index')}}">إلغــاء</a>
 
-                                                        </div>
-                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </form>
                                                                 </div>
                                                             </div>
