@@ -154,7 +154,7 @@
 
 			success: function(data) {
 			
-				$('#resultr').html(data);
+				$('#result').html(data);
 
 
 			},

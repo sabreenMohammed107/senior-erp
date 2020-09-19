@@ -26,7 +26,6 @@
 <!-- Single pro tab review Start-->
 <div class="single-pro-review-area mt-t-30 mg-b-15">
     <div class="container-fluid">
-    <a href="{{route('users.index')}}" title="New" class="btn btn-primary waves-effect waves-light mg-b-15"> رجوع</a>
 
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -151,8 +150,14 @@
 
                                                                             @endforeach
                                                                         </select>
-                                                                        <button type="submit" class="btn btn-primary waves-effect waves-light">حــفــظ</button>
+                                                                        <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="payment-adress" style="margin: 15px;">
+                                                            <button type="submit" class="btn btn-primary waves-effect waves-light">تعديل المستخدم</button>
+                                                            <a class="btn btn-primary waves-effect waves-light" href="{{route('users.index')}}">إلغــاء</a>
 
+                                                        </div>
+                                                    </div>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -199,8 +204,14 @@
                                                                             @endforeach
 
                                                                         </select>
-                                                                        <button type="submit" class="btn btn-primary waves-effect waves-light">حــفــظ</button>
+                                                                        <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="payment-adress" style="margin: 15px;">
+                                                            <button type="submit" class="btn btn-primary waves-effect waves-light">تعديل المستخدم</button>
+                                                            <a class="btn btn-primary waves-effect waves-light" href="{{route('users.index')}}">إلغــاء</a>
 
+                                                        </div>
+                                                    </div>
                                                                     </form>
                                                                 </div>
                                                             </div>
