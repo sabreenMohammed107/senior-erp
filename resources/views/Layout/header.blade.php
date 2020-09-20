@@ -213,8 +213,7 @@
 												<li class="nav-item dropdown res-dis-nn">
 													<a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span> المخزون  </a>
 													<div role="menu" class="dropdown-menu animated zoomIn">
-														<a href="#" class="dropdown-item">المخزون</a>
-														<a href="#" class="dropdown-item">المخزون</a>
+													<a href="{{route('items.index')}}" class="dropdown-item"> الأصناف </a>														<a href="#" class="dropdown-item">المخزون</a>
 														<a href="#" class="dropdown-item">المخزون</a>
 														<a href="#" class="dropdown-item">المخزون</a>
 														<a href="#" class="dropdown-item">المخزون</a>
@@ -225,8 +224,7 @@
 													<div role="menu" class="dropdown-menu animated zoomIn">
 													<a href="{{route('branch.index')}}" class="dropdown-item">الفروع </a>
 													<a href="{{route('users.index')}}" class="dropdown-item">المستخدمين </a>
-														<a href="#" class="dropdown-item">الرئيسية </a>
-														<a href="#" class="dropdown-item">الرئيسية </a>
+													<a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات </a>														<a href="#" class="dropdown-item">الرئيسية </a>
 														<a href="#" class="dropdown-item">الرئيسية </a>
 													</div>
 												</li>
@@ -253,16 +251,14 @@
 											<ul class="collapse dropdown-header-top">
 												<li><a href="{{route('branch.index')}}" class="dropdown-item">الفروع</a></li>
 												<li><a href="{{route('users.index')}}" class="dropdown-item">المستخدمين </a></li>
-												<li><a href="#" class="dropdown-item">الرئيسية</a></li>
-												<li><a href="#" class="dropdown-item">الرئيسية</a></li>
+												<li><a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات</a></li>												<li><a href="#" class="dropdown-item">الرئيسية</a></li>
 												<li><a href="#" class="dropdown-item">الرئيسية</a></li>
 											</ul>
 										</li>
 										<li>
 											<a data-toggle="collapse" data-target="#demoevent" href="#">المخزون <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
 											<ul id="demoevent" class="collapse dropdown-header-top">
-												<li><a href="#" class="dropdown-item">المخزون</a></li>
-												<li><a href="#" class="dropdown-item">المخزون</a></li>
+											<li><a href="{{route('items.index')}}" class="dropdown-item"> الأصناف </a></li>												<li><a href="#" class="dropdown-item">المخزون</a></li>
 												<li><a href="#" class="dropdown-item">المخزون</a></li>
 												<li><a href="#" class="dropdown-item">المخزون</a></li>
 												<li><a href="#" class="dropdown-item">المخزون</a></li>

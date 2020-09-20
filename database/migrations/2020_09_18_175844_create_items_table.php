@@ -16,6 +16,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code', 255)->nullable();
+            $table->string('image', 255)->nullable();
             $table->string('ar_name', 255)->nullable();
             $table->string('en_name', 255)->nullable();
             $table->tinyInteger('has_batch')->nullable();
@@ -52,14 +53,7 @@ class CreateItemsTable extends Migration
             $table->text('notes')->nullable();
             $table->float('item_total_cost',8,2)->nullable();
             $table->integer('item_total_qty')->nullable();
-
-
-
-
-
-
-
-
+            $table->float('vat_value',8,2)->nullable();
 
             $table->timestamps();
         });
