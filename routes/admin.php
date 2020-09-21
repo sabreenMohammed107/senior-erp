@@ -18,6 +18,14 @@ Route::POST('delete-subCategory/{id}', 'ItemCategoryController@deletesubCategory
 /*********************==items==******************* */
 Route::resource('/items', 'ItemsController');
 Route::POST('items/search', 'ItemsController@search')->name('items.search');
+/*********************==stocks==******************* */
+Route::resource('/stocks', 'StocksController');
+Route::get('/stockBranchdetails.fetch', 'StocksController@branchFetch')->name('stockBranchdetails.fetch');
+Route::get('/stocks.creation', 'StocksController@creation')->name('stocks.creation');
+Route::get('/stockCategory', 'StocksController@stockCategory')->name('stockCategory');
+Route::get('/stockTransaction', 'StocksController@stockTransaction')->name('stockTransaction');
+
+
 
 
 });

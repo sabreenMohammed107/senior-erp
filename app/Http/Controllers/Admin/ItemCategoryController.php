@@ -111,7 +111,7 @@ class ItemCategoryController extends Controller
     public function edit($id)
     {
         $row = Item_category::where('id', '=', $id)->first();
-        $cats = Item_category::where('parent_id', '=', $id)->get();
+        $cats =Item_category::where('parent_id', '=', $id)->get();
         return view($this->viewName . 'edit', compact('row', 'cats'));
     }
 

@@ -17,10 +17,9 @@ class CreateStocksItemsTotalsTable extends Migration
             $table->bigIncrements('id');
             $table->BigInteger('stock_id')->unsigned()->nullable();
             $table->BigInteger('item_id')->unsigned()->nullable();
-            $table->string('code', 255)->nullable();
+            $table->string('batch_no', 255)->nullable();
             $table->dateTime('expired_date', 6)->nullable();
             $table->integer('item_total_qty')->nullable();
-            $table->float('item_total_price',8,2)->nullable();
             $table->integer('item_qty_unconfirmed')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
