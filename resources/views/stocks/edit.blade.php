@@ -90,7 +90,7 @@
                                 <form action="{{route('items.update',$row->id)}}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
-                                    <a class="btn btn-primary waves-effect waves-light mg-b-15" href="{{route('items.index')}}">رجــــــوع</a>
+                                    <a class="btn btn-primary waves-effect waves-light mg-b-15" href="{{route('stocks.index')}}">رجــــــوع</a>
                                     <button class="btn btn-primary waves-effect waves-light mg-b-15" type="submit">حـفـــــظ</button>
                                     <div class="row res-rtl" style="display: flex ;flex-direction: row-reverse ;">
 
