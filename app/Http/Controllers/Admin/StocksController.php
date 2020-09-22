@@ -228,10 +228,11 @@ class StocksController extends Controller
         // users_stocks
         $stockId = $request->input('stockTrans');
         $types = $request->input('types');
+        $tranType=Transaction_type::where('id',$types)->first();
         $row = Stock::where('id', '=', $stockId)->first();
-        if ($types) {
+        if ($tranType) {
 
-            $row->type()->sync($types);
+            $row->type()->sync($tranType->id);
         } else {
             $row->type()->detach();
         }
