@@ -226,9 +226,8 @@ class StocksController extends Controller
     public function stockTransaction(Request $request)
     {
         // users_stocks
-        $request->merge(array_map('trim', $request->all()));
         $stockId = $request->input('stockTrans');
-        $types = $request->input('types');
+        $types = trim($request->input('types'));
         $row = Stock::where('id', '=', $stockId)->first();
         if ($types) {
 
