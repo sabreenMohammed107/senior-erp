@@ -229,13 +229,14 @@ class StocksController extends Controller
         $stockId =$request->input('stockTrans');
         $types =$request->input('types');
         $row = Stock::where('id', '=', $stockId)->first();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         if ($types) {
 
             $row->type()->sync($types);
         } else {
             $row->type()->detach();
         }
-
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
         return redirect()->back()->with('flash_success', 'تم التعديل بنجاح !');
     }
 
