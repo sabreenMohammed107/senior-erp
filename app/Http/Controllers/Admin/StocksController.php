@@ -229,7 +229,6 @@ class StocksController extends Controller
         $stockId =$request->input('stockTrans');
         $types =$request->input('types');
         $row = Stock::where('id', '=', $stockId)->first();
-        dd($types);
         if ($types) {
 
             $row->type()->sync($types);
