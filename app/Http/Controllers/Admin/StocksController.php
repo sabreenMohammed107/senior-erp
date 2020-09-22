@@ -149,6 +149,7 @@ class StocksController extends Controller
         $typ = $row->type->pluck('id')->toArray();
         $subCats = Item_category::whereNotNull('parent_id')->whereNotIn('id', $exception)->get();
         $transactionTypes = Transaction_type::whereNotIn('id', $typ)->get();
+        dd($transactionTypes);
         $totals = Stocks_items_total::where('stock_id', $id)->get();
         return view($this->viewName . 'edit', compact('branch', 'row', 'subCats', 'transactionTypes', 'totals'));
     }
