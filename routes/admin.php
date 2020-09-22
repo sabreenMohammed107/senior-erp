@@ -24,6 +24,12 @@ Route::get('/stockBranchdetails.fetch', 'StocksController@branchFetch')->name('s
 Route::get('/stocks.creation', 'StocksController@creation')->name('stocks.creation');
 Route::get('/stockCategory', 'StocksController@stockCategory')->name('stockCategory');
 Route::get('/stockTransaction', 'StocksController@stockTransaction')->name('stockTransaction');
+Route::get('/stocks.openBalance/{id}', 'StocksController@openBalance')->name('stocks.openBalance');
+Route::get('addRow/fetch', 'StocksController@addRow')->name('addRow.fetch');
+Route::get('/editSelectVal.fetch', 'StocksController@editSelectVal')->name('editSelectVal.fetch');
+Route::post('/store-open-balance', 'StocksController@storeOpenBalance')->name('store-open-balance');
+Route::post('/approve-open-balance', 'StocksController@approveOpenBalance')->name('approve-open-balance');
+
 
 
 

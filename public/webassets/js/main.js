@@ -95,8 +95,8 @@
 		   easingType: 'linear',
 		   scrollSpeed: 900,
 		   animation: 'fade'
-	   }); 	   
-	
+	   }); 	
+
    })(jQuery); 
    $(window).on('load', function(){
 	   /*
@@ -127,5 +127,8 @@
 		  reader.readAsDataURL(input.files[0]);
 	  }
 	}
+
+	$(".chosen-select").trigger("chosen:updated");
+
    });
    

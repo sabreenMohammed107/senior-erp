@@ -32,4 +32,9 @@ class Item extends Model
      {
          return $this->belongsTo('App\Models\Item_type','item_type_id');
      }
+
+     public function uom()
+     {
+         return $this->belongsTo('App\Models\Unit_measure','default_uom_id');
+     }
 }

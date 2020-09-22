@@ -6,5 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stock_transaction_item extends Model
 {
-    //
+    protected $table = 'stock_transaction_items';
+    protected $primaryKey = 'id';
+    protected $fillable = [
+        'item_id',
+        'batch_no',
+        'expired_date',
+        'property_grp_id',
+        'item_qty',
+        'item_price',
+        'total_line_cost',
+        'transaction_id',
+        'notes',
+
+    ];
+
+     //relation
+     public function transaction()
+     {
+         return $this->belongsTo('App\Models\Stocks_transaction','transaction_id');
+     }
+
+     public function item()
+     {
+         return $this->belongsTo('App\Models\Item','item_id');
+     }
+
+
 }

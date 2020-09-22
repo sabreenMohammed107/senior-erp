@@ -50,7 +50,7 @@ class ItemsController extends Controller
     public function create()
     {
         $rows = Item::paginate(8);
-        $persons = Person::where('PERSON_TYPE_ID', 2)->get();
+        $persons = Person::where('person_type_id', 100)->get();
         $category = Item_category::whereNotNull('PARENT_ID')->get();
         $uoms = Unit_measure::all();
 
@@ -186,7 +186,7 @@ class ItemsController extends Controller
     public function show($id)
     {
         $row = Item::where('id', $id)->first();
-        $persons = Person::where('PERSON_TYPE_ID', 2)->get();
+        $persons = Person::where('person_type_id', 100)->get();
         $category = Item_category::whereNotNull('PARENT_ID')->get();
         $uoms = Unit_measure::all();
         return view($this->viewName . 'view', compact('persons', 'uoms', 'category', 'row'));
@@ -201,7 +201,7 @@ class ItemsController extends Controller
     public function edit($id)
     {
         $row = Item::where('id', $id)->first();
-        $persons = Person::where('PERSON_TYPE_ID', 2)->get();
+        $persons = Person::where('person_type_id', 100)->get();
         $category = Item_category::whereNotNull('PARENT_ID')->get();
         $uoms = Unit_measure::all();
         return view($this->viewName . 'edit', compact('persons', 'uoms', 'category', 'row'));

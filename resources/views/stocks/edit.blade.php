@@ -273,7 +273,7 @@
                                                                         <input type="hidden" name="stockTrans" value="{{$row->id}}">
                                                                         <select class="form-control dual_select" name="types[]" multiple>
                                                                             @foreach($transactionTypes as $type)
-                                                                            <option value="{{$type->id}}">{{$cat->name}}</option>
+                                                                            <option value="{{$type->id}}">{{$type->name}}</option>
                                                                             @endforeach
 
                                                                             @foreach($row->type as $menyType)
