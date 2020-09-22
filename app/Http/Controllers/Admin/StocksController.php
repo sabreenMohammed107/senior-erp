@@ -226,9 +226,10 @@ class StocksController extends Controller
     public function stockTransaction(Request $request)
     {
         // users_stocks
-        $stockId = $request->input('stockTrans');
-        $types = trim($request->input('types'));
+        $stockId =$request->input('stockTrans');
+        $types =$request->input('types');
         $row = Stock::where('id', '=', $stockId)->first();
+        dd($types);
         if ($types) {
 
             $row->type()->sync($types);
