@@ -485,7 +485,7 @@
             url: "{{url('/stock/Remove/Item')}}",
             data: {
                 id: id,
-                trans_id: '{{$stockTran->id}}',
+                trans_id: '{{$stockTran->id ?? 0}}',
             },
             success: function(data) {
 
