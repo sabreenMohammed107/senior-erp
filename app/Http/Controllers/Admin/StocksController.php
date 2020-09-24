@@ -52,9 +52,11 @@ class StocksController extends Controller
 
         return view($this->viewName . 'index', compact('branches', 'row', 'stocks'));
     }
-    /*
-
-*/
+  /**
+     * Display a table  of the branch.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function branchFetch(Request $request)
     {
         $branch_id = $request->input('branch_id');
@@ -72,6 +74,13 @@ class StocksController extends Controller
     {
         //
     }
+
+
+     /**
+     * Show the form for creating a new resource with request.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function creation(Request $request)
     {
 
@@ -106,10 +115,8 @@ class StocksController extends Controller
             DB::transaction(function () use ($data,  $request) {
                 $user = User::where('id', 1)->first();
 
-               $stock= $this->object::create($data);
-               $user->stock()->attach($stock);
-              
-
+                $stock = $this->object::create($data);
+                $user->stock()->attach($stock);
             });
         } catch (QueryException $q) {
 
@@ -147,8 +154,8 @@ class StocksController extends Controller
         $branch = Branch::where('id', $row->branch_id)->first();
         $exception = $row->category->pluck('id')->toArray();
         $typ = $row->type->pluck('id')->toArray();
-        $subCats =Item_category::whereNotNull('parent_id')->whereNotIn('id', $exception)->get();
-        $transactionTypes =Transaction_type::whereNotIn('id', $typ)->get();
+        $subCats = Item_category::whereNotNull('parent_id')->whereNotIn('id', $exception)->get();
+        $transactionTypes = Transaction_type::whereNotIn('id', $typ)->get();
         $totals = Stocks_items_total::where('stock_id', $id)->get();
         return view($this->viewName . 'edit', compact('branch', 'row', 'subCats', 'transactionTypes', 'totals'));
     }
@@ -226,8 +233,8 @@ class StocksController extends Controller
     public function stockTransaction(Request $request)
     {
         // users_stocks
-        $stockId =$request->input('stockTrans');
-        $types =$request->input('types');
+        $stockId = $request->input('stockTrans');
+        $types = $request->input('types');
         $row = Stock::where('id', '=', $stockId)->first();
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         if ($types) {
@@ -283,10 +290,13 @@ class StocksController extends Controller
 
             ]);
 
-
+            // echo json_encode($items);
             return $ajaxComponent->render();
         }
     }
+
+
+  
     /***
      * 
      */
@@ -303,13 +313,13 @@ class StocksController extends Controller
             if ($items->uom) {
                 $noBatch = $items->uom->ar_name;
             }
-            echo json_encode(array($items->ar_name, $noBatch));
+            echo json_encode(array($items->ar_name ,$items->code, $noBatch));
         }
     }
 
     public function storeOpenBalance(Request $request)
     {
-        $count = $request->get('rowCount');
+        $count = $request->get('rowCountStore');
 
         $details = [];
         for ($i = 1; $i <= $count; $i++) {
@@ -331,8 +341,7 @@ class StocksController extends Controller
                 array_push($details, $detail);
             }
         }
-
-        //update Details
+        \Log::info($request->get('rowCountStore'));
         $counterrrr = $request->get('qqq');
 
         $detailsUpdate = [];
@@ -342,7 +351,7 @@ class StocksController extends Controller
 
 
             $detailUpdate = [
-                'item_trans_id' => $request->get('item_trans_id' . $i),
+                'id' => $request->get('item_trans_id' . $i),
                 'item_id' => $request->get('selectup' . $i),
                 'expired_date' => $request->get('batchDateup' . $i),
                 'batch_no' => $request->get('batchNumup' . $i),
@@ -358,95 +367,116 @@ class StocksController extends Controller
 
 
 
-            DB::beginTransaction();
-            try {
+            // DB::beginTransaction();
+            // try {
 
-                //save stock-transaction
-                $data = [
-                    'code' => 1,
-                    'transaction_date' => $request->get('transaction_date'),
-                    'primary_stock_id' => $request->get('primary_stock_id'),
-                ];
-                $trans = Stocks_transaction::where('primary_stock_id', $request->get('primary_stock_id'))->firstOrNew($data);
-                $trans->confirmed = 0;
-                $trans->notes = $request->get('transNote');
-                $trans->transaction_date = Carbon::parse($request->get('transaction_date'));
-                $trans->save();
+            //save stock-transaction
+            $data = [
+                'code' => 1,
+             
+                'primary_stock_id' => $request->get('primary_stock_id'),
+            ];
+           
+            $trans = Stocks_transaction::where('primary_stock_id', $request->get('primary_stock_id'))->firstOrNew($data);
+            \Log::info($trans);
+            $trans->confirmed = 0;
+            $trans->notes = $request->get('transNote');
+            $trans->total_items_price = $request->get('total_items_price');
+            $trans->transaction_date = Carbon::parse($request->get('transaction_date'));
+            $trans->save();
 
 
-                foreach ($details as $Item) {
+            foreach ($details as $Item) {
 
-                    $Item['transaction_id'] = $trans->id;
-                    Stock_transaction_item::create($Item);
-                }
-
-                foreach ($detailsUpdate as $updates) {
-                    $itm = Stock_transaction_item::where('id', $updates['item_trans_id'])->first();
-
-                    $itm->update($updates);
-                }
-                DB::commit();
-                return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم  إضافة رصيد أفتتاحى بنجاح !');
-            } catch (\Throwable $th) {
-                // throw $th;
-                DB::rollBack();
-
-                return redirect()->back()->with('flash_success', 'حدث خطأ ما يرجي اعادة المحاولة!');
+                $Item['transaction_id'] = $trans->id;
+                Stock_transaction_item::create($Item);
             }
+
+            foreach ($detailsUpdate as $updates) {
+                $itm = Stock_transaction_item::where('id', $updates['id'])->first();
+
+                Stock_transaction_item::where('id', $updates['id'])->update($updates);
+            }
+            // DB::commit();
+            return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم  إضافة رصيد أفتتاحى بنجاح !');
+            // } catch (\Throwable $th) {
+            //     // throw $th;
+            //     DB::rollBack();
+
+            //     return redirect()->back()->with('flash_success', $th);
+            // }
         } elseif ($request->get('action') == 'confirm') {
 
-            DB::beginTransaction();
-            try {
+            // DB::beginTransaction();
+            // try {
 
 
-                //save stock-transaction
-                $data = [
+            //save stock-transaction
+            $data = [
 
-                    'primary_stock_id' => $request->get('primary_stock_id'),
+                'primary_stock_id' => $request->get('primary_stock_id'),
 
-                ];
-                $trans = Stocks_transaction::where('primary_stock_id', $request->get('primary_stock_id'))->firstOrNew($data);
-                $trans->confirmed = 1;
-                $trans->notes = $request->get('transNote');
-                $trans->transaction_date = Carbon::parse($request->get('transaction_date'));
-                $trans->save();
+            ];
+            $trans = Stocks_transaction::where('primary_stock_id', $request->get('primary_stock_id'))->firstOrNew($data);
+            $trans->confirmed = 1;
+            $trans->notes = $request->get('transNote');
+            $trans->total_items_price = $request->get('total_items_price');
+            $trans->transaction_date = Carbon::parse($request->get('transaction_date'));
+            $trans->save();
 
-                foreach ($details as $Item) {
+            foreach ($details as $Item) {
 
-                    $Item['transaction_id'] = $trans->id;
-                    Stock_transaction_item::create($Item);
-                }
-
-                foreach ($detailsUpdate as $updates) {
-                    $itm = Stock_transaction_item::where('id', $updates['item_trans_id'])->first();
-
-                    $itm->update($updates);
-                }
-                $itemsUpdates = Stock_transaction_item::where('transaction_id', $trans->id)->get();
-                foreach ($itemsUpdates as $itemsUpdate) {
-                    $itmUp = [
-                        'stock_id' => $itemsUpdate->transaction->primary_stock_id,
-                        'item_id' => $itemsUpdate->item_id,
-                        'batch_no' => $itemsUpdate->batch_no,
-                        'expired_date' => $itemsUpdate->expired_date,
-                        'item_total_qty' => $itemsUpdate->item_total_qty,
-                        'notes' => $itemsUpdate->notes,
-                    ];
-
-                    Stocks_items_total::create($itmUp);
-                }
-
-                DB::commit();
-                return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم  إضافة رصيد أفتتاحى بنجاح !');
-            } catch (\Throwable $th) {
-                // throw $th;
-                DB::rollBack();
-
-                return redirect()->back()->with('flash_success', 'حدث خطأ ما يرجي اعادة المحاولة!');
+                $Item['transaction_id'] = $trans->id;
+                Stock_transaction_item::create($Item);
             }
+
+            foreach ($detailsUpdate as $updates) {
+                $itm = Stock_transaction_item::where('id', $updates['id'])->first();
+
+                Stock_transaction_item::where('id', $updates['id'])->update($updates);
+            }
+            $itemsUpdates = Stock_transaction_item::where('transaction_id', $trans->id)->get();
+            foreach ($itemsUpdates as $itemsUpdate) {
+                $itmUp = [
+                    'stock_id' => $itemsUpdate->transaction->primary_stock_id,
+                    'item_id' => $itemsUpdate->item_id,
+                    'batch_no' => $itemsUpdate->batch_no,
+                    'expired_date' => $itemsUpdate->expired_date,
+                    'item_total_qty' => $itemsUpdate->item_qty,
+                    'notes' => $itemsUpdate->notes,
+                ];
+
+                Stocks_items_total::create($itmUp);
+            }
+
+            // DB::commit();
+
+            return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم  إضافة رصيد أفتتاحى بنجاح !');
+            // } catch (\Throwable $th) {
+            //     // throw $th;
+            //     DB::rollBack();
+
+            //     return redirect()->back()->with('flash_success', 'حدث خطأ ما يرجي اعادة المحاولة!');
+            // }
         }
     }
-    public function approveOpenBalance(Request $req)
+    public function DeleteStockItem(Request $req)
     {
+
+
+        if ($req->ajax()) {
+
+            $item = Stock_transaction_item::where('id', $req->id)->first();
+
+            $teans =Stocks_transaction::where('id', $req->trans_id)->first();
+            $ss = [
+                'total_items_price' => $teans->total_items_price - $item->total_line_cost,
+                
+            ];
+
+            Stocks_transaction::where('id', $req->trans_id)->update($ss);
+
+            Stock_transaction_item::where('id', $req->id)->delete();
+        }
     }
 }

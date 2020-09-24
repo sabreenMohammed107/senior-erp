@@ -18,10 +18,10 @@ $counterrrr = 1;
     <td id="fTd{{$counter}}">{{$counter}}</td>
     <td>
 
-    {{$itemo->Item->code}}/{{$itemo->Item->ar_name}}
+    {{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}
        
     </td>
-    <td id="ar_name{{$counter}}">{{$itemo->item->ar_name ?? ''}}</td>
+    <td id="ar_name{{$counter}}">{{$itemo->item->ar_name ?? ''}} {{$itemo->item->code ?? ''}}</td>
     <td id="uom{{$counter}}">{{$itemo->item->uom->ar_name ?? ''}}</td>
     <td>
         <div class="input-mark-inner">
@@ -55,9 +55,32 @@ $counterrrr = 1;
         </div>
     </td>
     <td>
-        <div class="product-buttons">
-            <button id="del{{$counter}}" onclick="deleteRow({{$counter}})" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+    <div class="product-buttons">
+        <button type="button" data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
         </div>
+        <!--Delete-->
+<div id="del{{$counter}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header header-color-modal bg-color-2">
+                <h4 class="modal-title" style="text-align:right">حذف بيانات الصنف</h4>
+                <div class="modal-close-area modal-close-df">
+                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                </div>
+            </div>
+            <div class="modal-body">
+                <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+                <h2></h2>
+                <h4>هل تريد حذف جميع بيانات الصنف ؟  </h4>
+            </div>
+            <div class="modal-footer info-md">
+                <a data-dismiss="modal" href="#">إلغــاء</a>
+                <a href="#" onclick="DeleteStockItem({{$itemo->id}},{{$counter}})">حـذف</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/Delete-->
     </td>
 </tr>
 <?php

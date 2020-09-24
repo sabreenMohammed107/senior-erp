@@ -87,7 +87,7 @@
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div class="form-group-inner" style="margin-right:10px;">
-                                <form action="{{route('items.update',$row->id)}}" method="POST" enctype="multipart/form-data">
+                                <form action="{{route('stocks.update',$row->id)}}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <a class="btn btn-primary waves-effect waves-light mg-b-15" href="{{route('stocks.index')}}">رجــــــوع</a>
@@ -314,8 +314,9 @@
                                         <th>الباتش</th>
                                         <th>تاريخ الصلاحية</th>
                                         <th>الكمية الحالية</th>
-                                        <th>وصف الصنف</th>
                                         <th>سعر الصنف</th>
+                                        <th>وصف الصنف</th>
+                                     
                                         <th>ملاحظات</th>
                                     </tr>
                                 </thead>
@@ -332,8 +333,9 @@
                                             $date = date_create($total->expired_date) ?>
                                             @if($date) {{ date_format($date,"d-m-Y") }}@endif</td>
                                         <td>{{$total->item_total_qty}}</td>
+                                        <td> {{ $total->item->average_price * $total->item_total_qty}} </td>
+
                                         <td> {{$total->item->ar_description}}</td>
-                                        <td></td>
                                         <td>{{$total->notes}}</td>
 
                                     </tr>

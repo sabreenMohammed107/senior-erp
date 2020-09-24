@@ -29,6 +29,9 @@ Route::get('addRow/fetch', 'StocksController@addRow')->name('addRow.fetch');
 Route::get('/editSelectVal.fetch', 'StocksController@editSelectVal')->name('editSelectVal.fetch');
 Route::post('/store-open-balance', 'StocksController@storeOpenBalance')->name('store-open-balance');
 Route::post('/approve-open-balance', 'StocksController@approveOpenBalance')->name('approve-open-balance');
+Route::get('/stock/Remove/Item','StocksController@DeleteStockItem');
+
+
 
 
 

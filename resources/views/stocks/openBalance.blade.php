@@ -17,7 +17,6 @@
 <!-- chosen CSS
 		============================================ -->
 <link rel="stylesheet" href="{{ asset('webassets/css/chosen/bootstrap-chosen.css')}}">
-
 <style>
     .pagination-info {
         display: none !important;
@@ -57,6 +56,7 @@
             <button class="btn btn-primary waves-effect waves-light mg-b-15" @if($confirmed==1) disabled @endif type="submit" name="action" value="confirm"> الموافقة</button>
 
             <input type="hidden" name="primary_stock_id" value="{{$row->id}}">
+            <input type="hidden" name="transUpdate" value="{{$stockTran->id}}" >
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="sparkline13-list">
@@ -125,7 +125,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-    
+
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mg-b-22">
                                             <h4 style="text-align:right"> العمليات <i class="fa fa-calculator"></i></h4>
@@ -151,7 +151,7 @@
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="total_items_price" readonly class="form-control" placeholder="">
+                                                        <input type="text" id="total_items_price" name="total_items_price" value="{{$stockTran->total_items_price ?? 0}}" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -175,10 +175,33 @@
                                         </div>
                                     </div>
                                 </div>
+                                <style>
+                                    #myInput {
+                                        background-image: url('/css/searchicon.png');
+                                        /* Add a search icon to input */
+                                        background-position: 10px 12px;
+                                        /* Position the search icon */
+                                        background-repeat: no-repeat;
+                                        /* Do not repeat the icon image */
+                                        width: 30%;
+                                        /* Full-width */
+                                        font-size: 16px;
+                                        /* Increase font-size */
+                                        padding: 12px 20px 12px 40px;
+                                        /* Add some padding */
+                                        border: 1px solid #ddd;
+                                        /* Add a grey border */
+                                        margin-bottom: 12px;
+                                        /* Add some space below the input */
+                                    }
+                                </style>
 
                                 <h3 style="text-align:right">الأصناف</h3>
-                                <button id="add" onclick="addRow()" @if($confirmed==1) disabled @endif type="button" class="btn btn-primary waves-effect waves-light">إضافة صنف</button>
-                                <table class="table-striped" id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="false" data-cookie="true" data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="direction:rtl;">
+                                <button id="add" @if($confirmed==1) disabled @endif type="button" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة صنف</button>
+
+                                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+
+                                <table class="table" id="table" style="direction:rtl;">
                                     <thead>
                                         <tr>
                                             <th data-field="state"></th>
@@ -210,47 +233,89 @@
 <!-- Static Table End -->
 @endsection
 @section('scripts')
+
 <script>
     $(function() {
         debugger;
-        $('#table').bootstrapTable();
-        var focus = $('#table > tbody  > tr').length;
+     
 
-        $('.no-records-found').remove();
+        $('#add').on('click', function() {
+            var rowCount = 0;
+
+            if ($('#table > tbody  > tr').attr('data-id')) {
+                rowCount = $('#table > tbody  > tr:last').attr('data-id');
+            }
+
+            // var rowCount = $('#table > tbody > tr').length;
+            var rowSS = parseFloat(rowCount) + 1;
+
+            person_id = $('#person_id option:selected').val();
+            $.ajax({
+                type: 'GET',
+                async: false,
+                data: {
+                    rowcount: parseFloat(rowCount) + 1,
+                    id: '{{$row->id}}',
+                    person_id: person_id,
+
+                },
+                url: "{{url('addRow/fetch')}}",
+
+                success: function(data) {
+
+                    $('#rows').append(data);
+
+                    $('#select' + rowSS).select2();
+                    $('#firstTT' + rowSS).focus();
+                },
+
+                error: function(request, status, error) {
+                    console.log(request.responseText);
+                }
+            });
+            debugger;
+
+        })
+
     })
 
-    var table = $('#table')
-
+//adding row
     function addRow() {
-        var rowCount = $('#table > tbody > tr').length;
-        var rowSS = rowCount + 1;
-        var rows = [];
+        var rowCount = 0;
+
+        if ($('#table > tbody  > tr').attr('data-id')) {
+            rowCount = $('#table > tbody  > tr:last').attr('data-id');
+        }
+
+        // var rowCount = $('#table > tbody > tr').length;
+        var rowSS = parseFloat(rowCount) + 1;
+
         person_id = $('#person_id option:selected').val();
         $.ajax({
             type: 'GET',
+            async: false,
             data: {
-                rowcount: rowCount + 1,
+                rowcount: parseFloat(rowCount) + 1,
                 id: '{{$row->id}}',
                 person_id: person_id,
+
             },
             url: "{{url('addRow/fetch')}}",
 
             success: function(data) {
-                rows.push(data);
-                var trs = $('#table > tbody').html();
-                $('#table').bootstrapTable('destroy');
-                $('.no-records-found').remove();
-                $('#rows').html(trs);
-                console.log(trs);
-                $('#rows').append(data);
-                $('#table').bootstrapTable();
-                $('#select' + rowSS).select2();
 
+                $('#rows').append(data);
+
+                $('#select' + rowSS).select2();
+                $('#firstTT' + rowSS).focus();
             },
+
             error: function(request, status, error) {
                 console.log(request.responseText);
             }
         });
+        debugger;
+
     }
 
     //not submit in enter
@@ -261,18 +326,19 @@
             return false;
         }
     });
-
+//add row on enter
     function enterForRow(e, index) {
         if (e.keyCode == 13) {
             addRow();
 
         }
     }
-
+//select item
     function editSelectVal(index) {
         debugger;
 
         var select_value = $('#select' + index + ' option:selected').val();
+        var text = $('#select' + index + ' option:selected').text();
 
         $.ajax({
             type: 'GET',
@@ -286,9 +352,11 @@
             success: function(data) {
                 var result = $.parseJSON(data);
 
-                $("#ar_name" + index + "").text(result[0]);
-                $("#uom" + index + "").text(result[1]);
+                $("#ar_name" + index + "").text(result[0] + ' - ' +result[1]);
+                $("#uom" + index + "").text(result[2]);
 
+                $('#select' + index + ' option:selected').val(select_value).trigger('chosen:updated');;
+                $('#select' + index + ' option:selected').text(text).trigger('chosen:updated');;
 
             },
             error: function(request, status, error) {
@@ -301,37 +369,17 @@
 
 
     }
-
+//delete Row
     function deleteRow(index) {
 
 
         $('tr[data-id=' + index + ']').remove();
-        // recountRows();
-        var trs = $('#table > tbody').html();
-        console.log(trs);
-        $('#table').bootstrapTable('destroy');
-        $('#rows').html(trs);
-        $('#table').bootstrapTable();
+       
         headCalculations(index);
-    }
-
-    function recountRows() {
-        $('.no-records-found').remove();
-        index = $('#table > tbody > tr').length;
-        var rowCount = 0;
-        console.log(index);
-        $('#table > tbody  > tr').each(function() {
-            rowCount = rowCount + 1;
-
-            $('tr').attr('data-id', rowCount);
-            $('td').attr('id', 'fTd' + rowCount);
-
-
-            console.log($('#table > tbody').html());
-            --index;
-        })
 
     }
+
+ 
     // headCalculations(index);
     function headCalculations(index) {
         $('.no-records-found').remove();
@@ -339,26 +387,9 @@
         var total = 0;
         console.log(index);
         $('#table > tbody  > tr').each(function() {
+            var row_num = $(this).attr('data-id');
+            total += parseFloat($('#total' + row_num).text());
 
-            total += parseFloat($('#total' + index).text());
-
-
-            --index;
-        })
-        console.log(total);
-        $('#total_items_price').val(total.toFixed(2));
-
-    }
-    //--------------------
-    // headCalculations(index);
-    function headCalculationsDel(index) {
-        $('.no-records-found').remove();
-        index = $('#table > tbody > tr').length;
-        var total = 0;
-        console.log(index);
-        $('#table > tbody  > tr').each(function() {
-
-            total += parseFloat($('.total_item').text());
 
             --index;
         })
@@ -367,6 +398,7 @@
 
     }
     //--------------------
+
     //item qty
     function itemQty(index) {
         var price = $("#itemprice" + index + "").val();
@@ -415,5 +447,56 @@
         $("#batchDate" + index).attr('value', batchd);
     }
     //--------------------
+
+
+// custom search
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+
+     // Delete DB row functions
+     function DeleteStockItem(id, index) {
+        debugger;
+        $("#del" + index).modal('hide');
+        $('.modal-backdrop.fade.in').remove();
+        $('.modal-open').css('overflow-y', 'scroll');
+        $.ajax({
+            type: 'GET',
+            url: "{{url('/stock/Remove/Item')}}",
+            data: {
+                id: id,
+                trans_id: '{{$stockTran->id}}',
+            },
+            success: function(data) {
+
+                headCalculations(index);
+                location.reload(true);
+            },
+            error: function(request, status, error) {
+                console.log(request.responseText);
+            }
+        });
+        // headCalculations();
+    }
 </script>
 @endsection

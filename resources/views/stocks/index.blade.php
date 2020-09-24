@@ -51,7 +51,7 @@
 				<form action="{{route('stocks.creation')}}" method="get">
 					<input type="hidden" value="{{$row->id}}" id="branch" name="branch">
 
-					<button type="submit" style="direction:ltr;margin-top:-20px;background: rgba(139,0,0,.7);color:white;padding:5px ; border-color: rgba(139,0,0,.7);">إضافة أمر بيع</button>
+					<button type="submit" style="direction:ltr;margin-top:-20px;background: rgba(139,0,0,.7);color:white;padding:5px ; border-color: rgba(139,0,0,.7);">إضافة مخزن</button>
 
 				</form>
 

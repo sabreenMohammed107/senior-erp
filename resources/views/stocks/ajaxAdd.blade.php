@@ -1,15 +1,18 @@
 <tr data-id="{{$rowCount}}" >
     <td></td>
-    <td id="fTd{{$rowCount}}">{{$rowCount}}</td>
-    <td>
-    <input type="number" style="display: none;" value="{{$rowCount}}" name="rowCount" id="rowCount"  class="form-control " placeholder="">
+    <td id="fTd{{$rowCount}}"><input style="width: 30px;" type="number" readonly id="firstTT{{$rowCount}}"  value="{{$rowCount}}" ></td>
 
-        <select id="select{{$rowCount}}" name="select{{$rowCount}}" name="dropname" style="width: 200px" onchange="editSelectVal({{$rowCount}})" data-placeholder="Choose a Country..." class="form-control">
-            <option value="">Select</option>
+    <td>
+    <input type="number" style="display: none;" value="{{$rowCount}}" name="rowCountStore" id="rowCount"  class="form-control" placeholder="">
+ <select id="select{{$rowCount}}" name="select{{$rowCount}}"  name="dropname" style="width: 200px" onchange="editSelectVal({{$rowCount}})" data-placeholder="Choose a Country..." data-live-search="true" class="form-control my-select ">
+            <option  value="">Select</option>
             @foreach ($items as $Item)
             <option value="{{$Item->id}}">{{$Item->code}}/{{$Item->ar_name}}</option>
+
             @endforeach
         </select>
+        <input type="number" style="display: none;" value="" name="sasa{{$rowCount}}" id="sasa{{$rowCount}}"  class="form-control" placeholder="">
+
     </td>
     <td id="ar_name{{$rowCount}}"></td>
     <td id="uom{{$rowCount}}"></td>
