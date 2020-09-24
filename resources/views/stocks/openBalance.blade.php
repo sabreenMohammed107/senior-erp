@@ -56,7 +56,7 @@
             <button class="btn btn-primary waves-effect waves-light mg-b-15" @if($confirmed==1) disabled @endif type="submit" name="action" value="confirm"> الموافقة</button>
 
             <input type="hidden" name="primary_stock_id" value="{{$row->id}}">
-            <input type="hidden" name="transUpdate" value="{{$stockTran->id}}" >
+            <input type="hidden" name="transUpdate" value="{{$stockTran->id ?? 0}}" >
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="sparkline13-list">
