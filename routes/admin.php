@@ -30,6 +30,11 @@ Route::get('/editSelectVal.fetch', 'StocksController@editSelectVal')->name('edit
 Route::post('/store-open-balance', 'StocksController@storeOpenBalance')->name('store-open-balance');
 Route::post('/approve-open-balance', 'StocksController@approveOpenBalance')->name('approve-open-balance');
 Route::get('/stock/Remove/Item','StocksController@DeleteStockItem');
+/*********************==customer==******************* */
+Route::resource('/customer', 'CustomerController');
+Route::get('dynamicPersonCountry/fetch', 'CustomerController@fetchCity')->name('dynamicPersonCountry.fetch');
+Route::get('dynamicPersonCity/fetch', 'CustomerController@fetchLocation')->name('dynamicPersonCity.fetch');
+
 
 
 

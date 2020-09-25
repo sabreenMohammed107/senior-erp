@@ -10,6 +10,7 @@ class Person extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'code',
+        'image',
         'name',
         'nick_name',
         'phone1',
@@ -44,4 +45,20 @@ class Person extends Model
         'updated_at'
 
     ];
+
+
+    public function country()
+    {
+        return $this->belongsTo('App\Models\Country','country_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo('App\Models\City','city_id');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo('App\Models\Location','location_id');
+    }
 }

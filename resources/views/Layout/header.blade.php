@@ -224,7 +224,8 @@
 												<div role="menu" class="dropdown-menu animated zoomIn">
 													<a href="{{route('branch.index')}}" class="dropdown-item">الفروع </a>
 													<a href="{{route('users.index')}}" class="dropdown-item">المستخدمين </a>
-													<a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات </a> <a href="#" class="dropdown-item">الرئيسية </a>
+													<a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات </a> 
+													<a href="{{route('customer.index')}}" class="dropdown-item">العملاء </a>
 													<a href="#" class="dropdown-item">الرئيسية </a>
 												</div>
 											</li>
@@ -252,7 +253,7 @@
 											<li><a href="{{route('branch.index')}}" class="dropdown-item">الفروع</a></li>
 											<li><a href="{{route('users.index')}}" class="dropdown-item">المستخدمين </a></li>
 											<li><a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات</a></li>
-											<li><a href="#" class="dropdown-item">الرئيسية</a></li>
+											<li><a href="{{route('customer.index')}}" class="dropdown-item">العملاء </a></li>
 											<li><a href="#" class="dropdown-item">الرئيسية</a></li>
 										</ul>
 									</li>
