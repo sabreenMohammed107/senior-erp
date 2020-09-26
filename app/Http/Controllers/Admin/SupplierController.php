@@ -3,24 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Branch;
-use App\Models\City;
-use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Financial_entry;
 use App\Models\Financial_subsystem;
-use App\Models\Location;
 use App\Models\Person;
 use App\Models\Person_catrgory;
-use App\Models\Representative;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use File;
 use DB;
-
-class CustomerController extends Controller
+class SupplierController extends Controller
 {
     protected $object;
     protected $viewName;
@@ -34,8 +27,8 @@ class CustomerController extends Controller
 
         $this->object = $object;
 
-        $this->viewName = 'customer.';
-        $this->routeName = 'customer.';
+        $this->viewName = 'supplier.';
+        $this->routeName = 'supplier.';
 
         $this->message = 'تم حفظ البيانات';
         $this->errormessage =  "لم يتم حفظها بسبب خطأ ما حاول مرة أخرى و تأكد من البيانات المدخله";
@@ -47,8 +40,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-
-        $rows = Person::where('person_type_id',101)->orderBy('created_at', 'Desc')->get();
+        $rows = Person::where('person_type_id', 100)->orderBy('created_at', 'Desc')->get();
 
         return view($this->viewName . 'index', compact('rows'));
     }
@@ -60,16 +52,11 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $user = User::where('id', 1)->first();
-        $branches = $user->branch;
         $person_categories = Person_catrgory::all();
-        $marketers = Representative::where('rep_type_id', 101)->get();
-        $sales = Representative::where('rep_type_id', 100)->get();
+        
         $currencies = Currency::all();
-        $countries = Country::all();
-        $cities = [];
-        $locations = [];
-        return view($this->viewName . 'add', compact('branches', 'person_categories', 'marketers', 'sales', 'currencies', 'countries', 'cities', 'locations'));
+       
+        return view($this->viewName . 'add', compact('person_categories', 'currencies', ));
     }
 
     /**
@@ -80,15 +67,13 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $personBranch = Branch::where('id', $request->input('branch_id'))->first();
-
-        $increment = Person::latest('code')->first();
-
-        $increment = ($increment != null) ? intval($increment['code']) : $personBranch['start_code'] - 1;
-
-        $increment++;
+        $max = Person::where('person_type_id', 100)->latest('code')->first();
+      
+        $max = ($max != null) ? intval($max['code']) : 0;
+        $max++;
+       
         $data = [
-            'code' => $increment,
+            'code' => $max,
             'name' => $request->input('name'),
             'nick_name' => $request->input('nick_name'),
             'phone1' => $request->input('phone1'),
@@ -105,8 +90,7 @@ class CustomerController extends Controller
             'person_open_balance_date' => Carbon::parse($request->get('person_open_balance_date')),
             'person_limit_balance' => $request->input('person_limit_balance'),
             'notes' => $request->input('notes'),
-            'last_invoice_date' => Carbon::parse($request->input('last_invoice_date')),
-            'person_type_id' => 101,
+            'person_type_id' => 100,
         ];
 
         if ($request->input('person_currency_id')) {
@@ -118,33 +102,8 @@ class CustomerController extends Controller
 
             $data['person_category_id'] = $request->input('person_category_id');
         }
-        if ($request->input('branch_id')) {
-
-            $data['branch_id'] = $request->input('branch_id');
-        }
-
-        if ($request->input('country_id')) {
-
-            $data['country_id'] = $request->input('country_id');
-        }
-        if ($request->input('city_id')) {
-
-            $data['city_id'] = $request->input('city_id');
-        }
-        if ($request->input('location_id')) {
-
-            $data['location_id'] = $request->input('location_id');
-        }
-
-        if ($request->input('sales_rep_id')) {
-
-            $data['sales_rep_id'] = $request->input('sales_rep_id');
-        }
-        if ($request->input('marketing_rep_id')) {
-
-            $data['marketing_rep_id'] = $request->input('marketing_rep_id');
-        }
-
+       
+       
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -169,31 +128,29 @@ class CustomerController extends Controller
 
     try{
 
-        if ($increment > $personBranch['end_code']) {
-            return redirect()->route($this->routeName . 'index')->with('flash_danger', "كود العميل اكبر من نطاق الكود للفرع");
-        } else {
-            $customer = $this->object::create($data);
+     
+            $supplier = $this->object::create($data);
             $financeEntry = new Financial_entry();
             $financeEntry->trans_type_id = 102;
             $financeEntry->entry_serial = -1;
             $financeEntry->entry_date = $data['person_open_balance_date'];
-            $financeEntry->person_id = $customer->id;
+            $financeEntry->person_id = $supplier->id;
             $financeEntry->person_name = $data['name'];
-            $financeEntry->branch_id = $data['branch_id'];
-            $financeEntry->entry_statment = "رصيد أفتتاحى لعميل";
+           
+            $financeEntry->entry_statment = "رصيد أفتتاحى لمورد";
             if ($data['balance_type'] == 1) {
-                $financeEntry->debit = $data['person_open_balance'];
-                $financeEntry->credit = 0;
-            } else {
+                $financeEntry->credit = $data['person_open_balance'];
                 $financeEntry->debit = 0;
+            } else {
+                $financeEntry->credit = 0;
                 $financeEntry->credit = $data['person_open_balance'];
             }
-            $gl = Financial_subsystem::where('id', 115)->first();
+            $gl = Financial_subsystem::where('id', 110)->first();
             $financeEntry->gl_item_id = $gl->gl_item_id;
 
             $financeEntry->save();
 
-        }
+     
 
 
         DB::commit();
@@ -224,16 +181,13 @@ class CustomerController extends Controller
     public function show($id)
     {
         $row = Person::where('id', $id)->first();
-        $user = User::where('id', 1)->first();
-        $branches = $user->branch;
+      
         $person_categories = Person_catrgory::all();
-        $marketers = Representative::where('rep_type_id', 101)->get();
-        $sales = Representative::where('rep_type_id', 100)->get();
+     
         $currencies = Currency::all();
-        $countries = Country::all();
-        $cities = City::where('country_id', $row->country_id)->get();
-        $locations = Location::where('city_id', $row->city_id)->get();
-        return view($this->viewName . 'view', compact('row', 'branches', 'person_categories', 'marketers', 'sales', 'currencies', 'countries', 'cities', 'locations'));
+      
+        return view($this->viewName . 'view', compact('row', 'person_categories', 'currencies', ));
+   
     }
 
     /**
@@ -245,16 +199,12 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $row = Person::where('id', $id)->first();
-        $user = User::where('id', 1)->first();
-        $branches = $user->branch;
+      
         $person_categories = Person_catrgory::all();
-        $marketers = Representative::where('rep_type_id', 101)->get();
-        $sales = Representative::where('rep_type_id', 100)->get();
+     
         $currencies = Currency::all();
-        $countries = Country::all();
-        $cities = City::where('country_id', $row->country_id)->get();
-        $locations = Location::where('city_id', $row->city_id)->get();
-        return view($this->viewName . 'edit', compact('row', 'branches', 'person_categories', 'marketers', 'sales', 'currencies', 'countries', 'cities', 'locations'));
+      
+        return view($this->viewName . 'edit', compact('row', 'person_categories', 'currencies', ));
     }
 
     /**
@@ -266,8 +216,9 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+       
         $data = [
-
+           
             'name' => $request->input('name'),
             'nick_name' => $request->input('nick_name'),
             'phone1' => $request->input('phone1'),
@@ -280,10 +231,9 @@ class CustomerController extends Controller
             'commercial_register' => $request->input('commercial_register'),
             'tax_card' => $request->input('tax_card'),
             'tax_authority' => $request->input('tax_authority'),
-           
+            
             'person_limit_balance' => $request->input('person_limit_balance'),
             'notes' => $request->input('notes'),
-            'last_invoice_date' => Carbon::parse($request->input('last_invoice_date')),
            
         ];
 
@@ -296,33 +246,8 @@ class CustomerController extends Controller
 
             $data['person_category_id'] = $request->input('person_category_id');
         }
-        if ($request->input('branch_id')) {
-
-            $data['branch_id'] = $request->input('branch_id');
-        }
-
-        if ($request->input('country_id')) {
-
-            $data['country_id'] = $request->input('country_id');
-        }
-        if ($request->input('city_id')) {
-
-            $data['city_id'] = $request->input('city_id');
-        }
-        if ($request->input('location_id')) {
-
-            $data['location_id'] = $request->input('location_id');
-        }
-
-        if ($request->input('sales_rep_id')) {
-
-            $data['sales_rep_id'] = $request->input('sales_rep_id');
-        }
-        if ($request->input('marketing_rep_id')) {
-
-            $data['marketing_rep_id'] = $request->input('marketing_rep_id');
-        }
-
+       
+       
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -331,18 +256,22 @@ class CustomerController extends Controller
         }
 
 
-       
+        if ($request->input('balance_type')) {
 
 
+            $data['balance_type'] = 1;
+        } else {
+            $data['balance_type'] = 0;
+        }
 
         DB::transaction(function () use ($data,  $id) {
 
 
-            $customerUpdate = $this->object::findOrFail($id)->update($data);
+            $supplierUpdate = $this->object::findOrFail($id)->update($data);
 
-            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
         });
-        return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
+        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+   
     }
 
     /**
@@ -372,54 +301,7 @@ class CustomerController extends Controller
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
     }
 
-    /**
-     * get city dependant on country.
-     *
-     * @param  request
-     * @return \Illuminate\Http\Response
-     */
-    public function fetchCity(Request $request)
-    {
-        $select = $request->get('select');
-        $value = $request->get('value');
-
-        $data = City::where('country_id', $value)->get();
-
-        $output = '<option value="">Select</option>';
-        foreach ($data as $row) {
-
-            $output .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
-        }
-
-
-
-        echo $output;
-    }
-
-    /**
-     * get locations dependant on city.
-     *
-     * @param  request
-     * @return \Illuminate\Http\Response
-     */
-    public function fetchLocation(Request $request)
-    {
-        $select = $request->get('select');
-        $value = $request->get('value');
-
-        $data = Location::where('city_id', $value)->get();
-
-        $output = '<option value="">Select</option>';
-        foreach ($data as $row) {
-
-            $output .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
-        }
-
-
-
-        echo $output;
-    }
-
+    
     /**
      * image
      */

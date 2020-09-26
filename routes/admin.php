@@ -35,7 +35,8 @@ Route::resource('/customer', 'CustomerController');
 Route::get('dynamicPersonCountry/fetch', 'CustomerController@fetchCity')->name('dynamicPersonCountry.fetch');
 Route::get('dynamicPersonCity/fetch', 'CustomerController@fetchLocation')->name('dynamicPersonCity.fetch');
 
-
+/*********************==supplier==******************* */
+Route::resource('/supplier', 'SupplierController');
 
 
 

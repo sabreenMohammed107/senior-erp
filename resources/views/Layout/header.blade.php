@@ -226,7 +226,7 @@
 													<a href="{{route('users.index')}}" class="dropdown-item">المستخدمين </a>
 													<a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات </a> 
 													<a href="{{route('customer.index')}}" class="dropdown-item">العملاء </a>
-													<a href="#" class="dropdown-item">الرئيسية </a>
+													<a href="{{route('supplier.index')}}" class="dropdown-item">الموردين </a>
 												</div>
 											</li>
 										</ul>
@@ -254,7 +254,7 @@
 											<li><a href="{{route('users.index')}}" class="dropdown-item">المستخدمين </a></li>
 											<li><a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات</a></li>
 											<li><a href="{{route('customer.index')}}" class="dropdown-item">العملاء </a></li>
-											<li><a href="#" class="dropdown-item">الرئيسية</a></li>
+											<li><a href="{{route('supplier.index')}}" class="dropdown-item">الموردين</a></li>
 										</ul>
 									</li>
 									<li>

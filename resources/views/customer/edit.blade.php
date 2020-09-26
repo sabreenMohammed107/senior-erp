@@ -26,11 +26,64 @@
 <!-- Single pro tab review Start-->
 <div class="single-pro-review-area mt-t-30 mg-b-15">
     <div class="container-fluid">
-        <form action="{{route('customer.update',$row->id)}}" method="POST" enctype="multipart/form-data">
+        <form action="{{route('customer.update',$row->id)}}" id="form_id" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <a class="btn btn-primary waves-effect waves-light mg-b-15" href="{{route('customer.index')}}">رجــــــوع</a>
-            <button class="btn btn-primary waves-effect waves-light mg-b-15" type="submit">حـفـــــظ</button>
+            <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
+
+<button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
+
+<!--save Company-->
+<div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header header-color-modal bg-color-2">
+                <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
+                <div class="modal-close-area modal-close-df">
+                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                </div>
+            </div>
+            <div class="modal-body">
+                <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+
+                <h4>هل تريد حفظ البيانات ؟ </h4>
+            </div>
+            <div class="modal-footer info-md">
+                <a data-dismiss="modal" href="#">إلغــاء</a>
+
+                <button class="btn btn-primary waves-effect waves-light" onclick="document.getElementById('form-id').submit();">حفظ</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--/save Company-->
+
+    <!--cancle Company-->
+    <div id="cancle" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header header-color-modal bg-color-2">
+                <h4 class="modal-title" style="text-align:right">رجوع البيانات</h4>
+                <div class="modal-close-area modal-close-df">
+                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                </div>
+            </div>
+            <div class="modal-body">
+                <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+
+                <h4>هل تريد الرجوع لصفحه الكل ؟ </h4>
+            </div>
+            <div class="modal-footer info-md">
+                <a data-dismiss="modal" href="#">إلغــاء</a>
+
+                <a class="btn btn-primary waves-effect waves-light" href="{{route('customer.index')}}">رجــــــوع</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--/cancle Company-->
             <div class="row res-rtl" style="display: flex ;flex-direction: row-reverse ;">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <div class="profile-info-inner">
@@ -55,7 +108,7 @@
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="direction:rtl"">
 												<div class=" form-group">
                                             <label class="">كود العميل</label>
-                                            <input name="code" value="{{$row->code}}" readonly type="text" class="form-control" placeholder="اسم الشهرة">
+                                            <input name="code" value="{{$row->code}}" readonly type="text" class="form-control" placeholder="الكود">
                                         </div>
                                         <div class="form-group">
                                             <label class="">إسم العميل</label>
@@ -196,12 +249,12 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label>
-                                                            <input type="checkbox" name="balance_type" class="i-checks" @if($row->balance_type=1) checked @endif> إئتمان
+                                                            <input type="checkbox" disabled name="balance_type" class="i-checks" @if($row->balance_type=1) checked @endif> مدين
                                                         </label>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="">رصيد العميل</label>
-                                                        <input name="person_open_balance" value="{{$row->person_open_balance}}" type="text" class="form-control" placeholder="رصيد العميل">
+                                                        <input name="person_open_balance" readonly value="{{$row->person_open_balance}}" type="text" class="form-control" placeholder="رصيد العميل">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="">تاريخ رصيد العميل</label>
@@ -209,11 +262,11 @@
                                                         $date = null;
                                                         $date = date_create($row->person_open_balance_date) ?>
 
-                                                        <input name="person_open_balance_date" value="{{date_format($date,"Y-m-d") }}" type="date" class="form-control" placeholder="تاريخ رصيد العميل" style="text-align:right">
+                                                        <input name="person_open_balance_date" readonly value="{{date_format($date,"Y-m-d") }}" type="date" class="form-control" placeholder="تاريخ رصيد العميل" style="text-align:right">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="">حد رصيد العميل</label>
-                                                        <input name="person_limit_balance" value="{{$row->person_limit_balance}}" type="text" class="form-control" placeholder="حد رصيد العميل">
+                                                        <input name="person_limit_balance" readonly value="{{$row->person_limit_balance}}" type="text" class="form-control" placeholder="حد رصيد العميل">
                                                     </div>
 
 
