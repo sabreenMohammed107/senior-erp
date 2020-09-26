@@ -215,7 +215,7 @@
 												<div role="menu" class="dropdown-menu animated zoomIn">
 													<a href="{{route('items.index')}}" class="dropdown-item"> الأصناف </a>
 													<a href="{{route('stocks.index')}}" class="dropdown-item"> المخازن </a>
-													<a href="#" class="dropdown-item">المخزون</a>
+													<a href="{{route('item-price.index')}}" class="dropdown-item">اسعار الاصناف</a>
 													<a href="#" class="dropdown-item">المخزون</a>
 												</div>
 											</li>
@@ -264,7 +264,7 @@
 											<li><a href="#" class="dropdown-item">المخزون</a></li>
 											<li><a href="{{route('stocks.index')}}" class="dropdown-item"> المخازن </a>
 											</li>
-											<li><a href="#" class="dropdown-item">المخزون</a></li>
+											<li><a href="{{route('item-price.index')}}" class="dropdown-item">اسعار الاصناف</a></li>
 											<li><a href="#" class="dropdown-item">المخزون</a></li>
 										</ul>
 									</li>

@@ -186,6 +186,7 @@
                                         width: 30%;
                                         /* Full-width */
                                         font-size: 16px;
+                                        float: right;
                                         /* Increase font-size */
                                         padding: 12px 20px 12px 40px;
                                         /* Add some padding */
@@ -193,13 +194,14 @@
                                         /* Add a grey border */
                                         margin-bottom: 12px;
                                         /* Add some space below the input */
+                                        text-align: right;
                                     }
                                 </style>
 
                                 <h3 style="text-align:right">الأصناف</h3>
                                 <button id="add" @if($confirmed==1) disabled @endif type="button" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة صنف</button>
 
-                                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+                                <input type="text" id="myInput" onkeyup="myFunction()"  placeholder="إبحث باسم الصنف ..">
 
                                 <table class="table table-bordered" id="table" style="direction:rtl;">
                                     <thead>

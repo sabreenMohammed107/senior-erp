@@ -37,6 +37,12 @@ Route::get('dynamicPersonCity/fetch', 'CustomerController@fetchLocation')->name(
 
 /*********************==supplier==******************* */
 Route::resource('/supplier', 'SupplierController');
+/*********************==item-price==******************* */
+Route::resource('/item-price', 'ItemPricingController');
+Route::get('addRowPrice/fetch', 'ItemPricingController@addRow')->name('addRowPrice.fetch');
+Route::get('/itemPrice/Remove/Item','ItemPricingController@DeletePriceItem');
+
+
 
 
 
