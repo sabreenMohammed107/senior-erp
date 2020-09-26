@@ -28,6 +28,8 @@ class CreateFinancialEntriesTable extends Migration
             $table->BigInteger('voucher_id')->unsigned()->nullable();
             $table->BigInteger('stock_id')->unsigned()->nullable();
             $table->text('entry_statment')->nullable();
+            $table->BigInteger('branch_id')->unsigned()->nullable();
+            $table->BigInteger('bank_id')->unsigned()->nullable();
 
             $table->timestamps();
         });

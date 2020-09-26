@@ -14,7 +14,7 @@ $counterrrr = 1;
 <input type="number" style="display: none;" value="{{$itemo->transaction_id}}" name="transaction_id" id="transaction_id"  class="form-control " placeholder="">
 <input type="number" style="display: none;" value="{{$itemo->item_id}}" name="selectup{{$counter}}" id="selectup{{$counter}}"  class="form-control " placeholder="">
 
-    <td></td>
+   
     <td id="fTd{{$counter}}">{{$counter}}</td>
     <td>
 

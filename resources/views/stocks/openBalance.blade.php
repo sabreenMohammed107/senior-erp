@@ -201,11 +201,10 @@
 
                                 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
 
-                                <table class="table" id="table" style="direction:rtl;">
+                                <table class="table table-bordered" id="table" style="direction:rtl;">
                                     <thead>
                                         <tr>
-                                            <th data-field="state"></th>
-                                            <th>Serial</th>
+                                        <th>Serial</th>
                                             <th data-field="id">كود البند</th>
                                             <th>إسم البند</th>
                                             <th>UOM</th>

@@ -60,6 +60,8 @@ class AccountRelation extends Migration
             $table->foreign('cheque_id')->references('id')->on('cheques');
             $table->foreign('voucher_id')->references('id')->on('vouchers');
             $table->foreign('stock_id')->references('id')->on('stocks');
+            $table->foreign('branch_id')->references('id')->on('branches');
+            $table->foreign('bank_id')->references('id')->on('banks');
         });
 
 

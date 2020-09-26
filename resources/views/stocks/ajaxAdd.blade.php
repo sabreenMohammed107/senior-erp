@@ -1,5 +1,5 @@
 <tr data-id="{{$rowCount}}" >
-    <td></td>
+ 
     <td id="fTd{{$rowCount}}"><input style="width: 30px;" type="number" readonly id="firstTT{{$rowCount}}"  value="{{$rowCount}}" ></td>
 
     <td>

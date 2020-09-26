@@ -7,6 +7,8 @@ use App\Models\Branch;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\Financial_entry;
+use App\Models\Financial_subsystem;
 use App\Models\Location;
 use App\Models\Person;
 use App\Models\Person_catrgory;
@@ -16,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use File;
+use DB;
+
 class CustomerController extends Controller
 {
     protected $object;
@@ -62,10 +66,10 @@ class CustomerController extends Controller
         $marketers = Representative::where('rep_type_id', 101)->get();
         $sales = Representative::where('rep_type_id', 100)->get();
         $currencies = Currency::all();
-        $countries=Country::all();
-        $cities=[];
-        $locations=[];
-        return view($this->viewName . 'add', compact('branches', 'person_categories', 'marketers', 'sales','currencies','countries','cities','locations'));
+        $countries = Country::all();
+        $cities = [];
+        $locations = [];
+        return view($this->viewName . 'add', compact('branches', 'person_categories', 'marketers', 'sales', 'currencies', 'countries', 'cities', 'locations'));
     }
 
     /**
@@ -80,8 +84,8 @@ class CustomerController extends Controller
 
         $increment = Person::latest('code')->first();
 
-        $increment = ($increment != null) ? intval($increment['code']) : $personBranch['start_code']-1 ;
-    
+        $increment = ($increment != null) ? intval($increment['code']) : $personBranch['start_code'] - 1;
+
         $increment++;
         $data = [
             'code' => $increment,
@@ -98,48 +102,48 @@ class CustomerController extends Controller
             'tax_card' => $request->input('tax_card'),
             'tax_authority' => $request->input('tax_authority'),
             'person_open_balance' => $request->input('person_open_balance'),
-            'person_open_balance_date' =>Carbon::parse($request->get('person_open_balance_date')),
+            'person_open_balance_date' => Carbon::parse($request->get('person_open_balance_date')),
             'person_limit_balance' => $request->input('person_limit_balance'),
             'notes' => $request->input('notes'),
             'last_invoice_date' => Carbon::parse($request->input('last_invoice_date')),
-            'person_type_id' =>101,
+            'person_type_id' => 101,
         ];
 
-        if($request->input('person_currency_id')){
+        if ($request->input('person_currency_id')) {
 
-            $data['person_currency_id']=$request->input('person_currency_id');
-         }
+            $data['person_currency_id'] = $request->input('person_currency_id');
+        }
 
-         if($request->input('person_category_id')){
+        if ($request->input('person_category_id')) {
 
-            $data['person_category_id']=$request->input('person_category_id');
-         }
-         if($request->input('branch_id')){
+            $data['person_category_id'] = $request->input('person_category_id');
+        }
+        if ($request->input('branch_id')) {
 
-            $data['branch_id']=$request->input('branch_id');
-         }
+            $data['branch_id'] = $request->input('branch_id');
+        }
 
-         if($request->input('country_id')){
+        if ($request->input('country_id')) {
 
-            $data['country_id']=$request->input('country_id');
-         }
-         if($request->input('city_id')){
+            $data['country_id'] = $request->input('country_id');
+        }
+        if ($request->input('city_id')) {
 
-            $data['city_id']=$request->input('city_id');
-         }
-         if($request->input('location_id')){
+            $data['city_id'] = $request->input('city_id');
+        }
+        if ($request->input('location_id')) {
 
-            $data['location_id']=$request->input('location_id');
-         }
+            $data['location_id'] = $request->input('location_id');
+        }
 
-         if($request->input('sales_rep_id')){
+        if ($request->input('sales_rep_id')) {
 
-            $data['sales_rep_id']=$request->input('sales_rep_id');
-         }
-         if($request->input('marketing_rep_id')){
+            $data['sales_rep_id'] = $request->input('sales_rep_id');
+        }
+        if ($request->input('marketing_rep_id')) {
 
-            $data['marketing_rep_id']=$request->input('marketing_rep_id');
-         }
+            $data['marketing_rep_id'] = $request->input('marketing_rep_id');
+        }
 
 
         if ($request->hasFile('image')) {
@@ -158,26 +162,57 @@ class CustomerController extends Controller
         }
 
 
+        
+        $success = true;
 
+    DB::beginTransaction();
 
+    try{
 
-        try {
-            if($increment > $personBranch['end_code']){
-                return redirect()->route($this->routeName . 'index')->with('flash_danger', "كود العميل اكبر من نطاق الكود للفرع");
-
-            }else{
-                $this->object::create($data);
-
+        if ($increment > $personBranch['end_code']) {
+            return redirect()->route($this->routeName . 'index')->with('flash_danger', "كود العميل اكبر من نطاق الكود للفرع");
+        } else {
+            $customer = $this->object::create($data);
+            $financeEntry = new Financial_entry();
+            $financeEntry->trans_type_id = 102;
+            $financeEntry->entry_serial = -1;
+            $financeEntry->entry_date = $data['person_open_balance_date'];
+            $financeEntry->person_id = $customer->id;
+            $financeEntry->person_name = $data['name'];
+            $financeEntry->branch_id = $data['branch_id'];
+            $financeEntry->entry_statment = "رصيد أفتتاحى لعميل";
+            if ($data['balance_type'] == 1) {
+                $financeEntry->debit = $data['person_open_balance'];
+                $financeEntry->credit = 0;
+            } else {
+                $financeEntry->debit = 0;
+                $financeEntry->credit = $data['person_open_balance'];
             }
-           
-        } catch (QueryException $q) {
+            $gl = Financial_subsystem::where('id', 115)->first();
+            $financeEntry->gl_item_id = $gl->gl_item_id;
 
-            return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
+            $financeEntry->save();
+
         }
 
 
+        DB::commit();
+
+    }catch(\Exception $e){
+
+        DB::rollback();
+
+        $success = false;
+
+    }
+
+    if($success){
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-        
+    }
+
+    else{
+        return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
+    }
     }
 
     /**
@@ -188,18 +223,17 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $row=Person::where('id',$id)->first();
+        $row = Person::where('id', $id)->first();
         $user = User::where('id', 1)->first();
         $branches = $user->branch;
         $person_categories = Person_catrgory::all();
         $marketers = Representative::where('rep_type_id', 101)->get();
         $sales = Representative::where('rep_type_id', 100)->get();
         $currencies = Currency::all();
-        $countries=Country::all();
-        $cities=City::where('country_id',$row->country_id)->get();
-        $locations=Location::where('city_id',$row->city_id)->get();
-        return view($this->viewName . 'view', compact('row','branches', 'person_categories', 'marketers', 'sales','currencies','countries','cities','locations'));
-  
+        $countries = Country::all();
+        $cities = City::where('country_id', $row->country_id)->get();
+        $locations = Location::where('city_id', $row->city_id)->get();
+        return view($this->viewName . 'view', compact('row', 'branches', 'person_categories', 'marketers', 'sales', 'currencies', 'countries', 'cities', 'locations'));
     }
 
     /**
@@ -210,18 +244,17 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $row=Person::where('id',$id)->first();
+        $row = Person::where('id', $id)->first();
         $user = User::where('id', 1)->first();
         $branches = $user->branch;
         $person_categories = Person_catrgory::all();
         $marketers = Representative::where('rep_type_id', 101)->get();
         $sales = Representative::where('rep_type_id', 100)->get();
         $currencies = Currency::all();
-        $countries=Country::all();
-        $cities=City::where('country_id',$row->country_id)->get();
-        $locations=Location::where('city_id',$row->city_id)->get();
-        return view($this->viewName . 'edit', compact('row','branches', 'person_categories', 'marketers', 'sales','currencies','countries','cities','locations'));
-  
+        $countries = Country::all();
+        $cities = City::where('country_id', $row->country_id)->get();
+        $locations = Location::where('city_id', $row->city_id)->get();
+        return view($this->viewName . 'edit', compact('row', 'branches', 'person_categories', 'marketers', 'sales', 'currencies', 'countries', 'cities', 'locations'));
     }
 
     /**
@@ -234,7 +267,7 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $data = [
-           
+
             'name' => $request->input('name'),
             'nick_name' => $request->input('nick_name'),
             'phone1' => $request->input('phone1'),
@@ -248,48 +281,48 @@ class CustomerController extends Controller
             'tax_card' => $request->input('tax_card'),
             'tax_authority' => $request->input('tax_authority'),
             'person_open_balance' => $request->input('person_open_balance'),
-            'person_open_balance_date' =>Carbon::parse($request->get('person_open_balance_date')),
+            'person_open_balance_date' => Carbon::parse($request->get('person_open_balance_date')),
             'person_limit_balance' => $request->input('person_limit_balance'),
             'notes' => $request->input('notes'),
             'last_invoice_date' => Carbon::parse($request->input('last_invoice_date')),
-            'person_type_id' =>101,
+            'person_type_id' => 101,
         ];
 
-        if($request->input('person_currency_id')){
+        if ($request->input('person_currency_id')) {
 
-            $data['person_currency_id']=$request->input('person_currency_id');
-         }
+            $data['person_currency_id'] = $request->input('person_currency_id');
+        }
 
-         if($request->input('person_category_id')){
+        if ($request->input('person_category_id')) {
 
-            $data['person_category_id']=$request->input('person_category_id');
-         }
-         if($request->input('branch_id')){
+            $data['person_category_id'] = $request->input('person_category_id');
+        }
+        if ($request->input('branch_id')) {
 
-            $data['branch_id']=$request->input('branch_id');
-         }
+            $data['branch_id'] = $request->input('branch_id');
+        }
 
-         if($request->input('country_id')){
+        if ($request->input('country_id')) {
 
-            $data['country_id']=$request->input('country_id');
-         }
-         if($request->input('city_id')){
+            $data['country_id'] = $request->input('country_id');
+        }
+        if ($request->input('city_id')) {
 
-            $data['city_id']=$request->input('city_id');
-         }
-         if($request->input('location_id')){
+            $data['city_id'] = $request->input('city_id');
+        }
+        if ($request->input('location_id')) {
 
-            $data['location_id']=$request->input('location_id');
-         }
+            $data['location_id'] = $request->input('location_id');
+        }
 
-         if($request->input('sales_rep_id')){
+        if ($request->input('sales_rep_id')) {
 
-            $data['sales_rep_id']=$request->input('sales_rep_id');
-         }
-         if($request->input('marketing_rep_id')){
+            $data['sales_rep_id'] = $request->input('sales_rep_id');
+        }
+        if ($request->input('marketing_rep_id')) {
 
-            $data['marketing_rep_id']=$request->input('marketing_rep_id');
-         }
+            $data['marketing_rep_id'] = $request->input('marketing_rep_id');
+        }
 
 
         if ($request->hasFile('image')) {
@@ -310,20 +343,14 @@ class CustomerController extends Controller
 
 
 
-
-        try {
-          
-            $this->object::findOrFail($id)->update($data);
-
-         
-           
-        } catch (QueryException $q) {
-
-            return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
-        }
+        DB::transaction(function () use ($data,  $id) {
 
 
-        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+            $customerUpdate = $this->object::findOrFail($id)->update($data);
+
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        });
+        return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
     }
 
     /**
@@ -351,10 +378,9 @@ class CustomerController extends Controller
             return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
         }
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
-   
     }
 
- /**
+    /**
      * get city dependant on country.
      *
      * @param  request
@@ -364,16 +390,16 @@ class CustomerController extends Controller
     {
         $select = $request->get('select');
         $value = $request->get('value');
-      
-        $data = City::where('country_id', $value)->get();
-      
-            $output = '<option value="">Select</option>';
-            foreach ($data as $row) {
 
-                $output .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
-            }
-       
-      
+        $data = City::where('country_id', $value)->get();
+
+        $output = '<option value="">Select</option>';
+        foreach ($data as $row) {
+
+            $output .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
+        }
+
+
 
         echo $output;
     }
@@ -388,21 +414,21 @@ class CustomerController extends Controller
     {
         $select = $request->get('select');
         $value = $request->get('value');
-      
-        $data = Location::where('city_id', $value)->get();
-      
-            $output = '<option value="">Select</option>';
-            foreach ($data as $row) {
 
-                $output .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
-            }
-       
-      
+        $data = Location::where('city_id', $value)->get();
+
+        $output = '<option value="">Select</option>';
+        foreach ($data as $row) {
+
+            $output .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
+        }
+
+
 
         echo $output;
     }
 
-     /**
+    /**
      * image
      */
     /**
@@ -428,5 +454,4 @@ class CustomerController extends Controller
 
         return $imageName;
     }
-
 }
