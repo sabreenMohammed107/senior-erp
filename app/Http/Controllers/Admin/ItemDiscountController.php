@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
-use App\Models\Items_price;
+use App\Models\Items_discount;
 use App\Models\Person;
 use App\Models\Person_catrgory;
 use App\Models\Pric_disc_type;
 use Illuminate\Http\Request;
 use DB;
 use Log;
-class ItemPricingController extends Controller
+class ItemDiscountController extends Controller
 {
     protected $object;
     protected $viewName;
@@ -19,14 +19,14 @@ class ItemPricingController extends Controller
     protected $message;
     protected $errormessage;
 
-    public function __construct(Items_price $object)
+    public function __construct(Items_discount $object)
     {
 
 
         $this->object = $object;
 
-        $this->viewName = 'item-price.';
-        $this->routeName = 'item-price.';
+        $this->viewName = 'item-discount.';
+        $this->routeName = 'item-discount.';
 
         $this->message = 'تم حفظ البيانات';
         $this->errormessage =  "لم يتم حفظها بسبب خطأ ما حاول مرة أخرى و تأكد من البيانات المدخله";
@@ -38,7 +38,7 @@ class ItemPricingController extends Controller
      */
     public function index()
     {
-        $rows = Items_price::orderBy('created_at', 'Desc')->get();
+        $rows = Items_discount::orderBy('created_at', 'Desc')->get();
 
         return view($this->viewName . 'index', compact('rows'));
     }
@@ -75,14 +75,14 @@ class ItemPricingController extends Controller
 
                 'client_category_id' => $request->get('selectCat' . $i),
                 'client_id' => $request->get('selectClient' . $i),
-                'item_price' => $request->get('item_price' . $i),
+                'item_discount_price' => $request->get('item_price' . $i),
 
 
             ];
             if ($request->get('optionsRadios' . $i) == 'no') {
-                $detail['item_pricing_type_id'] = 101;
+                $detail['item_discount_type_id'] = 101;
             } else {
-                $detail['item_pricing_type_id'] = 100;
+                $detail['item_discount_type_id'] = 100;
             }
 
             if ($request->get('item_price' . $i)) {
@@ -96,7 +96,7 @@ class ItemPricingController extends Controller
             foreach ($details as $Item) {
 
                 $Item['item_id'] = $request->get('item_id');
-                Items_price::create($Item);
+                Items_discount::create($Item);
             }
             DB::commit();
 
@@ -119,10 +119,10 @@ class ItemPricingController extends Controller
     {
         $row=Item::where('id',$id)->first();
         $items = Item::all();
-       $priceItems=Items_price::where('item_id',$id)->get();
+       $discountItems=Items_discount::where('item_id',$id)->get();
        $cats = Person_catrgory::all();
        $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
-       return view($this->viewName . 'view', compact('priceItems', 'cats','items', 'clients','row'));
+       return view($this->viewName . 'view', compact('discountItems', 'cats','items', 'clients','row'));
     }
 
     /**
@@ -135,10 +135,10 @@ class ItemPricingController extends Controller
     {
         $row=Item::where('id',$id)->first();
         $items = Item::all();
-       $priceItems=Items_price::where('item_id',$id)->get();
+       $discountItems=Items_discount::where('item_id',$id)->get();
        $cats = Person_catrgory::all();
        $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
-       return view($this->viewName . 'edit', compact('priceItems', 'cats','items', 'clients','row'));
+       return view($this->viewName . 'edit', compact('discountItems', 'cats','items', 'clients','row'));
     }
 
     /**
@@ -160,14 +160,14 @@ class ItemPricingController extends Controller
 
                 'client_category_id' => $request->get('selectCat' . $i),
                 'client_id' => $request->get('selectClient' . $i),
-                'item_price' => $request->get('item_price' . $i),
+                'item_discount_price' => $request->get('item_price' . $i),
 
 
             ];
             if ($request->get('optionsRadios' . $i) == 'no') {
-                $detail['item_pricing_type_id'] = 101;
+                $detail['item_discount_type_id'] = 101;
             } else {
-                $detail['item_pricing_type_id'] = 100;
+                $detail['item_discount_type_id'] = 100;
             }
 
             if ($request->get('item_price' . $i)) {
@@ -191,7 +191,7 @@ class ItemPricingController extends Controller
             $detailUpdate = [
                 'id' => $request->get('item_price_id' . $i),
               
-                'item_price' => $request->get('item_priceup' . $i),
+                'item_discount_price' => $request->get('item_priceup' . $i),
 
             ];
             array_push($detailsUpdate, $detailUpdate);
@@ -202,14 +202,14 @@ class ItemPricingController extends Controller
             foreach ($details as $Item) {
 
                 $Item['item_id'] = $id;
-                Items_price::create($Item);
+                Items_discount::create($Item);
             }
 
 
             foreach ($detailsUpdate as $updates) {
-                $itm = Items_price::where('id', $updates['id'])->first();
+                $itm = Items_discount::where('id', $updates['id'])->first();
 
-                Items_price::where('id', $updates['id'])->update($updates);
+                Items_discount::where('id', $updates['id'])->update($updates);
             }
             DB::commit();
 
@@ -233,7 +233,7 @@ class ItemPricingController extends Controller
         //
     }
 
-    /***
+     /***
      * 
      */
 
@@ -246,7 +246,7 @@ class ItemPricingController extends Controller
             $cats = Person_catrgory::all();
             $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
 
-            $ajaxComponent = view('item-price.ajaxAdd', [
+            $ajaxComponent = view('item-discount.ajaxAdd', [
                 'rowCount' => $rowCount,
                 'cats' => $cats,
                 'clients' => $clients,
@@ -264,7 +264,7 @@ class ItemPricingController extends Controller
 
         if ($req->ajax()) {
 
-            $item = Items_price::where('id', $req->id)->first();
+            $item = Items_discount::where('id', $req->id)->first();
 
 
             $item->delete();

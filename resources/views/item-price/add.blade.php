@@ -183,7 +183,7 @@
                                     }
                                 </style>
                                 <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة سعر</button>
-                                <input type="text" id="myInput"  placeholder="إبحث بسعر الصنف ..">
+                                <input type="text" id="myInput" placeholder="إبحث بسعر الصنف ..">
 
                                 <table class="table table-bordered" id="table" style="direction:rtl;">
                                     <thead>
@@ -247,7 +247,7 @@
                     $('#rows').append(data);
                     $("#selectCat" + rowSS).select2();
                     // $('#table #catRadio' + rowSS).focus();
-                    $('#table > tbody  > tr:last td:first input[type=radio]').focus();
+                    $('#firstTT' + rowSS).focus();
                     console.log(rowSS);
                 },
 
@@ -258,35 +258,35 @@
             debugger;
 
         })
-      
-          //filter
-          $("#myInput").on("keyup", function() {
+
+        //filter
+        $("#myInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
-            $("#table tr").filter(function() {
+            $("#table > tbody > tr").filter(function() {
                 var row_num = $(this).attr('data-id');
                 $(this).toggle(
                     $('#item_cat' + row_num).text().toLowerCase().indexOf(value) > -1 ||
                     $('#item_client' + row_num).text().toLowerCase().indexOf(value) > -1 ||
-                    $('#total_item_price' + row_num).text().toLowerCase().indexOf(value) > -1 
+                    $('#total_item_price' + row_num).text().toLowerCase().indexOf(value) > -1
 
-                  
-                  
+
+
                 );
             });
-          
+
         });
 
     })
 
- //item batchDate
- function clientDate(index) {
-    var text = $('#selectClient' + index + ' option:selected').text();
+    //item batchDate
+    function clientDate(index) {
+        var text = $('#selectClient' + index + ' option:selected').text();
 
-    $('#item_client' + index).text(text)
+        $('#item_client' + index).text(text)
     }
     //--------------------
-     //item batchDate
-     function catDate(index) {
+    //item batchDate
+    function catDate(index) {
         var text = $('#selectCat' + index + ' option:selected').text();
         $('#item_cat' + index).text(text)
     }
@@ -317,8 +317,7 @@
 
                 $('#rows').append(data);
                 $("#selectCat" + rowSS).select2();
-                $('#table #catRadio' + rowSS).focus();
-            },
+                $('#firstTT' + rowSS).focus();            },
 
             error: function(request, status, error) {
                 console.log(request.responseText);
@@ -377,13 +376,13 @@
 
     }
 
-     //item price
-     function itemPrice(index) {
+    //item price
+    function itemPrice(index) {
         var price = $("#itemprice" + index + "").val();
-       
+
         $("#itemprice" + index).attr('value', price);
-        
-        $("#total_item_price" + index).text( price);
+
+        $("#total_item_price" + index).text(price);
     }
     //--------------------
 </script>

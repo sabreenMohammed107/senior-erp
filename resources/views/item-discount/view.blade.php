@@ -89,7 +89,7 @@
                     <div class="modal-footer info-md">
                         <a data-dismiss="modal" href="#">إلغــاء</a>
 
-                        <a class="btn btn-primary waves-effect waves-light" href="{{route('item-price.index')}}">رجــــــوع</a>
+                        <a class="btn btn-primary waves-effect waves-light" href="{{route('item-discount.index')}}">رجــــــوع</a>
 
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                 <div class="sparkline13-list">
                     <div class="sparkline13-hd">
                         <div class="main-sparkline13-hd">
-                            <h1 style="direction:rtl">أسعار الاصناف</h1>
+                            <h1 style="direction:rtl">خصم الاصناف</h1>
                         </div>
                     </div>
                     <div class="sparkline13-graph">
@@ -156,7 +156,7 @@
                                     text-align: right;
                                 }
                             </style>
-                            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="إبحث باسم الصنف ..">
+                            <input type="text" id="myInput"  placeholder="إبحث باسم الصنف ..">
 
                             <table class="table table-bordered" id="table" style="direction:rtl;">
                                 <thead>
@@ -169,13 +169,11 @@
                                         <th>إسم تصنيف العميل</th>
 
                                         <th>إسم العميل</th>
-                                        <th>سعر الصنف</th>
+                                        <th>خصم الصنف</th>
                                         <th>الاختيارات</th>
                                     </tr>
                                 </thead>
                                 <tbody id="rows">
-
-
                                     <?php
 
                                     $counter = 1;
@@ -185,7 +183,7 @@
                                     $counterrrr = 1;
                                     ?>
 
-                                    @foreach($priceItems as $i=> $itemo)
+                                    @foreach($discountItems as $i=> $itemo)
 
                                     <tr data-id="{{$counter}}">
                                         <td>{{$counter}}</td>
@@ -197,9 +195,9 @@
 
                                             <div class="bt-df-checkbox">
                                                 <input type="hidden" name="" class="inv_type" value="new">
-                                                <input class="cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_pricing_type_id=101) checked @endif type="radio" value="no" id="catRadio{{$counter}}" name="optionsRadios{{$counter}}">
+                                                <input class="cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_discount_type_id=101) checked @endif type="radio" value="no" id="catRadio{{$counter}}" name="optionsRadios{{$counter}}">
                                                 <label><b> تصنيف </b></label>
-                                                <input class="radio-checked cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_pricing_type_id=100) checked @endif type="radio" value="yes" id="clientRadio{{$counter}}" name="optionsRadios{{$counter}}">
+                                                <input class="radio-checked cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_discount_type_id=100) checked @endif type="radio" value="yes" id="clientRadio{{$counter}}" name="optionsRadios{{$counter}}">
                                                 <label><b> عميل </b></label>
                                             </div>
                                         </td>
@@ -224,20 +222,20 @@
                                         </td>
                                         <td>
                                             <div class="input-mark-inner mg-b-22">
-                                                <input type="number" onkeypress="enterForRow(event,{{$counter}})" id="itemprice{{$counter}}" name="item_priceup{{$counter}}" oninput="itemPrice({{$counter}})" value="{{$itemo->item_price}}" class="form-control item_price" placeholder="">
+                                                <input type="number" onkeypress="enterForRow(event,{{$counter}})" id="itemprice{{$counter}}" name="item_priceup{{$counter}}" oninput="itemPrice({{$counter}})" value="{{$itemo->item_discount_price}}" class="form-control item_price" placeholder="">
                                             </div>
-                                            <span style="display:none;" id="total_item_price{{$counter}}" class="total_item_price" placeholder="">{{$itemo->item_price}}</span>
+                                            <span style="display:none;" id="total_item_price{{$counter}}" class="total_item_price" placeholder="">{{$itemo->item_discount_price}}</span>
 
                                         </td>
                                         <td>
-                                          
+                                           
                                         </td>
                                     </tr>
 
                                     <?php
                                     ++$counter;
 
-                                    if ($counter > count($priceItems)) {
+                                    if ($counter > count($discountItems)) {
                                     ?>
                                         @break
                                     <?php }
@@ -283,7 +281,7 @@
 
 
                 },
-                url: "{{url('addRowPrice/fetch')}}",
+                url: "{{url('addRowDiscount/fetch')}}",
 
                 success: function(data) {
 
@@ -318,7 +316,6 @@
             });
 
         });
-
     })
 
     //adding row
@@ -341,7 +338,7 @@
 
 
             },
-            url: "{{url('addRowPrice/fetch')}}",
+            url: "{{url('addRowDiscount/fetch')}}",
 
             success: function(data) {
 
@@ -354,6 +351,7 @@
             }
         });
         debugger;
+
 
     }
 
@@ -421,7 +419,7 @@
         $('.modal-open').css('overflow-y', 'scroll');
         $.ajax({
             type: 'GET',
-            url: "{{url('/itemPrice/Remove/Item')}}",
+            url: "{{url('/itemDiscount/Remove/Item')}}",
             data: {
                 id: id,
 

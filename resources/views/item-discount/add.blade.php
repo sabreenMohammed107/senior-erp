@@ -14,7 +14,7 @@
                 <a href="#"></a> الأصناف<span class="bread-slash"> / </span>
             </li>
             <li>
-                <span class="bread-blod"> أسعار الأصناف </span>
+                <span class="bread-blod">خصم أسعار الاصناف </span>
             </li>
         </ul>
     </div>
@@ -65,9 +65,8 @@
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
     <div class="container-fluid">
-        <form action="{{route('item-price.update',$row->id)}}" id="form-id" method="POST">
+        <form action="{{route('item-discount.store')}}" id="form-id" method="POST">
             @csrf
-            @method('PUT')
             <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
 
             <button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
@@ -116,7 +115,7 @@
                         <div class="modal-footer info-md">
                             <a data-dismiss="modal" href="#">إلغــاء</a>
 
-                            <a class="btn btn-primary waves-effect waves-light" href="{{route('item-price.index')}}">رجــــــوع</a>
+                            <a class="btn btn-primary waves-effect waves-light" href="{{route('item-discount.index')}}">رجــــــوع</a>
 
                         </div>
                     </div>
@@ -128,7 +127,7 @@
                     <div class="sparkline13-list">
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd">
-                                <h1 style="direction:rtl">أسعار الاصناف</h1>
+                                <h1 style="direction:rtl">خصم الاصناف</h1>
                             </div>
                         </div>
                         <div class="sparkline13-graph">
@@ -138,10 +137,10 @@
                                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 shadow mg-b-15" style="direction:rtl">
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                                    <select data-placeholder="Choose a Country..." disabled name="item_id" class="chosen-select" tabindex="-1">
+                                                    <select data-placeholder="Choose a Country..." name="item_id" class="chosen-select" tabindex="-1">
                                                         <option value="">Select</option>
                                                         @foreach($items as $obj)
-                                                        <option @if($row->id==$obj->id) selected @endif value="{{$obj->id}}">{{$obj->code}} - {{$obj->ar_name}}</option>
+                                                        <option value="{{$obj->id}}">{{$obj->code}} - {{$obj->ar_name}}</option>
                                                         @endforeach
                                                     </select>
 
@@ -197,12 +196,12 @@
                                             <th>إسم تصنيف العميل</th>
 
                                             <th>إسم العميل</th>
-                                            <th>سعر الصنف</th>
+                                            <th>خصم الصنف</th>
                                             <th>الاختيارات</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rows">
-                                        @include('item-price.ajaxEdit')
+
                                     </tbody>
                                 </table>
                             </div>
@@ -241,7 +240,7 @@
 
 
                 },
-                url: "{{url('addRowPrice/fetch')}}",
+                url: "{{url('addRowDiscount/fetch')}}",
 
                 success: function(data) {
 
@@ -259,7 +258,6 @@
             debugger;
 
         })
-
 
         //filter
         $("#myInput").on("keyup", function() {
@@ -280,6 +278,19 @@
 
     })
 
+    //item batchDate
+    function clientDate(index) {
+        var text = $('#selectClient' + index + ' option:selected').text();
+
+        $('#item_client' + index).text(text)
+    }
+    //--------------------
+    //item batchDate
+    function catDate(index) {
+        var text = $('#selectCat' + index + ' option:selected').text();
+        $('#item_cat' + index).text(text)
+    }
+    //--------------------
     //adding row
     function addRow() {
         var rowCount = 0;
@@ -300,13 +311,14 @@
 
 
             },
-            url: "{{url('addRowPrice/fetch')}}",
+            url: "{{url('addRowDiscount/fetch')}}",
 
             success: function(data) {
 
                 $('#rows').append(data);
                 $("#selectCat" + rowSS).select2();
-                $('#firstTT' + rowSS).focus();            },
+                $('#firstTT' + rowSS).focus();
+            },
 
             error: function(request, status, error) {
                 console.log(request.responseText);
@@ -370,30 +382,9 @@
         var price = $("#itemprice" + index + "").val();
 
         $("#itemprice" + index).attr('value', price);
+
+        $("#total_item_price" + index).text(price);
     }
     //--------------------
-    // Delete DB row functions
-    function DeletePriceItem(id, index) {
-        debugger;
-        $("#del" + index).modal('hide');
-        $('.modal-backdrop.fade.in').remove();
-        $('.modal-open').css('overflow-y', 'scroll');
-        $.ajax({
-            type: 'GET',
-            url: "{{url('/itemPrice/Remove/Item')}}",
-            data: {
-                id: id,
-
-            },
-            success: function(data) {
-
-                location.reload(true);
-            },
-            error: function(request, status, error) {
-                console.log(request.responseText);
-            }
-        });
-
-    }
 </script>
 @endsection

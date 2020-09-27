@@ -14,7 +14,7 @@
                 <a href="#"></a> الأصناف<span class="bread-slash"> / </span>
             </li>
             <li>
-                <span class="bread-blod"> أسعار الأصناف </span>
+                <span class="bread-blod"> خصم الأصناف </span>
             </li>
         </ul>
     </div>
@@ -65,7 +65,7 @@
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
     <div class="container-fluid">
-        <form action="{{route('item-price.update',$row->id)}}" id="form-id" method="POST">
+        <form action="{{route('item-discount.update',$row->id)}}" id="form-id" method="POST">
             @csrf
             @method('PUT')
             <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
@@ -116,7 +116,7 @@
                         <div class="modal-footer info-md">
                             <a data-dismiss="modal" href="#">إلغــاء</a>
 
-                            <a class="btn btn-primary waves-effect waves-light" href="{{route('item-price.index')}}">رجــــــوع</a>
+                            <a class="btn btn-primary waves-effect waves-light" href="{{route('item-discount.index')}}">رجــــــوع</a>
 
                         </div>
                     </div>
@@ -197,12 +197,12 @@
                                             <th>إسم تصنيف العميل</th>
 
                                             <th>إسم العميل</th>
-                                            <th>سعر الصنف</th>
+                                            <th>خصم الصنف</th>
                                             <th>الاختيارات</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rows">
-                                        @include('item-price.ajaxEdit')
+                                        @include('item-discount.ajaxEdit')
                                     </tbody>
                                 </table>
                             </div>
@@ -241,7 +241,7 @@
 
 
                 },
-                url: "{{url('addRowPrice/fetch')}}",
+                url: "{{url('addRowDiscount/fetch')}}",
 
                 success: function(data) {
 
@@ -300,7 +300,7 @@
 
 
             },
-            url: "{{url('addRowPrice/fetch')}}",
+            url: "{{url('addRowDiscount/fetch')}}",
 
             success: function(data) {
 
@@ -380,7 +380,7 @@
         $('.modal-open').css('overflow-y', 'scroll');
         $.ajax({
             type: 'GET',
-            url: "{{url('/itemPrice/Remove/Item')}}",
+            url: "{{url('/itemDiscount/Remove/Item')}}",
             data: {
                 id: id,
 

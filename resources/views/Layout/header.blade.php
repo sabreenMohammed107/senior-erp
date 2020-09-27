@@ -216,7 +216,7 @@
 													<a href="{{route('items.index')}}" class="dropdown-item"> الأصناف </a>
 													<a href="{{route('stocks.index')}}" class="dropdown-item"> المخازن </a>
 													<a href="{{route('item-price.index')}}" class="dropdown-item">اسعار الاصناف</a>
-													<a href="#" class="dropdown-item">المخزون</a>
+													<a href="{{route('item-discount.index')}}" class="dropdown-item">خصم أسعار الاصناف</a>
 												</div>
 											</li>
 											<li class="nav-item dropdown res-dis-nn">
@@ -265,7 +265,7 @@
 											<li><a href="{{route('stocks.index')}}" class="dropdown-item"> المخازن </a>
 											</li>
 											<li><a href="{{route('item-price.index')}}" class="dropdown-item">اسعار الاصناف</a></li>
-											<li><a href="#" class="dropdown-item">المخزون</a></li>
+											<li><a href="{{route('item-discount.index')}}" class="dropdown-item">خصم أسعار الاصناف</a></li>
 										</ul>
 									</li>
 									<li>

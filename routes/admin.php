@@ -42,6 +42,11 @@ Route::resource('/item-price', 'ItemPricingController');
 Route::get('addRowPrice/fetch', 'ItemPricingController@addRow')->name('addRowPrice.fetch');
 Route::get('/itemPrice/Remove/Item','ItemPricingController@DeletePriceItem');
 
+/*********************==item-discount==******************* */
+Route::resource('/item-discount', 'ItemDiscountController');
+Route::get('addRowDiscount/fetch', 'ItemDiscountController@addRow')->name('addRowDiscount.fetch');
+Route::get('/itemDiscount/Remove/Item','ItemDiscountController@DeletePriceItem');
+
 
 
 
