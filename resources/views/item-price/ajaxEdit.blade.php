@@ -32,19 +32,25 @@ $counterrrr = 1;
             @foreach ($cats as $cat)
             <option value="{{$cat->id}}">{{$cat->ar_name}} - {{$cat->code}}</option>
             @endforeach
-        </select></td>
+        </select>
 
-
+        <span id="item_cat{{$counter}}" style="display:none;">{{$itemo->category->ar_name ?? ''}} - {{$itemo->category->code ?? ''}}</span>
+        </td>
     <td><select id="selectClient{{$counter}}" name="selectClientup{{$counter}}"  disabled style="display: none" class="form-control chosen-select" placeholder="أختر المنتج">
             <option value="">{{$itemo->client->name ?? ''}} - {{$itemo->client->code ?? ''}}</option>
             @foreach ($clients as $client)
             <option value="{{$client->id}}">{{$client->name}} - {{$client->code}}</option>
             @endforeach
-        </select></td>
+        </select>
+        <span id="item_client{{$counter}}" style="display:none;">{{$itemo->client->name ?? ''}} - {{$itemo->client->code ?? ''}}</span>
+
+    </td>
     <td>
         <div class="input-mark-inner mg-b-22">
             <input type="number" onkeypress="enterForRow(event,{{$counter}})" id="itemprice{{$counter}}" name="item_priceup{{$counter}}"  oninput="itemPrice({{$counter}})" value="{{$itemo->item_price}}" class="form-control item_price" placeholder="">
         </div>
+        <span style="display:none;" id="total_item_price{{$counter}}"  class="total_item_price" placeholder="">{{$itemo->item_price}}</span>
+
     </td>
     <td>
     <div class="product-buttons">

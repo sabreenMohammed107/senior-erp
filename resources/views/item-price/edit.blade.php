@@ -184,7 +184,7 @@
                                     }
                                 </style>
                                 <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة سعر</button>
-                                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="إبحث بسعر الصنف ..">
+                                <input type="text" id="myInput" placeholder="إبحث بسعر الصنف ..">
 
                                 <table class="table table-bordered" id="table" style="direction:rtl;">
                                     <thead>
@@ -259,6 +259,24 @@
             debugger;
 
         })
+
+
+        //filter
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#table tr").filter(function() {
+                var row_num = $(this).attr('data-id');
+                $(this).toggle(
+                    $('#item_cat' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                    $('#item_client' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                    $('#total_item_price' + row_num).text().toLowerCase().indexOf(value) > -1 
+
+                  
+                  
+                );
+            });
+          
+        });
 
     })
 
@@ -377,30 +395,6 @@
             }
         });
 
-    }
-
-    // custom search
-function myFunction() {
-        // Declare variables
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("table");
-        tr = table.getElementsByTagName("tr");
-
-        // Loop through all table rows, and hide those who don't match the search query
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[4];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-              
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
     }
 </script>
 @endsection
