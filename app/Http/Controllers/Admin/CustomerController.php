@@ -206,7 +206,7 @@ class CustomerController extends Controller
             $success = false;
         }
 
-        if ($success==true) {
+        if ($success=true) {
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
         } else {
             return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
