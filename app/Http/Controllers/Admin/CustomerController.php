@@ -199,18 +199,18 @@ class CustomerController extends Controller
             DB::commit();
             // Enable foreign key checks!
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+
         } catch (\Exception $e) {
 
             DB::rollback();
 
             $success = false;
+            return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
+
         }
 
-        if ($success=true) {
-            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-        } else {
-            return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
-        }
+       
     }
 
     /**
