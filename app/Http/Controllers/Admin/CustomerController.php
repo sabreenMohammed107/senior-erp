@@ -48,7 +48,7 @@ class CustomerController extends Controller
     public function index()
     {
 
-        $rows = Person::where('person_type_id',101)->orderBy('created_at', 'Desc')->get();
+        $rows = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
 
         return view($this->viewName . 'index', compact('rows'));
     }
@@ -162,57 +162,55 @@ class CustomerController extends Controller
         }
 
 
-        
+
         $success = true;
 
-    DB::beginTransaction();
+        DB::beginTransaction();
 
-    try{
-
-        if ($increment > $personBranch['end_code']) {
-            return redirect()->route($this->routeName . 'index')->with('flash_danger', "كود العميل اكبر من نطاق الكود للفرع");
-        } else {
-            $customer = $this->object::create($data);
-            $financeEntry = new Financial_entry();
-            $financeEntry->trans_type_id = 102;
-            $financeEntry->entry_serial = -1;
-            $financeEntry->entry_date = $data['person_open_balance_date'];
-            $financeEntry->person_id = $customer->id;
-            $financeEntry->person_name = $data['name'];
-            $financeEntry->branch_id = $data['branch_id'];
-            $financeEntry->entry_statment = "رصيد أفتتاحى لعميل";
-            if ($data['balance_type'] == 1) {
-                $financeEntry->debit = $data['person_open_balance'];
-                $financeEntry->credit = 0;
+        try {
+            // Disable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            if ($increment > $personBranch['end_code']) {
+                return redirect()->route($this->routeName . 'index')->with('flash_danger', "كود العميل اكبر من نطاق الكود للفرع");
             } else {
-                $financeEntry->debit = 0;
-                $financeEntry->credit = $data['person_open_balance'];
+                $customer = $this->object::create($data);
+                $financeEntry = new Financial_entry();
+                $financeEntry->trans_type_id = 102;
+                $financeEntry->entry_serial = -1;
+                $financeEntry->entry_date = $data['person_open_balance_date'];
+                $financeEntry->person_id = $customer->id;
+                $financeEntry->person_name = $data['name'];
+                $financeEntry->branch_id = $data['branch_id'];
+                $financeEntry->entry_statment = "رصيد أفتتاحى لعميل";
+                if ($data['balance_type'] == 1) {
+                    $financeEntry->debit = $data['person_open_balance'];
+                    $financeEntry->credit = 0;
+                } else {
+                    $financeEntry->debit = 0;
+                    $financeEntry->credit = $data['person_open_balance'];
+                }
+                $gl = Financial_subsystem::where('id', 115)->first();
+                $financeEntry->gl_item_id = $gl->gl_item_id;
+
+                $financeEntry->save();
             }
-            $gl = Financial_subsystem::where('id', 115)->first();
-            $financeEntry->gl_item_id = $gl->gl_item_id;
 
-            $financeEntry->save();
 
+            DB::commit();
+            // Enable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            $success = false;
         }
 
-
-        DB::commit();
-
-    }catch(\Exception $e){
-
-        DB::rollback();
-
-        $success = false;
-
-    }
-
-    if($success){
-        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-    }
-
-    else{
-        return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
-    }
+        if ($success) {
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        } else {
+            return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
+        }
     }
 
     /**
@@ -280,11 +278,11 @@ class CustomerController extends Controller
             'commercial_register' => $request->input('commercial_register'),
             'tax_card' => $request->input('tax_card'),
             'tax_authority' => $request->input('tax_authority'),
-           
+
             'person_limit_balance' => $request->input('person_limit_balance'),
             'notes' => $request->input('notes'),
             'last_invoice_date' => Carbon::parse($request->input('last_invoice_date')),
-           
+
         ];
 
         if ($request->input('person_currency_id')) {
@@ -331,7 +329,7 @@ class CustomerController extends Controller
         }
 
 
-       
+
 
 
 
