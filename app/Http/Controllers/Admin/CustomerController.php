@@ -189,7 +189,7 @@ class CustomerController extends Controller
                     $financeEntry->debit = 0;
                     $financeEntry->credit = $data['person_open_balance'];
                 }
-                $gl = Financial_subsystem::where('id', 125)->first();
+                $gl = Financial_subsystem::where('id', 115)->first();
                 $financeEntry->gl_item_id = $gl->gl_item_id;
 
                 $financeEntry->save();
