@@ -13,6 +13,7 @@ use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use File;
 use DB;
+
 class SupplierController extends Controller
 {
     protected $object;
@@ -53,10 +54,10 @@ class SupplierController extends Controller
     public function create()
     {
         $person_categories = Person_catrgory::all();
-        
+
         $currencies = Currency::all();
-       
-        return view($this->viewName . 'add', compact('person_categories', 'currencies', ));
+
+        return view($this->viewName . 'add', compact('person_categories', 'currencies',));
     }
 
     /**
@@ -68,10 +69,10 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $max = Person::where('person_type_id', 100)->latest('code')->first();
-      
+
         $max = ($max != null) ? intval($max['code']) : 0;
         $max++;
-       
+
         $data = [
             'code' => $max,
             'name' => $request->input('name'),
@@ -102,8 +103,8 @@ class SupplierController extends Controller
 
             $data['person_category_id'] = $request->input('person_category_id');
         }
-       
-       
+
+
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -121,14 +122,15 @@ class SupplierController extends Controller
         }
 
 
-        
+
         $success = true;
 
-    DB::beginTransaction();
+        DB::beginTransaction();
 
-    try{
+        try {
 
-     
+            // Disable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             $supplier = $this->object::create($data);
             $financeEntry = new Financial_entry();
             $financeEntry->trans_type_id = 102;
@@ -136,7 +138,7 @@ class SupplierController extends Controller
             $financeEntry->entry_date = $data['person_open_balance_date'];
             $financeEntry->person_id = $supplier->id;
             $financeEntry->person_name = $data['name'];
-           
+
             $financeEntry->entry_statment = "رصيد أفتتاحى لمورد";
             if ($data['balance_type'] == 1) {
                 $financeEntry->credit = $data['person_open_balance'];
@@ -150,26 +152,19 @@ class SupplierController extends Controller
 
             $financeEntry->save();
 
-     
 
 
-        DB::commit();
 
-    }catch(\Exception $e){
+            DB::commit();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        } catch (\Exception $e) {
 
-        DB::rollback();
+            DB::rollback();
 
-        $success = false;
-
-    }
-
-    if($success){
-        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-    }
-
-    else{
-        return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
-    }
+            $success = false;
+            return redirect()->route($this->routeName . 'index')->with('flash_danger', $e->getMessage());
+        }
     }
 
     /**
@@ -181,13 +176,12 @@ class SupplierController extends Controller
     public function show($id)
     {
         $row = Person::where('id', $id)->first();
-      
+
         $person_categories = Person_catrgory::all();
-     
+
         $currencies = Currency::all();
-      
-        return view($this->viewName . 'view', compact('row', 'person_categories', 'currencies', ));
-   
+
+        return view($this->viewName . 'view', compact('row', 'person_categories', 'currencies',));
     }
 
     /**
@@ -199,12 +193,12 @@ class SupplierController extends Controller
     public function edit($id)
     {
         $row = Person::where('id', $id)->first();
-      
+
         $person_categories = Person_catrgory::all();
-     
+
         $currencies = Currency::all();
-      
-        return view($this->viewName . 'edit', compact('row', 'person_categories', 'currencies', ));
+
+        return view($this->viewName . 'edit', compact('row', 'person_categories', 'currencies',));
     }
 
     /**
@@ -216,9 +210,9 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
+
         $data = [
-           
+
             'name' => $request->input('name'),
             'nick_name' => $request->input('nick_name'),
             'phone1' => $request->input('phone1'),
@@ -231,10 +225,10 @@ class SupplierController extends Controller
             'commercial_register' => $request->input('commercial_register'),
             'tax_card' => $request->input('tax_card'),
             'tax_authority' => $request->input('tax_authority'),
-            
+
             'person_limit_balance' => $request->input('person_limit_balance'),
             'notes' => $request->input('notes'),
-           
+
         ];
 
         if ($request->input('person_currency_id')) {
@@ -246,8 +240,8 @@ class SupplierController extends Controller
 
             $data['person_category_id'] = $request->input('person_category_id');
         }
-       
-       
+
+
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -268,10 +262,8 @@ class SupplierController extends Controller
 
 
             $supplierUpdate = $this->object::findOrFail($id)->update($data);
-
         });
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-   
     }
 
     /**
@@ -301,7 +293,7 @@ class SupplierController extends Controller
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
     }
 
-    
+
     /**
      * image
      */
