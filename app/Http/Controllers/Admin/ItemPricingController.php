@@ -101,11 +101,11 @@ class ItemPricingController extends Controller
             DB::commit();
 
             return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم  إضافة سعر للصنف !');
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
             // throw $th;
             DB::rollBack();
 
-            return redirect()->back()->with('flash_success', 'حدث خطأ ما يرجي اعادة المحاولة!');
+            return redirect()->back()->with('flash_success',  $e->getMessage());
         }
     }
 
@@ -214,11 +214,11 @@ class ItemPricingController extends Controller
             DB::commit();
 
             return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم  إضافة سعر للصنف !');
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
             // throw $th;
             DB::rollBack();
 
-            return redirect()->back()->with('flash_success', 'حدث خطأ ما يرجي اعادة المحاولة!');
+            return redirect()->back()->with('flash_success',  $e->getMessage());
         }
     }
 
