@@ -222,7 +222,7 @@
                                         </td>
                                         <td>
                                             <div class="input-mark-inner mg-b-22">
-                                                <input type="number" onkeypress="enterForRow(event,{{$counter}})" id="itemprice{{$counter}}" name="item_priceup{{$counter}}" oninput="itemPrice({{$counter}})" value="{{$itemo->item_discount_price}}" class="form-control item_price" placeholder="">
+                                                <input type="number" step=".01" onkeypress="enterForRow(event,{{$counter}})" id="itemprice{{$counter}}" name="item_priceup{{$counter}}" oninput="itemPrice({{$counter}})" value="{{$itemo->item_discount_price}}" class="form-control item_price" placeholder="">
                                             </div>
                                             <span style="display:none;" id="total_item_price{{$counter}}" class="total_item_price" placeholder="">{{$itemo->item_discount_price}}</span>
 

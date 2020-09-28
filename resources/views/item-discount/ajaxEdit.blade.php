@@ -93,4 +93,4 @@ $counterrrr++;
 ?>
 
 @endforeach
-<input type="number" style="display: none;" value="{{$counterrrr}}" name="qqq" class="form-control item_quantity" placeholder="">
+<input type="number" step=".01" style="display: none;" value="{{$counterrrr}}" name="qqq" class="form-control item_quantity" placeholder="">

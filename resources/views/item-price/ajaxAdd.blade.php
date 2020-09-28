@@ -35,7 +35,7 @@
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" onkeypress="enterForRow(event,{{$rowCount}})" id="itemprice{{$rowCount}}" name="item_price{{$rowCount}}" oninput="itemPrice({{$rowCount}})" value="0" class="form-control item_price" placeholder="">
+            <input type="number" step=".01" onkeypress="enterForRow(event,{{$rowCount}})" id="itemprice{{$rowCount}}" name="item_price{{$rowCount}}" oninput="itemPrice({{$rowCount}})" value="0" class="form-control item_price" placeholder="">
         </div>
         <span style="display:none;" id="total_item_price{{$rowCount}}" class="total_item_price" placeholder=""></span>
 
