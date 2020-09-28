@@ -165,11 +165,11 @@ class CustomerController extends Controller
 
         $success = true;
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
 
-        // try {
-        //     // Disable foreign key checks!
-        //     DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        try {
+            // Disable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             if ($increment > $personBranch['end_code']) {
                 return redirect()->route($this->routeName . 'index')->with('flash_danger', "كود العميل اكبر من نطاق الكود للفرع");
             } else {
@@ -196,21 +196,21 @@ class CustomerController extends Controller
             }
 
 
-        //     DB::commit();
-        //     // Enable foreign key checks!
-        //     DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        // } catch (\Exception $e) {
+            DB::commit();
+            // Enable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } catch (\Exception $e) {
 
-        //     DB::rollback();
+            DB::rollback();
 
-        //     $success = false;
-        // }
+            $success = false;
+        }
 
-        // if ($success) {
+        if ($success) {
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-        // } else {
-        //     return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
-        // }
+        } else {
+            return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
+        }
     }
 
     /**
