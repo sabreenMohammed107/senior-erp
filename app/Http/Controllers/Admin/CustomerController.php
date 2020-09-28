@@ -205,7 +205,7 @@ class CustomerController extends Controller
 
             DB::rollback();
 
-            return redirect()->route($this->routeName . 'index')->with('flash_danger', $e->getMessage());
+            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
 
         }
 

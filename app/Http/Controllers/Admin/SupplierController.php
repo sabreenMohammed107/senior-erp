@@ -162,8 +162,8 @@ class SupplierController extends Controller
 
             DB::rollback();
 
-            $success = false;
-            return redirect()->route($this->routeName . 'index')->with('flash_danger', $e->getMessage());
+          
+            return redirect()->back()->with('flash_danger', $e->getMessage());
         }
     }
 
