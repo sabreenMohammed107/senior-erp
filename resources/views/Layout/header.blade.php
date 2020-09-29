@@ -217,6 +217,8 @@
 													<a href="{{route('stocks.index')}}" class="dropdown-item"> المخازن </a>
 													<a href="{{route('item-price.index')}}" class="dropdown-item">اسعار الاصناف</a>
 													<a href="{{route('item-discount.index')}}" class="dropdown-item">خصم أسعار الاصناف</a>
+													<a href="{{route('sales-order.index')}}" class="dropdown-item"> أوامر البيع </a>
+
 												</div>
 											</li>
 											<li class="nav-item dropdown res-dis-nn">
@@ -224,7 +226,7 @@
 												<div role="menu" class="dropdown-menu animated zoomIn">
 													<a href="{{route('branch.index')}}" class="dropdown-item">الفروع </a>
 													<a href="{{route('users.index')}}" class="dropdown-item">المستخدمين </a>
-													<a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات </a> 
+													<a href="{{route('item-category.index')}}" class="dropdown-item">التصنيفات </a>
 													<a href="{{route('customer.index')}}" class="dropdown-item">العملاء </a>
 													<a href="{{route('supplier.index')}}" class="dropdown-item">الموردين </a>
 												</div>
@@ -266,6 +268,9 @@
 											</li>
 											<li><a href="{{route('item-price.index')}}" class="dropdown-item">اسعار الاصناف</a></li>
 											<li><a href="{{route('item-discount.index')}}" class="dropdown-item">خصم أسعار الاصناف</a></li>
+											<li><a href="{{route('sales-order.index')}}" class="dropdown-item"> أوامر البيع </a></li>
+
+
 										</ul>
 									</li>
 									<li>

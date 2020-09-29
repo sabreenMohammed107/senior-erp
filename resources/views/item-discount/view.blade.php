@@ -156,7 +156,13 @@
                                     text-align: right;
                                 }
                             </style>
-                            <input type="text" id="myInput"  placeholder="إبحث باسم الصنف ..">
+                               <div class="row res-rtl" style="display: flex ">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
+                              <h3 style="text-align:right">اضافة</h3>
+                                <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
+                                        </div>
+                              </div>
+                                <div style="overflow-x:auto;">
 
                             <table class="table table-bordered" id="table" style="direction:rtl;">
                                 <thead>
@@ -245,6 +251,7 @@
                                     @endforeach
                                     <input type="number" style="display: none;" value="{{$counterrrr}}" name="qqq" class="form-control item_quantity" placeholder=""> </tbody>
                             </table>
+                                </div>
                         </div>
                     </div>
                 </div>

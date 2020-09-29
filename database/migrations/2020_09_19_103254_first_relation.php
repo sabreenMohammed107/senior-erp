@@ -114,6 +114,7 @@ class FirstRelation extends Migration
          //  This is Realations for the representatives Table ..
          Schema::table('representatives', function (Blueprint $table) {
             $table->foreign('rep_type_id')->references('id')->on('rep_types');
+            $table->foreign('branch_id')->references('id')->on('branches');
         });
 
          //  This is Realations for the stocks_transaction_types Table ..

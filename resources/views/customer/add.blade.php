@@ -137,7 +137,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود الفرع</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="branch_id" class="chosen-select" tabindex="-1">
+                                                <select data-placeholder="Choose a Country..." name="branch_id" class="chosen-select branch" tabindex="-1">
                                                     <option value="">Select</option>
                                                     @foreach($branches as $obj)
                                                     <option value="{{$obj->id}}">{{$obj->ar_name}} - {{$obj->code}}</option>
@@ -163,22 +163,16 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود التسويق</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="marketing_rep_id" class="chosen-select" tabindex="-1">
-                                                    <option value="">Select</option>
-                                                    @foreach($marketers as $obj)
-                                                    <option value="{{$obj->id}}">{{$obj->ar_name}}</option>
-                                                    @endforeach
+                                                <select data-placeholder="Choose a Country..." name="marketing_rep_id" id="marketing_rep_id" class="chosen-select" tabindex="-1">
+                                                   
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود المبيعات</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="sales_rep_id" class="chosen-select" tabindex="-1">
-                                                    <option value="">Select</option>
-                                                    @foreach($sales as $obj)
-                                                    <option value="{{$obj->id}}">{{$obj->ar_name}}</option>
-                                                    @endforeach
+                                                <select data-placeholder="Choose a Country..." name="sales_rep_id" id="sales_rep_id" class="chosen-select" tabindex="-1">
+                                                   
                                                 </select>
                                             </div>
                                         </div>
@@ -337,6 +331,37 @@
 
 <script>
     $(document).ready(function() {
+
+        $('.branch').change(function() {
+
+if ($(this).val() != '') {
+    var select = $(this).attr("id");
+    var value = $(this).val();
+
+
+    $.ajax({
+        url: "{{route('dynamicRepBranch.fetch')}}",
+        method: "get",
+        data: {
+            select: select,
+            value: value,
+
+        },
+        success: function(data) {
+            var result = $.parseJSON(data);
+            $('#marketing_rep_id').html(result[0]);
+            $("#marketing_rep_id").addClass("chosen-select");
+            $("#marketing_rep_id").trigger("chosen:updated");
+            $(select).trigger("chosen:updated");
+            $('#sales_rep_id').html(result[1]);
+            $("#sales_rep_id").addClass("chosen-select");
+            $("#sales_rep_id").trigger("chosen:updated");
+            $(select).trigger("chosen:updated");
+        }
+
+    })
+}
+});
 
         $('.dynamic').change(function() {
 

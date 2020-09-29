@@ -31,59 +31,59 @@
             @method('PUT')
             <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
 
-<button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
+            <button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
 
-<!--save Company-->
-<div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header header-color-modal bg-color-2">
-                <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
-                <div class="modal-close-area modal-close-df">
-                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+            <!--save Company-->
+            <div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header header-color-modal bg-color-2">
+                            <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
+                            <div class="modal-close-area modal-close-df">
+                                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+
+                            <h4>هل تريد حفظ البيانات ؟ </h4>
+                        </div>
+                        <div class="modal-footer info-md">
+                            <a data-dismiss="modal" href="#">إلغــاء</a>
+
+                            <button class="btn btn-primary waves-effect waves-light" onclick="document.getElementById('form-id').submit();">حفظ</button>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-body">
-                <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+            <!--/save Company-->
 
-                <h4>هل تريد حفظ البيانات ؟ </h4>
-            </div>
-            <div class="modal-footer info-md">
-                <a data-dismiss="modal" href="#">إلغــاء</a>
+            <!--cancle Company-->
+            <div id="cancle" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header header-color-modal bg-color-2">
+                            <h4 class="modal-title" style="text-align:right">رجوع البيانات</h4>
+                            <div class="modal-close-area modal-close-df">
+                                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
 
-                <button class="btn btn-primary waves-effect waves-light" onclick="document.getElementById('form-id').submit();">حفظ</button>
+                            <h4>هل تريد الرجوع لصفحه الكل ؟ </h4>
+                        </div>
+                        <div class="modal-footer info-md">
+                            <a data-dismiss="modal" href="#">إلغــاء</a>
 
-            </div>
-        </div>
-    </div>
-</div>
-<!--/save Company-->
+                            <a class="btn btn-primary waves-effect waves-light" href="{{route('customer.index')}}">رجــــــوع</a>
 
-    <!--cancle Company-->
-    <div id="cancle" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header header-color-modal bg-color-2">
-                <h4 class="modal-title" style="text-align:right">رجوع البيانات</h4>
-                <div class="modal-close-area modal-close-df">
-                    <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-body">
-                <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
-
-                <h4>هل تريد الرجوع لصفحه الكل ؟ </h4>
-            </div>
-            <div class="modal-footer info-md">
-                <a data-dismiss="modal" href="#">إلغــاء</a>
-
-                <a class="btn btn-primary waves-effect waves-light" href="{{route('customer.index')}}">رجــــــوع</a>
-
-            </div>
-        </div>
-    </div>
-</div>
-<!--/cancle Company-->
+            <!--/cancle Company-->
             <div class="row res-rtl" style="display: flex ;flex-direction: row-reverse ;">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <div class="profile-info-inner">
@@ -139,7 +139,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود تصنيف العميل</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="person_category_id" class="chosen-select" tabindex="-1">
+                                                <select data-placeholder="Choose a Country..." name="person_category_id" class="chosen-select branch" tabindex="-1">
                                                     <option value="">Select</option>
                                                     @foreach($person_categories as $obj)
                                                     <option @if($row->person_category_id==$obj->id) selected @endif
@@ -154,7 +154,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود التسويق</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="marketing_rep_id" class="chosen-select" tabindex="-1">
+                                                <select data-placeholder="Choose a Country..." name="marketing_rep_id" id="marketing_rep_id" class="chosen-select" tabindex="-1">
                                                     <option value="">Select</option>
                                                     @foreach($marketers as $obj)
                                                     <option @if($row->marketing_rep_id==$obj->id) selected @endif value="{{$obj->id}}">{{$obj->ar_name}}</option>
@@ -165,7 +165,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود المبيعات</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="sales_rep_id" class="chosen-select" tabindex="-1">
+                                                <select data-placeholder="Choose a Country..." name="sales_rep_id" id="sales_rep_id" class="chosen-select" tabindex="-1">
                                                     <option value="">Select</option>
                                                     @foreach($sales as $obj)
                                                     <option @if($row->sales_rep_id==$obj->id) selected @endif value="{{$obj->id}}">{{$obj->ar_name}}</option>
@@ -217,7 +217,7 @@
                                                     <div class="form-group">
                                                         <div class="chosen-select-single mg-b-20">
                                                             <label><b>كود المنطقة</b> </label>
-                                                            <select data-placeholder="Choose a city..."  name="city_id" id="city" class="chosen-select city" tabindex="-1">
+                                                            <select data-placeholder="Choose a city..." name="city_id" id="city" class="chosen-select city" tabindex="-1">
                                                                 <option value="">Select</option>
                                                                 @foreach($cities as $obj)
                                                                 <option @if($row->city_id==$obj->id) selected @endif value="{{$obj->id}}">{{$obj->ar_name}}</option>
@@ -228,8 +228,8 @@
                                                     <div class="form-group">
                                                         <div class="chosen-select-single mg-b-20">
                                                             <label><b>كود الموقع</b> </label>
-                                                            <select data-placeholder="Choose a location..."  name="location_id" id="location" class="chosen-select" tabindex="-1">
-                                                            <option value="">Select</option>
+                                                            <select data-placeholder="Choose a location..." name="location_id" id="location" class="chosen-select" tabindex="-1">
+                                                                <option value="">Select</option>
                                                                 @foreach($locations as $obj)
                                                                 <option @if($row->location_id==$obj->id) selected @endif value="{{$obj->id}}">{{$obj->ar_name}}</option>
                                                                 @endforeach
@@ -341,6 +341,37 @@
 
 <script>
     $(document).ready(function() {
+
+        $('.branch').change(function() {
+
+            if ($(this).val() != '') {
+                var select = $(this).attr("id");
+                var value = $(this).val();
+
+
+                $.ajax({
+                    url: "{{route('dynamicRepBranch.fetch')}}",
+                    method: "get",
+                    data: {
+                        select: select,
+                        value: value,
+
+                    },
+                    success: function(data) {
+                        var result = $.parseJSON(data);
+                        $('#marketing_rep_id').html(result[0]);
+                        $("#marketing_rep_id").addClass("chosen-select");
+                        $("#marketing_rep_id").trigger("chosen:updated");
+                        $(select).trigger("chosen:updated");
+                        $('#sales_rep_id').html(result[1]);
+                        $("#sales_rep_id").addClass("chosen-select");
+                        $("#sales_rep_id").trigger("chosen:updated");
+                        $(select).trigger("chosen:updated");
+                    }
+
+                })
+            }
+        });
 
         $('.dynamic').change(function() {
 

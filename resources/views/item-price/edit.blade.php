@@ -183,9 +183,14 @@
                                         text-align: right;
                                     }
                                 </style>
-                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة سعر</button>
-                                <input type="text" id="myInput" placeholder="إبحث بسعر الصنف ..">
-
+                                <div class="row res-rtl" style="display: flex ">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
+                              <h3 style="text-align:right">اضافة</h3>
+                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
+                                        </div>
+                              </div>
+                                <div style="overflow-x:auto;">
                                 <table class="table table-bordered" id="table" style="direction:rtl;">
                                     <thead>
                                         <tr>
@@ -205,6 +210,7 @@
                                         @include('item-price.ajaxEdit')
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>

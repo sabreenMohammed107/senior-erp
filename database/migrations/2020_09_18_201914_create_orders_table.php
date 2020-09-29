@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->BigInteger('stock_id')->unsigned()->nullable();
             $table->string('person_name', 255)->nullable();
             $table->BigInteger('person_type_id')->unsigned()->nullable();
-            $table->string('received_date_suggested', 255)->nullable();
+            $table->dateTime('received_date_suggested', 6)->nullable();
             $table->BigInteger('currency_id')->unsigned()->nullable();
             $table->float('exchange_rate', 8, 2)->nullable();
             $table->text('order_description')->nullable();

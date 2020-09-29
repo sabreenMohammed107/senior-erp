@@ -19,7 +19,7 @@ use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use File;
 use DB;
-
+use Log;
 class CustomerController extends Controller
 {
     protected $object;
@@ -224,8 +224,8 @@ class CustomerController extends Controller
         $user = User::where('id', 1)->first();
         $branches = $user->branch;
         $person_categories = Person_catrgory::all();
-        $marketers = Representative::where('rep_type_id', 101)->get();
-        $sales = Representative::where('rep_type_id', 100)->get();
+        $marketers = Representative::where('rep_type_id', 101)->where('branch_id',$row->branch_id)->get();
+        $sales = Representative::where('rep_type_id', 100)->where('branch_id',$row->branch_id)->get();
         $currencies = Currency::all();
         $countries = Country::all();
         $cities = City::where('country_id', $row->country_id)->get();
@@ -245,8 +245,8 @@ class CustomerController extends Controller
         $user = User::where('id', 1)->first();
         $branches = $user->branch;
         $person_categories = Person_catrgory::all();
-        $marketers = Representative::where('rep_type_id', 101)->get();
-        $sales = Representative::where('rep_type_id', 100)->get();
+        $marketers = Representative::where('rep_type_id', 101)->where('branch_id',$row->branch_id)->get();
+        $sales = Representative::where('rep_type_id', 100)->where('branch_id',$row->branch_id)->get();
         $currencies = Currency::all();
         $countries = Country::all();
         $cities = City::where('country_id', $row->country_id)->get();
@@ -415,6 +415,37 @@ class CustomerController extends Controller
 
 
         echo $output;
+    }
+    
+    /**
+     * get reprsentative dependant on branch.
+     *
+     * @param  request
+     * @return \Illuminate\Http\Response
+     */
+    public function dynamicRepBranch(Request $request)
+    {
+        $select = $request->get('select');
+        $value = $request->get('value');
+
+        $data = Location::where('city_id', $value)->get();
+        $marketers = Representative::where('rep_type_id', 101)->where('branch_id',$value)->get();
+        $sales = Representative::where('rep_type_id', 100)->where('branch_id',$value)->get();
+        $output = '<option value="">Select</option>';
+        foreach ($marketers as $row) {
+
+            $output .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
+        }
+
+        $output2 = '<option value="">Select</option>';
+        foreach ($sales as $row) {
+
+            $output2 .= '<option value="' . $row->id . '">' . $row->ar_name . '</option>';
+        }
+
+
+        echo json_encode(array($output, $output2));
+        
     }
 
     /**
