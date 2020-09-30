@@ -58,5 +58,13 @@ Route::namespace('Admin')->group(function () {
     Route::get('/editSelectValPerson.fetch', 'SaleOrderController@editSelectValPerson')->name('editSelectValPerson.fetch');
     Route::get('/editSelectBatch.fetch', 'SaleOrderController@editSelectBatch')->name('editSelectBatch.fetch');
     Route::get('/saleOrder/Remove/Item', 'SaleOrderController@DeleteOrderItem');
+    /*********************==approve-oreder==******************* */
+Route::resource('/approve-sales-order', 'ApproveSalesOrderController');
+Route::get('/dynamicApprovalOrder.fetch', 'ApproveSalesOrderController@branchFetch')->name('dynamicApprovalOrder.fetch');
+Route::post('/approveOrder', 'ApproveSalesOrderController@approveOrder')->name('approveOrder');
+
+Route::post('/rejectOrder', 'ApproveSalesOrderController@rejectOrder')->name('rejectOrder');
+
+/*********************************************************************** */
 
 });
