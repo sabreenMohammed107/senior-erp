@@ -450,12 +450,15 @@ class SaleOrderController extends Controller
             if ($Clientprice) {
 
                 $outs = $Clientprice->item_price;
+                $outs = 1;  
             } elseif ($Categoryprice) {
 
                 $outs = $Categoryprice->item_price;
+                $outs = 2;
             } else {
 
                 $outs = $ItemPrice->retail_price;
+                $outs = 3;
             }
             //discount
 
@@ -473,13 +476,6 @@ class SaleOrderController extends Controller
                 $disc = 0;
             }
 
-
-
-
-
-
-
-         
 
             echo json_encode(array($row->batch_no,  date_format($date, "d-m-Y"), $row->item_total_qty, $outs ,$disc));
         }
