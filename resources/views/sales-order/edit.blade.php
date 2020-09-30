@@ -798,7 +798,7 @@
 
                 $("#qty" + index).attr('max', result[2]);
 alert(result);
-                $("#itemprice" + index + "").attr('value',300);
+                $("#itemprice" + index + "").attr('value',result[3]);
                 $("#disval" + index + "").attr('value', result[4]);
 
                 headCalculations(index);

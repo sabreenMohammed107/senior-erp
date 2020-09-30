@@ -442,7 +442,7 @@ class SaleOrderController extends Controller
             $outs = 0;
             $disc = 0;
 
-            $ItemPrice = Item::where('id', $select_value)->first();
+            $ItemPrice = Item::where('id', $row->item_id)->first();
 
             $Clientprice = Items_price::where('item_id', $row->item_id)->where('client_id', $person)->first();
 
@@ -450,15 +450,12 @@ class SaleOrderController extends Controller
             if ($Clientprice) {
 
                 $outs = $Clientprice->item_price;
-                $outs = 1;  
             } elseif ($Categoryprice) {
 
                 $outs = $Categoryprice->item_price;
-                $outs = 2;
             } else {
 
                 $outs = $ItemPrice->retail_price;
-                $outs = 3;
             }
             //discount
 
