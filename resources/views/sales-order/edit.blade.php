@@ -70,32 +70,33 @@
 
 @section('content')
 <!-- Static Table Start -->
- <!-- Modal -->
- <div class="modal fade" id="myModal" role="dialog">
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content" style="direction: rtl;">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" style="text-align:center">تحذير</h4>
+
+        <!-- Modal content-->
+        <div class="modal-content" style="direction: rtl;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="text-align:center">تحذير</h4>
+            </div>
+            <div class="modal-body">
+                <p>هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده .</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <p>هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده .</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button>
-        </div>
-      </div>
-      
+
     </div>
-  </div>
+</div>
 <div class="data-table-area mg-b-15">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <form action="{{route('sales-order.store')}}" id="form-id" method="post">
+                <form action="{{route('sales-order.update',$orderObj->id)}}" id="form-id" method="post">
                     @csrf
+                    @method('PUT')
                     <div class="mg-b-23">
                         <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
 
@@ -181,7 +182,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                    <?php
+                                                        <?php
                                                         $date = date_create($orderObj->order_date);
                                                         ?>
                                                         <input type="date" id="order_date" value="{{ date_format($date, 'Y-m-d')}}" name="order_date" class="form-control" placeholder="">
@@ -238,7 +239,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                    <?php
+                                                        <?php
                                                         $date = date_create($orderObj->received_date_suggested);
                                                         ?>
                                                         <input type="date" id="order_delev" value="{{ date_format($date, 'Y-m-d')}}" name="received_date_suggested" class="form-control" placeholder="">
@@ -361,7 +362,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly  value="{{$saleCode->ar_name ?? ''}}" id="saleMan" class="form-control" placeholder="">
+                                                            <input type="text" readonly value="{{$saleCode->ar_name ?? ''}}" id="saleMan" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -606,8 +607,8 @@
                     $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
                     $('#total' + row_num).text().toLowerCase().indexOf(value) > -1 ||
                     $('#final' + row_num).text().toLowerCase().indexOf(value) > -1 ||
-                     $('#upselect' + row_num).val().toLowerCase().indexOf(value) > -1 ||
-                    $('#upselectBatch' + row_num).val().toLowerCase().indexOf(value) > -1 
+                    $('#upselect' + row_num).val().toLowerCase().indexOf(value) > -1 ||
+                    $('#upselectBatch' + row_num).val().toLowerCase().indexOf(value) > -1
 
                 );
             });
@@ -739,7 +740,7 @@
             data: {
 
                 select_value: select_value,
-                select_stock:select_stock
+                select_stock: select_stock
 
             },
             url: "{{route('editSelectVal.fetch')}}",
@@ -754,7 +755,8 @@
                 $("#batchNum" + index + "").text('');
                 $("#batchDate" + index + "").text('');
                 $("#batchqty" + index + "").text('');
-                $("#itemprice" + index + "").attr('value',0);
+                $("#itemprice" + index + "").attr('value', 0);
+                $("#disval" + index + "").attr('value',0);
                 headCalculations(index);
 
             },
@@ -795,8 +797,9 @@
                 $("#batchqty" + index + "").text(result[2]);
 
                 $("#qty" + index).attr('max', result[2]);
-            
-                $("#itemprice" + index + "").attr('value',result[3]);
+
+                $("#itemprice" + index + "").attr('value', result[3]);
+                $("#disval" + index + "").attr('value', result[4]);
 
                 headCalculations(index);
 

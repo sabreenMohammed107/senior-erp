@@ -363,7 +363,7 @@
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
 
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select id="stock_id" name="stock_id" data-placeholder="Choose a Country..." class="chosen-select">
+                                                                <select id="stock_id" disabled name="stock_id" data-placeholder="Choose a Country..." class="chosen-select">
                                                                     @foreach($stocks as $stock)
                                                                     <option @if ($orderObj->stock_id == $stock->id)
                                                                         selected="selected"
@@ -399,7 +399,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select id="person_id" name="person_id" data-placeholder="Choose a Country..." class="chosen-select">
+                                                                <select id="person_id" disabled name="person_id" data-placeholder="Choose a Country..." class="chosen-select">
                                                                     @foreach($persons as $person)
                                                                     <option @if ($orderObj->person_id == $person->id)
                                                                         selected="selected"
@@ -434,7 +434,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select data-placeholder="Choose a Country..." name="currency_id" class="chosen-select">
+                                                                <select disabled data-placeholder="Choose a Country..." name="currency_id" class="chosen-select">
                                                                     <option value="">Select</option>
                                                                     @foreach($currencies as $cur)
                                                                     <option @if ($orderObj->currency_id == $cur->id)
