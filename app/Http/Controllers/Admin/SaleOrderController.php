@@ -233,7 +233,7 @@ class SaleOrderController extends Controller
 
         $orderItems = Order_item::where('order_id', $id)->get();
         $stocks =  $stocks = Stock::where('branch_id', $orderObj->branch_id)->get();
-        $persons = Person::where('person_type_id', 100)->get();
+        $persons = Person::where('person_type_id', 101)->get();
         $currencies = Currency::get();
 
         $xx = Stocks_items_total::where('stock_id', $orderObj->stock_id)->with('item')->get();
@@ -439,7 +439,7 @@ class SaleOrderController extends Controller
            
             $personObj = Person::where('id', $person)->first();
             $date = date_create($row->expired_date);
-            $outs = 0;
+           
             $disc = 0;
 
             $ItemPrice = Item::where('id', $row->item_id)->first();
@@ -447,6 +447,7 @@ class SaleOrderController extends Controller
             $Clientprice = Items_price::where('item_id', $row->item_id)->where('client_id', $person)->first();
 
             $Categoryprice = Items_price::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
+            $outs = 0;
             if ($Clientprice) {
 
                 $outs = $Clientprice->item_price;
