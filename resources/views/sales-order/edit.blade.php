@@ -797,8 +797,8 @@
                 $("#batchqty" + index + "").text(result[2]);
 
                 $("#qty" + index).attr('max', result[2]);
-alert(result[3]);
-                $("#itemprice" + index + "").attr('value', result[3]);
+alert(result);
+                $("#itemprice" + index + "").attr('value',300);
                 $("#disval" + index + "").attr('value', result[4]);
 
                 headCalculations(index);
