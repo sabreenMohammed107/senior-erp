@@ -144,7 +144,7 @@
                                                     <?php
                                                         $date = date_create($orderObj->order_date);
                                                         ?>
-                                                        <input type="date" id="order_date" value="{{ date_format($date, 'Y-m-d')}}" name="order_date" class="form-control" placeholder="">
+                                                        <input type="date" readonly id="order_date" value="{{ date_format($date, 'Y-m-d')}}" name="order_date" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -169,7 +169,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" readonly placeholder="">
+                                                        <input type="text" readonly class="form-control" readonly placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -183,7 +183,7 @@
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" value="{{$orderObj->notes}}" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
+                                                        <input type="text" readonly class="form-control" value="{{$orderObj->notes}}" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -201,7 +201,7 @@
                                                     <?php
                                                         $date = date_create($orderObj->received_date_suggested);
                                                         ?>
-                                                        <input type="date" id="order_delev" value="{{ date_format($date, 'Y-m-d')}}" name="received_date_suggested" class="form-control" placeholder="">
+                                                        <input type="date" readonly id="order_delev" value="{{ date_format($date, 'Y-m-d')}}" name="received_date_suggested" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -213,7 +213,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="decOrder" value="{{$orderObj->order_description}}" name="order_description" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
+                                                        <input type="text" readonly id="decOrder" value="{{$orderObj->order_description}}" name="order_description" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
