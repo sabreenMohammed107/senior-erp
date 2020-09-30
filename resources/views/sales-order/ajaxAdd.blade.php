@@ -22,9 +22,13 @@
         <span id="batch_search{{$rowCount}}" style="display:none;"></span>
 
     </td>
-    <td id="batchNum{{$rowCount}}" class="batchNum"> </td>
+    <td id="batchNum{{$rowCount}}"  class="batchNum"> 
+
+    </td>
     <td id="batchDate{{$rowCount}}" class="batchDate"> </td>
-    <td id="batchqty{{$rowCount}}" class="batchqty"> </td>
+    <td id="batchqty{{$rowCount}}" class="batchqty"> 
+   
+    </td>
     <td>
         <div class="input-mark-inner mg-b-22">
             <input type="number" style="width: 200px"  oninput="itemQty({{$rowCount}})" onfocusout="maxQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  class="form-control item_quantity" placeholder="">

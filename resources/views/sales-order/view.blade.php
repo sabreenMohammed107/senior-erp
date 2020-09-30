@@ -70,62 +70,22 @@
 
 @section('content')
 <!-- Static Table Start -->
-<!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
+ <!-- Modal -->
+ <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content" style="direction: rtl;">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="text-align:center">تحذير</h4>
-            </div>
-            <div class="modal-body">
-                <p>هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده .</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button>
-            </div>
-        </div>
-
+    
+     
+      
     </div>
-</div>
+  </div>
 <div class="data-table-area mg-b-15">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <form action="{{route('sales-order.store')}}" id="form-id" method="post">
-                    @csrf
-                    <div class="mg-b-23">
-                        <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
+              
+            <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
 
-                        <button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
-
-                        <!--save Company-->
-                        <div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header header-color-modal bg-color-2">
-                                        <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
-                                        <div class="modal-close-area modal-close-df">
-                                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="modal-body">
-                                        <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
-
-                                        <h4>هل تريد حفظ البيانات ؟ </h4>
-                                    </div>
-                                    <div class="modal-footer info-md">
-                                        <a data-dismiss="modal" href="#">إلغــاء</a>
-
-                                        <button class="btn btn-primary waves-effect waves-light" onclick="document.getElementById('form-id').submit();">حفظ</button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/save Company-->
+                       
 
                         <!--cancle Company-->
                         <div id="cancle" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
@@ -158,7 +118,7 @@
                     <div class="sparkline13-list">
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd">
-                                <h1 style="direction:rtl">إضافة أصناف أمر البيع</h1><br />
+                                <h1 style="direction:rtl"> أصناف أمر البيع</h1><br />
                             </div>
                         </div>
                         <div class="sparkline13-graph">
@@ -169,7 +129,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" name="" readonly class="form-control" placeholder="">
+                                                        <input type="text" name="purch_order_no" value="{{$orderObj->purch_order_no}}" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -181,7 +141,10 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="date" id="order_date" name="order_date" class="form-control" placeholder="">
+                                                    <?php
+                                                        $date = date_create($orderObj->order_date);
+                                                        ?>
+                                                        <input type="date" id="order_date" value="{{ date_format($date, 'Y-m-d')}}" name="order_date" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -220,7 +183,7 @@
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
+                                                        <input type="text" class="form-control" value="{{$orderObj->notes}}" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -235,7 +198,10 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="date" id="order_delev" name="received_date_suggested" class="form-control" placeholder="">
+                                                    <?php
+                                                        $date = date_create($orderObj->received_date_suggested);
+                                                        ?>
+                                                        <input type="date" id="order_delev" value="{{ date_format($date, 'Y-m-d')}}" name="received_date_suggested" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -247,7 +213,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="decOrder" name="order_description" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
+                                                        <input type="text" id="decOrder" value="{{$orderObj->order_description}}" name="order_description" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -259,7 +225,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="total_items_price" name="order_value" readonly class="form-control" placeholder="">
+                                                        <input type="text" id="total_items_price" value="{{$orderObj->order_value}}" name="order_value" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -271,7 +237,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="number" id="total_items_discount" name="total_disc_value" readonly class="form-control" placeholder="">
+                                                        <input type="number" id="total_items_discount" value="{{$orderObj->total_disc_value}}" name="total_disc_value" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -283,7 +249,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="number" id="total_items_final" name="total_final_cost" readonly class="form-control" placeholder="">
+                                                        <input type="number" id="total_items_final" value="{{$orderObj->total_final_cost}}" name="total_final_cost" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -327,7 +293,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly value="{{$persons[0]->market->ar_name ?? ''}}" id="marketMan" class="form-control" placeholder="">
+                                                            <input type="text" readonly value="{{$MarktCode->ar_name ?? ''}}" id="marketMan" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -340,7 +306,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" value="{{$persons[0]->market->code ?? ''}}" id="marketCode" readonly class="form-control" placeholder="">
+                                                                <input type="text" value="{{$MarktCode->code ?? ''}}" id="marketCode" readonly class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
@@ -355,7 +321,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly value="{{$persons[0]->sale->ar_name ?? ''}}" id="saleMan" class="form-control" placeholder="">
+                                                            <input type="text" readonly  value="{{$saleCode->ar_name ?? ''}}" id="saleMan" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -368,7 +334,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" id="saleCode" value="{{$persons[0]->sale->code ?? ''}}" readonly class="form-control" placeholder="">
+                                                                <input type="text" id="saleCode" value="{{$saleCode->code ?? ''}}" readonly class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-3 col-sm-3 col-xs-12">
@@ -399,7 +365,9 @@
                                                             <div class="input-mark-inner mg-b-22">
                                                                 <select id="stock_id" name="stock_id" data-placeholder="Choose a Country..." class="chosen-select">
                                                                     @foreach($stocks as $stock)
-                                                                    <option value="{{$stock->id}}">{{$stock->ar_name}} / {{$stock->code}}</option>
+                                                                    <option @if ($orderObj->stock_id == $stock->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$stock->id}}">{{$stock->ar_name}} / {{$stock->code}}</option>
 
                                                                     @endforeach
                                                                 </select>
@@ -433,7 +401,10 @@
                                                             <div class="input-mark-inner mg-b-22">
                                                                 <select id="person_id" name="person_id" data-placeholder="Choose a Country..." class="chosen-select">
                                                                     @foreach($persons as $person)
-                                                                    <option value="{{$person->id}}">{{$person->name}} / {{$person->code}}</option>
+                                                                    <option @if ($orderObj->person_id == $person->id)
+                                                                        selected="selected"
+                                                                        @endif
+                                                                        value="{{$person->id}}">{{$person->name}} / {{$person->code}}</option>
                                                                     @endforeach
 
                                                                 </select> </div>
@@ -466,7 +437,9 @@
                                                                 <select data-placeholder="Choose a Country..." name="currency_id" class="chosen-select">
                                                                     <option value="">Select</option>
                                                                     @foreach($currencies as $cur)
-                                                                    <option value="{{$cur->id}}">{{$cur->name}}</option>
+                                                                    <option @if ($orderObj->currency_id == $cur->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$cur->id}}">{{$cur->name}}</option>
                                                                     @endforeach
                                                                 </select> </div>
                                                         </div>
@@ -488,7 +461,6 @@
                                 <div class="row res-rtl" style="display: flex ">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
                                         <h3 style="text-align:right">الأصناف</h3>
-                                        <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
                                         <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
                                     </div>
                                 </div>
@@ -517,6 +489,103 @@
                                             </tr>
                                         </thead>
                                         <tbody id="rows">
+                                        <?php
+
+use App\Models\Stocks_items_total;
+
+$counter = 1;
+
+?>
+<?php
+$counterrrr = 1;
+?>
+
+@foreach($orderItems as $i=> $itemo)
+<tr data-id="{{$counter}}">
+    <input type="hidden" name="counter" value="{{$counter}}">
+    <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}" value="{{$counter}}"></td>
+    <td>
+        <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_order_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
+        <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
+
+        <span id="item_search{{$counter}}" style="display:none;"></span>
+
+    </td>
+    <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
+    <td id="ar_name{{$counter}}" class="ar_name">{{$itemo->item->ar_name ?? ''}}</td>
+
+   
+    <td>
+    <?php
+    $data = App\Models\Stocks_items_total::where('item_id', $itemo->item_id)->where('stock_id',$itemo->order->stock_id)
+    ->where('expired_date', $itemo->expired_date)->where('batch_no', $itemo->batch_no)->first();
+    $dateBatch =null;
+    if($data){
+        $dateBatch = date_create($data->expired_date);
+
+    }
+    ?>
+    <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}">
+
+   <span id="batch_search{{$counter}}" style="display:none;"></span>
+    </td>
+    <td id="batchNum{{$counter}}" class="batchNum">{{$itemo->batch_no}} </td>
+    <?php
+   
+    $date = date_create($itemo->expired_date);
+    ?>
+    <td id="batchDate{{$counter}}" class="batchDate">{{ date_format($date, "d-m-Y")}} </td>
+    <td id="batchqty{{$counter}}" class="batchqty">{{$data->item_total_qty ?? ''}} </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" style="width: 200px" oninput="itemQty({{$counter}})" value="{{$itemo->item_qty}}" onfocusout="maxQty({{$counter}})" name="upqty{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
+        </div>
+    </td>
+
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" readonly step="0.01" style="width: 200px" id="itemprice{{$counter}}" value="{{$itemo->item_price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control item_price" placeholder="">
+        </div>
+    </td>
+
+    <td id="total{{$counter}}" class="total_item_price">
+        {{$itemo->total_line_cost}}
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" readonly step="0.01" style="width: 200px" value="{{$itemo->item_disc_perc}}" oninput="disPer({{$counter}})" name="upper{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
+        </div>
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" readonly step="0.01" style="width: 200px" value="{{$itemo->item_disc_value}}" oninput="disval({{$counter}})" name="updisval{{$counter}}" id="disval{{$counter}}" class="form-control item_disval" placeholder="">
+        </div>
+    </td>
+    <td id="final{{$counter}}" class="total_item_final">
+        {{$itemo->final_line_cost}}
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="text" style="width: 200px" onkeypress="enterForRow(event,{{$counter}})" name="updetNote{{$counter}}" value="{{$itemo->notes}}" class="form-control detNote" placeholder="ملاحظات">
+        </div>
+    </td>
+    <td>
+       
+    </td>
+</tr>
+
+<?php
+++$counter;
+
+if ($counter > count($orderItems)) {
+?>
+    @break
+<?php }
+$counterrrr++;
+?>
+
+@endforeach
+<input type="number" style="display: none;" value="{{$counterrrr}}" name="qqq" class="form-control item_quantity" placeholder="">
                                         </tbody>
 
                                     </table>
@@ -591,7 +660,9 @@
                     $('#item_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
                     $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
                     $('#total' + row_num).text().toLowerCase().indexOf(value) > -1 ||
-                    $('#final' + row_num).text().toLowerCase().indexOf(value) > -1
+                    $('#final' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                     $('#upselect' + row_num).val().toLowerCase().indexOf(value) > -1 ||
+                    $('#upselectBatch' + row_num).val().toLowerCase().indexOf(value) > -1 
 
                 );
             });
@@ -641,7 +712,8 @@
     $('select[name="stock_id"]').on('change', function() {
 
         index = $('#table > tbody > tr').length;
-        if (index > 0) {
+
+        if (index > 1) {
 
             $('#rows').html('');
         }
@@ -722,7 +794,7 @@
             data: {
 
                 select_value: select_value,
-                select_stock: select_stock
+                select_stock:select_stock
 
             },
             url: "{{route('editSelectVal.fetch')}}",
@@ -737,9 +809,7 @@
                 $("#batchNum" + index + "").text('');
                 $("#batchDate" + index + "").text('');
                 $("#batchqty" + index + "").text('');
-                $("#itemprice" + index + "").attr('value', 0);
-                $("#disval" + index + "").attr('value',0);
-
+                $("#itemprice" + index + "").attr('value',0);
                 headCalculations(index);
 
             },
@@ -753,6 +823,7 @@
         $('#item_search' + index).text(text);
 
     }
+
 
     function editSelectBatch(index) {
         debugger;
@@ -779,16 +850,11 @@
                 $("#batchqty" + index + "").text(result[2]);
 
                 $("#qty" + index).attr('max', result[2]);
+            
+                $("#itemprice" + index + "").attr('value',result[3]);
 
-                $("#itemprice" + index + "").attr('value', result[3]);
-                $("#disval" + index + "").attr('value', result[4]);
-
-
-                //dis 
-              
-
-                // disval(index);
                 headCalculations(index);
+
 
             },
             error: function(request, status, error) {
@@ -808,13 +874,11 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var disval = $("#disval" + index + "").val();
-        var cc = disval / (price * qty);
-
-        $("#per" + index).val(cc);
 
         $("#total" + index + "").text(price * qty);
-
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount);
+        var disval = $("#disval" + index + "").val();
         $("#final" + index + "").text((price * qty) - disval);
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
@@ -853,15 +917,13 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var disval = $("#disval" + index + "").val();
-        var cc = disval / (price * qty);
-
-        $("#per" + index).val(cc);
 
         $("#total" + index + "").text(price * qty);
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount);
+        var disval = $("#disval" + index + "").val();
 
         $("#final" + index + "").text((price * qty) - disval);
-
         headCalculations(index);
         $("#qty" + index).attr('value', qty);
 
@@ -923,6 +985,31 @@
         $('#total_items_final').val(final.toFixed(2));
 
 
+    }
+
+    // Delete DB row functions
+    function DeleteStockItem(id, index) {
+        debugger;
+        $("#del" + index).modal('hide');
+        $('.modal-backdrop.fade.in').remove();
+        $('.modal-open').css('overflow-y', 'scroll');
+        $.ajax({
+            type: 'GET',
+            url: "{{url('/saleOrder/Remove/Item')}}",
+            data: {
+                id: id,
+                order_id: '{{$orderObj->id ?? 0}}',
+            },
+            success: function(data) {
+
+                headCalculations(index);
+                location.reload(true);
+            },
+            error: function(request, status, error) {
+                console.log(request.responseText);
+            }
+        });
+        // headCalculations();
     }
 </script>
 @endsection

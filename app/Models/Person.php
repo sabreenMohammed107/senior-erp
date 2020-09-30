@@ -61,4 +61,14 @@ class Person extends Model
     {
         return $this->belongsTo('App\Models\Location','location_id');
     }
+
+    public function sale()
+    {
+        return $this->belongsTo('App\Models\Representative','sales_rep_id');
+    }
+
+    public function market()
+    {
+        return $this->belongsTo('App\Models\Representative','marketing_rep_id');
+    }
 }

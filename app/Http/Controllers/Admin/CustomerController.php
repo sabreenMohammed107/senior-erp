@@ -339,7 +339,6 @@ class CustomerController extends Controller
 
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
         });
-        return redirect()->route($this->routeName . 'index')->with('flash_danger', $this->errormessage);
     }
 
     /**

@@ -34,4 +34,9 @@ class Order extends Model
         'sales_rep_id',
         'marketing_rep_id',
     ];
+    public function item()
+    {
+        return $this->hasMany('App\Models\Order_item','order_id','id');
+    }
+
 }

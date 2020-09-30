@@ -57,5 +57,6 @@ Route::namespace('Admin')->group(function () {
     Route::get('addRow-saleOrder/fetch', 'SaleOrderController@addRow')->name('addRow-saleOrder.fetch');
     Route::get('/editSelectValPerson.fetch', 'SaleOrderController@editSelectValPerson')->name('editSelectValPerson.fetch');
     Route::get('/editSelectBatch.fetch', 'SaleOrderController@editSelectBatch')->name('editSelectBatch.fetch');
+    Route::get('/saleOrder/Remove/Item', 'SaleOrderController@DeleteOrderItem');
 
 });
