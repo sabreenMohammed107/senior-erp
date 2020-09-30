@@ -100,6 +100,7 @@
                         <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
 
                         <button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
+                        <button data-toggle="modal" data-target="#confi" type="button" class="btn btn-primary waves-effect waves-light mg-b-15"> الموافقة</button>
 
                         <!--save Company-->
                         <div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
@@ -119,13 +120,37 @@
                                     <div class="modal-footer info-md">
                                         <a data-dismiss="modal" href="#">إلغــاء</a>
 
-                                        <button class="btn btn-primary waves-effect waves-light" onclick="document.getElementById('form-id').submit();">حفظ</button>
+                                        <button class="btn btn-primary waves-effect waves-light" name="action" value="save" onclick="document.getElementById('form-id').submit();">حفظ</button>
 
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!--/save Company-->
+                        <!--confi Company-->
+                        <div id="confi" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header header-color-modal bg-color-2">
+                                        <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
+                                        <div class="modal-close-area modal-close-df">
+                                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+
+                                        <h4>هل تريد حفظ البيانات ؟ </h4>
+                                    </div>
+                                    <div class="modal-footer info-md">
+                                        <a data-dismiss="modal" href="#">إلغــاء</a>
+                                        <button class="btn btn-primary waves-effect waves-light" name="action" value="confirm" onclick="document.getElementById('form-id').submit();">حفظ</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/conf Company-->
 
                         <!--cancle Company-->
                         <div id="cancle" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
@@ -738,7 +763,7 @@
                 $("#batchDate" + index + "").text('');
                 $("#batchqty" + index + "").text('');
                 $("#itemprice" + index + "").attr('value', 0);
-                $("#disval" + index + "").attr('value',0);
+                $("#disval" + index + "").attr('value', 0);
 
                 headCalculations(index);
 
@@ -785,7 +810,7 @@
 
 
                 //dis 
-              
+
 
                 // disval(index);
                 headCalculations(index);

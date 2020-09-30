@@ -80,7 +80,7 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="product-buttons">
-            <button type="button" data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            <button type="button" @if($itemo->order->confirmed==1) disabled @endif data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
         </div>
         <!--Delete-->
         <div id="del{{$counter}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">

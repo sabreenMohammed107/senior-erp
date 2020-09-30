@@ -167,7 +167,14 @@ class SaleOrderController extends Controller
         try {
             // Disable foreign key checks!
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+         
+         
 
+            if ($request->get('action') == 'save') {
+                $data['confirmed'] =0;
+            }elseif ($request->get('action') == 'confirm') {
+                $data['confirmed'] =1;
+            }
             $order = Order::create($data);
             foreach ($details as $Item) {
 
@@ -342,6 +349,11 @@ class SaleOrderController extends Controller
         ];
         DB::beginTransaction();
         try {
+            if ($request->get('action') == 'save') {
+                $data['confirmed'] =0;
+            }elseif ($request->get('action') == 'confirm') {
+                $data['confirmed'] =1;
+            }
             // Disable foreign key checks!
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             Order::where('id', $id)->update($data);

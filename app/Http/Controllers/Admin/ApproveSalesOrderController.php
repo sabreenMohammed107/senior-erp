@@ -47,7 +47,7 @@ class ApproveSalesOrderController extends Controller
         $branches = $user->branch;
         $row = new Branch();
         $branch_id = 0;
-        $orders = Order::where('branch_id', $branch_id)->get();
+        $orders = Order::where('branch_id', $branch_id)->where('confirmed',1)->get();
         $stocks = Stock::where('branch_id', $branch_id)->get();
         return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
     }
@@ -55,7 +55,7 @@ class ApproveSalesOrderController extends Controller
     {
         $branch_id = $request->input('branch_id');
         $row = Branch::where('id', $branch_id)->first();
-        $orders = Order::where('branch_id', $branch_id)->get();
+        $orders = Order::where('branch_id', $branch_id)->where('confirmed',1)->get();
         $stocks = Stock::where('branch_id', $branch_id)->get();
         return view($this->viewName . 'preIndex', compact('row', 'orders', 'stocks'))->render();
     }
