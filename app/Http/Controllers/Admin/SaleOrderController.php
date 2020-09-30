@@ -344,11 +344,10 @@ class SaleOrderController extends Controller
         try {
             // Disable foreign key checks!
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-            $order = Order::create($data);
+            Order::where('id', $id)->update($data);
             foreach ($details as $Item) {
 
-                $Item['order_id'] = $order->id;
+                $Item['order_id'] = $id;
                 $Invoice_Item = Order_item::create($Item);
             }
             foreach ($detailsUpdate as $updates) {
