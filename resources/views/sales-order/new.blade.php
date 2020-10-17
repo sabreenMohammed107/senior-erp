@@ -754,7 +754,6 @@
 
             success: function(data) {
                 var result = $.parseJSON(data);
-
                 $("#ar_name" + index + "").text(result[0]);
                 $("#uom" + index + "").text(result[1]);
                 $("#selectBatch" + index + "").html(result[2]);

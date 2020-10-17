@@ -56,8 +56,7 @@ class SaleOrderController extends Controller
         $row = new Branch();
         $branch_id = 0;
         $orders = Order::where('branch_id', $branch_id)->get();
-        $stocks = Stock::get();
-
+        $stocks = Stock::where('branch_id', $branch_id)->get();
         return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
     }
     /**

@@ -29,15 +29,20 @@
     <td id="batchqty{{$rowCount}}" class="batchqty"> 
    
     </td>
-    <td>
-        <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px" value="0"  oninput="itemQty({{$rowCount}})" onfocusout="maxQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  class="form-control item_quantity" placeholder="">
-        </div>
-    </td>
    
     <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" style="width: 200px" min="0" value="0"  oninput="itemQty({{$rowCount}})" onfocusout="maxQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  class="form-control item_quantity" placeholder="">
+        </div>
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" style="width: 200px"  min="0" value="0"  onfocusout="maxQty({{$rowCount}})"  name="itemBonas{{$rowCount}}" id="itemBonas{{$rowCount}}" class="form-control " placeholder="">
+        </div>
+    </td>
+    <td>
         <div class="input-mark-inner mg-b-22" >
-          <input type="number" step="0.01" style="width: 200px" value="0" id="itemprice{{$rowCount}}" value="" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
+          <input type="number" step="0.01" style="width: 200px" id="itemprice{{$rowCount}}" value="" name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})"  class="form-control item_price" placeholder="">
         </div>
     </td>
 
@@ -48,20 +53,33 @@
             <input type="number" step="0.01" style="width: 200px" oninput="disPer({{$rowCount}})" name="per{{$rowCount}}" id="per{{$rowCount}}"   class="form-control item_dis" placeholder="">
         </div></td>
     <td><div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" style="width: 200px" oninput="disval({{$rowCount}})" name="disval{{$rowCount}}" id="disval{{$rowCount}}"  class="form-control item_disval" placeholder="">
+            <input type="number" step="0.01" style="width: 200px" onkeypress="enterForRow(event,{{$rowCount}})" oninput="disval({{$rowCount}})" name="disval{{$rowCount}}" id="disval{{$rowCount}}"  class="form-control item_disval" placeholder="">
         </div></td>
         <td id="final{{$rowCount}}" class="total_item_final">
         0
     </td>
-    <td>
-        <div class="input-mark-inner mg-b-22">
-            <input type="text" style="width: 200px" onkeypress="enterForRow(event,{{$rowCount}})" name="detNote{{$rowCount}}" class="form-control detNote" placeholder="ملاحظات">
-        </div>
+    <td id="totalvat{{$rowCount}}" class="input-mark-inner mg-b-22 vat_tax_value">
+    <input type="hidden" value="" name="totalvat1{{$rowCount}}"> 
+     0
     </td>
-    <td>
-        <div class="product-buttons">
+    <td  id="totalcit{{$rowCount}}"  class="input-mark-inner mg-b-22 comm_industr_tax">
+    <input type="hidden" value="" name="totalcit1{{$rowCount}}"> 
+     0
+    </td>
+    <td id="finalAll{{$rowCount}}" class="total_items_all">
+        {{$itemo->FINAL_LINE_COST ?? ''}}
+    </td>
+   
+   <td>
+
+    <div class="product-buttons">
             <button id="del{{$rowCount}}" onclick="deleteRow({{$rowCount}})" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
         
         </div>
+  
+
+
     </td>
+
 </tr>
+

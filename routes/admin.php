@@ -59,12 +59,26 @@ Route::namespace('Admin')->group(function () {
     Route::get('/editSelectBatch.fetch', 'SaleOrderController@editSelectBatch')->name('editSelectBatch.fetch');
     Route::get('/saleOrder/Remove/Item', 'SaleOrderController@DeleteOrderItem');
     /*********************==approve-oreder==******************* */
-Route::resource('/approve-sales-order', 'ApproveSalesOrderController');
-Route::get('/dynamicApprovalOrder.fetch', 'ApproveSalesOrderController@branchFetch')->name('dynamicApprovalOrder.fetch');
-Route::post('/approveOrder', 'ApproveSalesOrderController@approveOrder')->name('approveOrder');
+    Route::resource('/approve-sales-order', 'ApproveSalesOrderController');
+    Route::get('/dynamicApprovalOrder.fetch', 'ApproveSalesOrderController@branchFetch')->name('dynamicApprovalOrder.fetch');
+    Route::post('/approveOrder', 'ApproveSalesOrderController@approveOrder')->name('approveOrder');
 
-Route::post('/rejectOrder', 'ApproveSalesOrderController@rejectOrder')->name('rejectOrder');
+    Route::post('/rejectOrder', 'ApproveSalesOrderController@rejectOrder')->name('rejectOrder');
 
-/*********************************************************************** */
+    /*********************************Sale Invoice************************************** */
+    Route::resource('/sale-invoice', 'SaleInvoiceController');
+    
+    Route::get('/dynamicBranchSaleInvoice.fetch', 'SaleInvoiceController@branchFetch')->name('dynamicBranchSaleInvoice.fetch');
+    Route::get('/sale-invoice.creation', 'SaleInvoiceController@creation')->name('sale-invoice.creation');
+    Route::get('/dynamicOrderInvoice.fetch', 'SaleInvoiceController@orderInvoice')->name('dynamicOrderInvoice.fetch');
+    Route::get('/dynamicCurrencyRate.fetch', 'SaleInvoiceController@dynamicCurrencyRate')->name('dynamicCurrencyRate.fetch');
+
+    
+    Route::get('/dynamicOrderItemsInvoice.fetch', 'SaleInvoiceController@orderItemsInvoice')->name('dynamicOrderItemsInvoice.fetch');
+
+    Route::get('/editSelectValInvoice.fetch', 'SaleInvoiceController@editSelectVal')->name('editSelectValInvoice.fetch');
+    Route::get('/editSelectBatchInvoice.fetch', 'SaleInvoiceController@editSelectBatch')->name('editSelectBatchInvoice.fetch');
+    
+    Route::get('addInvoiceRow/fetch', 'SaleInvoiceController@addRow')->name('addInvoiceRow.fetch');
 
 });

@@ -219,6 +219,8 @@
 													<a href="{{route('item-discount.index')}}" class="dropdown-item">خصم أسعار الاصناف</a>
 													<a href="{{route('sales-order.index')}}" class="dropdown-item"> أوامر البيع </a>
 													<a href="{{route('approve-sales-order.index')}}" class="dropdown-item">الموافقة على أمر البيع</a>
+													<a href="{{route('sale-invoice.index')}}" class="dropdown-item">فاتورة المبيعات</a>
+
 
 												</div>
 											</li>
@@ -271,7 +273,8 @@
 											<li><a href="{{route('item-discount.index')}}" class="dropdown-item">خصم أسعار الاصناف</a></li>
 											<li><a href="{{route('sales-order.index')}}" class="dropdown-item"> أوامر البيع </a></li>
 											<li><a href="{{route('approve-sales-order.index')}}" class="dropdown-item">الموافقة على أمر البيع</a></li>
-
+											<li> <a href="{{route('sale-invoice.index')}}" class="dropdown-item">فاتورة المبيعات</a>
+											</li>
 										</ul>
 									</li>
 									<li>
