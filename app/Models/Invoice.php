@@ -38,4 +38,9 @@ class Invoice extends Model
         'print_sales_cnt',
         'order_id',
     ];
+
+    public function item()
+    {
+        return $this->hasMany('App\Models\Invoice_item','invoice_id','id');
+    }
 }

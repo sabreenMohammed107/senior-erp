@@ -9,12 +9,12 @@ $counter = 1;
 $counterrrr = 1;
 ?>
 
-@foreach($orderItems as $i=> $itemo)
+@foreach($invItems as $i=> $itemo)
 <tr data-id="{{$counter}}">
     <input type="hidden" name="counter" value="{{$counter}}">
     <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}" value="{{$counter}}"></td>
     <td>
-        <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_order_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
+        <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_inv_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
         <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
         <input type="hidden" id="upitemId{{$counter}}" name="upitemId{{$counter}}" readonly value="{{$itemo->item_id}}">
 
@@ -27,7 +27,7 @@ $counterrrr = 1;
    
     <td>
     <?php
-    $data = App\Models\Stocks_items_total::where('item_id', $itemo->item_id)->where('stock_id',$itemo->order->stock_id)
+    $data = App\Models\Stocks_items_total::where('item_id', $itemo->item_id)->where('stock_id',$itemo->invoice->stock_id)
     ->where('expired_date', $itemo->expired_date)->where('batch_no', $itemo->batch_no)->first();
     $dateBatch =null;
     if($data){
@@ -56,7 +56,7 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px" oninput="itemBonas({{$counter}})" value="{{$itemo->item_qty}}"  name="upitemBonas{{$counter}}" id="itemBonas{{$counter}}" class="form-control " placeholder="">
+            <input type="number" style="width: 200px" oninput="itemBonas({{$counter}})" value="{{$itemo->item_bonus_qty}}"  name="upitemBonas{{$counter}}" id="itemBonas{{$counter}}" class="form-control " placeholder="">
         </div>
     </td>
     <td>
@@ -83,23 +83,23 @@ $counterrrr = 1;
     </td>
     <td id="totalvat{{$counter}}" class="input-mark-inner mg-b-22 vat_tax_value">
     <input type="hidden" value="" name="uptotalvat1{{$counter}}"> 
-    {{$itemo->item->vat_value ?? ''}}
+    {{$itemo->item_vat_value ?? ''}}
     </td>
     <td  id="totalcit{{$counter}}" class="input-mark-inner mg-b-22 comm_industr_tax">
     <input type="hidden" value="" name="totalcit1{{$counter}}"> 
-    {{$itemo->final_line_cost  *  $itemo->item->vat_value }}
+    {{$itemo->final_line_cost  *  $itemo->vat_value }}
 
     
     </td>
     <td id="finalAll{{$counter}}" class="total_item_final">
-        {{ $itemo->final_line_cost - ($itemo->final_line_cost  *  $itemo->item->vat_value)}}
+        {{ $itemo->final_line_cost}}
     </td>
    
     <td>
 
-      {{--  <div class="product-buttons">
-           <button type="button" data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-          
+        <div class="product-buttons">
+          <button type="button" data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+            
         </div>
         <!--Delete-->
         <div id="del{{$counter}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
@@ -119,11 +119,11 @@ $counterrrr = 1;
                     </div>
                     <div class="modal-footer info-md">
                         <a data-dismiss="modal" href="#">إلغــاء</a>
-                       <a href="#" onclick="DeleteInvoiceItem({{$itemo->id}},{{$counter}})">حـذف</a>
-                       </div>
+                       <a href="#" onclick="DeleteInvoiceItem({{$itemo->id ?? 0}},{{$counter}})">حـذف</a>
+                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
         <!--/Delete-->
 
 
@@ -134,8 +134,8 @@ $counterrrr = 1;
 <?php
 ++$counter;
 $counterrrr++;
-if(is_countable($orderItems)) {
-    if ($counter > count($orderItems)) {
+if(is_countable($invItems)) {
+    if ($counter > count($invItems)) {
 
 
 ?>

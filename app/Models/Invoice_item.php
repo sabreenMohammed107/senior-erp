@@ -30,4 +30,13 @@ class Invoice_item extends Model
         'reverted_item_qty_total',
         'reverted_item_qty_bonus_total',
     ];
+    public function invoice()
+    {
+        return $this->belongsTo('App\Models\Invoice','invoice_id');
+    }
+
+    public function item()
+    {
+        return $this->belongsTo('App\Models\Item','item_id');
+    }
 }

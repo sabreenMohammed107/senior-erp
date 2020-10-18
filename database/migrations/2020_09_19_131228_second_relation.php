@@ -42,7 +42,7 @@ class SecondRelation extends Migration
             $table->foreign('person_type_id')->references('id')->on('person_types');
             $table->foreign('currency_id')->references('id')->on('currencies');
             $table->foreign('invoice_status_id')->references('id')->on('invoice_statuses');
-            $table->foreign('stk_transaction_id')->references('id')->on('stks_business_rules');
+            $table->foreign('stk_transaction_id')->references('id')->on('stocks_transactions');
             $table->foreign('stock_id')->references('id')->on('stocks');
             $table->foreign('branch_id')->references('id')->on('branches');
             $table->foreign('sales_rep_id')->references('id')->on('representatives');

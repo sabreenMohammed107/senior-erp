@@ -43,9 +43,7 @@
         text-align: right
     }
 
-    #checkOrder {
-        display: none;
-    }
+   
 </style>
 @endsection
 @section('crumb')
@@ -98,14 +96,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <form action="{{route('sale-invoice.store')}}" id="formid" method="post">
-                    @csrf
+          
                     <div class="mg-b-23">
                         <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
-                        <button data-toggle="modal" data-target="#confi" type="button" class="btn btn-primary waves-effect waves-light mg-b-15"> تأكيد</button>
-
-                        <button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
-
+                      
                         <!--save Company-->
                         <div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
                             <div class="modal-dialog">
@@ -197,7 +191,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" disabled class="form-control" id="currency-rate" placeholder="">
+                                                            <input type="text" class="form-control" disabled value="{{$currencyRate->conversion_rate ?? ''}}" id="currency-rate" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -209,10 +203,12 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                                            <select data-placeholder="Choose a Country..." id="currency_id" name="currency_id" class="chosen-select" tabindex="-1">
+                                                            <select data-placeholder="Choose a Country..." disabled id="currency_id" name="currency_id" class="chosen-select" tabindex="-1">
                                                                 <option value="">Select</option>
                                                                 @foreach($currencies as $cur)
-                                                                <option value="{{$cur->id}}">{{$cur->name}}</option>
+                                                                <option @if ($invObj->currency_id == $cur->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$cur->id}}">{{$cur->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -257,7 +253,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="client_name" readonly name="person_name" class="form-control" placeholder="">
+                                                            <input type="text" id="client_name" value="{{$invObj->person_name}}" readonly name="person_name" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -273,7 +269,9 @@
                                                             <select data-placeholder="إختر العميل" disabled name="clientPerson" id="clientPerson" class="chosen-select" tabindex="-1">
                                                                 <option value="0">Select</option>
                                                                 @foreach($persons as $person)
-                                                                <option value="{{$person->id}}">{{$person->name}} / {{$person->code}}</option>
+                                                                <option @if ($invObj->person_id == $person->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$person->id}}">{{$person->name}} / {{$person->code}}</option>
                                                                 @endforeach
 
                                                             </select>
@@ -291,7 +289,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="sale_name" readonly name="sale_name" class="form-control" placeholder="">
+                                                            <input type="text" id="sale_name" value="{{$saleName->ar_name ?? ''}}" readonly name="sale_name" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -304,10 +302,12 @@
 
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                                            <select data-placeholder="إختر مسئول المبيعات" name="salePerson" id="salePerson" class="chosen-select" tabindex="-1">
+                                                            <select data-placeholder="إختر مسئول المبيعات" disabled name="salePerson" id="salePerson" class="chosen-select" tabindex="-1">
                                                                 <option value="0">Select</option>
                                                                 @foreach($saleCodes as $sale)
-                                                                <option value="{{$sale->id}}">{{$sale->ar_name}} / {{$sale->code}}</option>
+                                                                <option  @if ($invObj->sales_rep_id == $sale->id)
+                                                                        selected="selected"
+                                                                        @endif  value="{{$sale->id}}">{{$sale->ar_name}} / {{$sale->code}}</option>
                                                                 @endforeach
 
                                                             </select>
@@ -326,7 +326,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly id="market_name" name="market_name" class="form-control" placeholder="">
+                                                            <input type="text" readonly id="market_name" value="{{$marketName->ar_name ?? ''}}" name="market_name" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -339,10 +339,12 @@
 
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                                            <select data-placeholder="إختر مسئول التسويق" name="marketPerson" id="marketPerson" class="chosen-select" tabindex="-1">
+                                                            <select data-placeholder="إختر مسئول التسويق" disabled name="marketPerson" id="marketPerson" class="chosen-select" tabindex="-1">
                                                                 <option value="0">Select</option>
                                                                 @foreach($MarktCodes as $market)
-                                                                <option value="{{$market->id}}">{{$market->ar_name}} / {{$market->code}}</option>
+                                                                <option @if ($invObj->marketing_rep_id == $market->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$market->id}}">{{$market->ar_name}} / {{$market->code}}</option>
                                                                 @endforeach
 
                                                             </select>
@@ -356,11 +358,11 @@
                                                 </div>
                                             </div>
                                             <!-- checked test -->
-                                            <div class="row" id="allStock">
+                                            <div class="row" id="allStock" @if(!$invObj->order_id) style="display:block" @else style="display:none" @endif>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="stock_name" class="form-control" placeholder="">
+                                                            <input type="text" id="stock_name" value="{{$stockName->ar_name ?? ''}}" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -372,10 +374,12 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                                            <select data-placeholder="إختر المخزن" id="stock_id" name="stock_id" class="chosen-select" tabindex="-1">
+                                                            <select data-placeholder="إختر المخزن" disabled id="stock_id" name="stock_id" class="chosen-select" tabindex="-1">
                                                                 <option value="">Select</option>
                                                                 @foreach($stocks as $stock)
-                                                                <option value="{{$stock->id}}">{{$stock->ar_name}} / {{$stock->code}}</option>
+                                                                <option @if ($invObj->stock_id == $stock->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$stock->id}}">{{$stock->ar_name}} / {{$stock->code}}</option>
 
                                                                 @endforeach
                                                             </select>
@@ -390,16 +394,19 @@
                                                 </div>
                                             </div>
                                             <!-- unchecked -->
-                                            <div class="row" id="checkOrder">
+                                            <div class="row" id="checkOrder" @if($invObj->order_id) style="display:block" @else style="display:none" @endif>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                                            <select data-placeholder="إختر أمر البيع" id="orderPersons" class="chosen-select" name="orderPersons" tabindex="-1">
+                                                            <!-- <select data-placeholder="إختر أمر البيع" id="orderPersons" class="chosen-select" name="orderPersons" tabindex="-1">
 
-                                                            </select>
+                                                            </select> -->
+
+                                                            <input type="text" readonly id="orderPersons" value="{{$orders->purch_order_no ?? '' }} - {{$orders->person_name ?? ''}}" name="orderPersons" class="form-control" placeholder="">
+
                                                         </div>
                                                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                             <div class="input-mask-title">
@@ -417,7 +424,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" name="notes" class="form-control" placeholder="">
+                                                                <input readonly type="text" value="{{$invObj->notes}}" name="notes" class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
@@ -434,7 +441,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="total_items_price" name="total_items_price" readonly class="form-control" placeholder="إجمالي السعر">
+                                                        <input type="text" id="total_items_price" value="{{$invObj->total_items_price}}" name="total_items_price" readonly class="form-control" placeholder="إجمالي السعر">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -446,7 +453,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="total_items_vat" name="total_vat_value" readonly class="form-control" placeholder="إجمالي الضريبة">
+                                                        <input type="text" id="total_items_vat" value="{{$invObj->total_vat_value}}" name="total_vat_value" readonly class="form-control" placeholder="إجمالي الضريبة">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -458,7 +465,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly id="total_items_discount" name="total_disc_value" class="form-control" placeholder="إجمالي الخصم">
+                                                        <input type="text" readonly id="total_items_discount" value="{{$invObj->total_disc_value}}" name="total_disc_value" class="form-control" placeholder="إجمالي الخصم">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -470,7 +477,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="total_items_finalqty" name="total_bonus_qty" readonly class="form-control" placeholder="إجمالي الكمية">
+                                                        <input type="text" id="total_items_finalqty" value="{{$invObj->total_bonus_qty}}" name="total_bonus_qty" readonly class="form-control" placeholder="إجمالي الكمية">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -482,7 +489,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="total_items_all"  name="local_net_invoice" readonly class="form-control" placeholder="صافي الفاتورة">
+                                                        <input type="text" id="total_items_all" value="{{$invObj->local_net_invoice}}" name="local_net_invoice" readonly class="form-control" placeholder="صافي الفاتورة">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -496,9 +503,11 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <select data-placeholder="Choose a Country..." onfocusin="currentV()" name="pay_type_id" id="pay_type_id" class="chosen-select" tabindex="-1">
+                                                        <select data-placeholder="Choose a Country..." disabled onfocusin="currentV()" name="pay_type_id" id="pay_type_id" class="chosen-select" tabindex="-1">
                                                             @foreach($paytypes as $type)
-                                                            <option value="{{$type->id}}">{{$type->ar_name}}</option>
+                                                            <option @if ($invObj->pay_type_id == $type->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$type->id}}">{{$type->ar_name}}</option>
                                                             @endforeach
                                                         </select> </div>
                                                 </div>
@@ -511,9 +520,9 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                                     <div class="bt-df-checkbox">
-                                                        <input class="radio-checked" checked="" type="radio" onclick="stocks()" value="option1" id="optionsRadios1" name="optionsRadios">
+                                                        <input class="radio-checked" disabled @if(!$invObj->order_id) checked @endif type="radio" onclick="stocks()" value="option1" id="optionsRadios1" name="optionsRadios">
                                                         <label><b>عام</b></label>
-                                                        <input class="" type="radio" value="option2" onclick="orders()" id="optionsRadios2" name="optionsRadios">
+                                                        <input class="" type="radio" disabled @if($invObj->order_id) checked @endif value="option2" onclick="orders()" id="optionsRadios2" name="optionsRadios">
                                                         <label><b>أمر بيع</b></label>
                                                     </div>
                                                 </div>
@@ -524,7 +533,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" name="invoice_no" readonly class="form-control" placeholder="">
+                                                        <input type="text" name="invoice_no" value="{{$invObj->invoice_no}}" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -536,7 +545,11 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="date" name="invoice_date" class="form-control" placeholder="">
+                                                    <?php
+                                                        $date = date_create($invObj->invoice_date);
+                                                        ?>
+                                                        <input type="date" readonly value="{{ date_format($date, 'Y-m-d')}}" name="invoice_date" class="form-control" placeholder="">
+                                                  
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -565,7 +578,7 @@
                                 <div class="row res-rtl" style="display: flex ">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
                                         <h3 style="text-align:right">الأصناف</h3>
-                                        <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                        <!-- <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button> -->
                                         <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
                                     </div>
                                 </div>
@@ -597,15 +610,137 @@
                                             </tr>
                                         </thead>
                                         <tbody id="rows">
+                                        <?php
 
-                                            @include('sale-invoice.allwithStock')
+use App\Models\Stocks_items_total;
+
+$counter = 1;
+
+?>
+<?php
+$counterrrr = 1;
+?>
+
+@foreach($invItems as $i=> $itemo)
+<tr data-id="{{$counter}}">
+    <input type="hidden" name="counter" value="{{$counter}}">
+    <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}" value="{{$counter}}"></td>
+    <td>
+        <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_inv_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
+        <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
+        <input type="hidden" id="upitemId{{$counter}}" name="upitemId{{$counter}}" readonly value="{{$itemo->item_id}}">
+
+        <span id="item_search{{$counter}}" style="display:none;"></span>
+
+    </td>
+    <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
+    <td id="ar_name{{$counter}}" class="ar_name">{{$itemo->item->ar_name ?? ''}}</td>
+
+   
+    <td>
+    <?php
+    $data = App\Models\Stocks_items_total::where('item_id', $itemo->item_id)->where('stock_id',$itemo->invoice->stock_id)
+    ->where('expired_date', $itemo->expired_date)->where('batch_no', $itemo->batch_no)->first();
+    $dateBatch =null;
+    if($data){
+        $dateBatch = date_create($data->expired_date);
+
+    }
+    ?>
+    <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}">
+    <input type="hidden" id="upitemBatch{{$counter}}" name="upitemBatch{{$counter}}" readonly value="{{$data->id}}">
+
+   <span id="batch_search{{$counter}}" style="display:none;"></span>
+    </td>
+    <td id="batchNum{{$counter}}" class="batchNum">{{$itemo->batch_no}} </td>
+    <?php
+   
+    $date = date_create($itemo->expired_date);
+    ?>
+    <td id="batchDate{{$counter}}" class="batchDate">{{ date_format($date, "d-m-Y")}} </td>
+    <td id="batchqty{{$counter}}" class="batchqty">{{$data->item_total_qty ?? ''}} </td>
+
+    
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" readonly style="width: 200px" oninput="itemQty({{$counter}})" value="{{$itemo->item_qty}}" onfocusout="maxQty({{$counter}})" name="upqty{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
+        </div>
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" readonly style="width: 200px" oninput="itemBonas({{$counter}})" value="{{$itemo->item_bonus_qty}}"  name="upitemBonas{{$counter}}" id="itemBonas{{$counter}}" class="form-control " placeholder="">
+        </div>
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" step="0.01" style="width: 200px" readonly id="itemprice{{$counter}}" value="{{$itemo->item_price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control item_price" placeholder="">
+        </div>
+    </td>
+
+    <td id="total{{$counter}}" class="total_item_price">
+        {{$itemo->total_line_cost}}
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" readonly step="0.01" style="width: 200px" value="{{$itemo->item_disc_perc}}" oninput="disPer({{$counter}})" name="upper{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
+        </div>
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" readonly step="0.01" style="width: 200px" value="{{$itemo->item_disc_value}}" oninput="disval({{$counter}})" name="updisval{{$counter}}" id="disval{{$counter}}" class="form-control item_disval" placeholder="">
+        </div>
+    </td>
+    <td id="final{{$counter}}" class="total_item_final">
+        {{$itemo->final_line_cost}}
+    </td>
+    <td id="totalvat{{$counter}}" class="input-mark-inner mg-b-22 vat_tax_value">
+    <input type="hidden" value="" name="uptotalvat1{{$counter}}"> 
+    {{$itemo->item_vat_value ?? ''}}
+    </td>
+    <td  id="totalcit{{$counter}}" class="input-mark-inner mg-b-22 comm_industr_tax">
+    <input type="hidden" value="" name="totalcit1{{$counter}}"> 
+    {{$itemo->final_line_cost  *  $itemo->vat_value }}
+
+    
+    </td>
+    <td id="finalAll{{$counter}}" class="total_item_final">
+        {{ $itemo->final_line_cost}}
+    </td>
+   
+    <td>
+
+    
+
+
+    </td>
+
+</tr>
+
+<?php
+++$counter;
+$counterrrr++;
+if(is_countable($invItems)) {
+    if ($counter > count($invItems)) {
+
+
+?>
+
+    @break
+<?php 
+}
+}
+
+?>
+@endforeach
+<input type="number" style="display: none;" value="{{$counterrrr}}" name="qqq" class="form-control item_quantity" placeholder="">
+
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
     </div>
@@ -774,7 +909,7 @@
         $('select[name="orderPersons"]').on('change', function() {
             var order = $(this).val();
             var index = $('#table > tbody > tr').length;
-           
+            alert(order);
             $.ajax({
                 url: "{{route('dynamicOrderItemsInvoice.fetch')}}",
                 method: "get",
@@ -942,7 +1077,7 @@
         var select_value = $('#select' + index + ' option:selected').val();
         var select_stock = $('#stock_id option:selected').val();
         order = $('#orderPersons option:selected').val();
-      
+        alert(select_value);
         $.ajax({
             type: 'GET',
             data: {
@@ -1175,7 +1310,7 @@
             final += parseFloat($('#final' + index).text());
             totalcit += parseFloat($('#totalcit' + index).text());
             finalAll += parseFloat($('#finalAll' + index).text());
-            qty += parseFloat($('#itemBonas' + index).val());
+            qty += parseFloat($('#qty' + index).val());
 
             --index;
             console.log(total);

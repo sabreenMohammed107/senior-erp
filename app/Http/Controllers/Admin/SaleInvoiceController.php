@@ -25,6 +25,7 @@ use DB;
 use Log;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 
 class SaleInvoiceController extends Controller
 {
@@ -243,6 +244,7 @@ class SaleInvoiceController extends Controller
             'sales_rep_id' => $request->get('salePerson'),
             'marketing_rep_id' => $request->get('marketPerson'),
             'invoice_date' => Carbon::parse($request->get('invoice_date')),
+            'total_disc_value'=>$request->get('total_disc_value'),
             'total_items_price' => $request->get('total_items_price'),
             'total_vat_value' => $request->get('total_vat_value'),
             'total_bonus_qty' => $request->get('total_bonus_qty'),
@@ -298,7 +300,7 @@ class SaleInvoiceController extends Controller
                 }
                 //invoice updates
 
-                $data['stk_transaction_id'] =$stocks_transaction->id;
+                $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
             }
             $invoice = Invoice::create($data);
@@ -334,7 +336,24 @@ class SaleInvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+        $invObj = Invoice::where('id', $id)->first();
+
+        $invItems = Invoice_item::where('invoice_id', $id)->get();
+        $branch = Branch::where('id', $invObj->branch_id)->first();
+        $stocks = Stock::where('branch_id', $invObj->branch_id)->get();
+        $persons = Person::where('person_type_id', 101)->get();
+        $currencies = Currency::get();
+        $paytypes = Sales_invoice_pay_type::get();
+        $orders = Order::where('id', $invObj->order_id)->first();
+        $saleCodes = Representative::where('rep_type_id', 100)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $currencyRate = Currency::where('id', $invObj->currency_id)->first();
+        $saleName = Representative::where('id', $invObj->saleCodes)->first();
+        $marketName = Representative::where('id', $invObj->MarktCodes)->first();
+        $stockName = Stock::where('id', $invObj->stock_id)->first();
+        $orderItems = [];
+
+        return view($this->viewName . 'view', compact('invObj', 'invItems', 'currencyRate', 'saleName', 'marketName', 'stockName', 'stocks', 'persons', 'orders', 'branch', 'orderItems', 'saleCodes', 'MarktCodes', 'paytypes', 'currencies'));
     }
 
     /**
@@ -345,7 +364,25 @@ class SaleInvoiceController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $invObj = Invoice::where('id', $id)->first();
+
+        $invItems = Invoice_item::where('invoice_id', $id)->get();
+        $branch = Branch::where('id', $invObj->branch_id)->first();
+        $stocks = Stock::where('branch_id', $invObj->branch_id)->get();
+        $persons = Person::where('person_type_id', 101)->get();
+        $currencies = Currency::get();
+        $paytypes = Sales_invoice_pay_type::get();
+        $orders = Order::where('id', $invObj->order_id)->first();
+        $saleCodes = Representative::where('rep_type_id', 100)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $currencyRate = Currency::where('id', $invObj->currency_id)->first();
+        $saleName = Representative::where('id', $invObj->saleCodes)->first();
+        $marketName = Representative::where('id', $invObj->MarktCodes)->first();
+        $stockName = Stock::where('id', $invObj->stock_id)->first();
+        $orderItems = [];
+
+        return view($this->viewName . 'edit', compact('invObj', 'invItems', 'currencyRate', 'saleName', 'marketName', 'stockName', 'stocks', 'persons', 'orders', 'branch', 'orderItems', 'saleCodes', 'MarktCodes', 'paytypes', 'currencies'));
     }
 
     /**
@@ -357,7 +394,207 @@ class SaleInvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $count = $request->rowCount;
+
+        $details = [];
+        /**
+         * 1-update stock-item-total
+         */
+        $updateTotals = [];
+        $TransactionItems = [];
+        $price = 1;
+        $qunty = 1;
+        $disc = 0;
+        for ($i = 1; $i <= $count; $i++) {
+            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+
+            $detail = [
+                'item_id' => $request->get('select' . $i),
+                'item_qty' => $request->get('qty' . $i),
+                'item_price' => $request->get('itemprice' . $i),
+                'total_line_cost' => $request->get('qty' . $i) * $request->get('itemprice' . $i),
+                'notes' => $request->get('detNote' . $i),
+                'item_disc_perc' =>  $request->get('per' . $i),
+                'item_disc_value' => $request->get('disval' . $i),
+                'item_bonus_qty' => $request->get('itemBonas' . $i),
+                'item_vat_value' => $request->get('totalvat1' . $i),
+                'final_line_cost' => ($request->get('qty' . $i) * $request->get('itemprice' . $i)) - $request->get('disval' . $i),
+
+            ];
+            if ($batch) {
+                $detail['batch_no'] = $batch->batch_no;
+                $detail['expired_date'] = $batch->expired_date;
+            }
+            if ($request->get('qty' . $i)) {
+                array_push($details, $detail);
+                //this for updating total qty
+                $totalQty = [
+                    'id' => $batch->id,
+                    'item_total_qty' => $batch->item_total_qty - ($request->get('qty' . $i) + $request->get('itemBonas' . $i)),
+                ];
+                array_push($updateTotals, $totalQty);
+
+                //this for updating stock_transaction_items
+                $TransactionItem = [
+                    'item_id' => $detail['item_id'],
+                    'batch_no' => $detail['batch_no'],
+                    'expired_date' => $detail['expired_date'],
+                    'item_qty' => $detail['item_qty'],
+                    'item_price' => $detail['item_price'],
+                    'total_line_cost' => $detail['total_line_cost'],
+                ];
+                array_push($TransactionItems, $TransactionItem);
+            }
+        }
+        //from order item
+        $counterrrr = $request->get('counter');
+
+        $detailsUpdate = [];
+
+        for ($i = 1; $i <= $counterrrr; $i++) {
+
+
+
+            $batch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
+
+            $detailUpdate = [
+                'id' => $request->get('item_inv_id' . $i),
+                'item_id' => $request->get('upitemId' . $i),
+                'item_qty' => $request->get('upqty' . $i),
+                'item_price' => $request->get('upitemprice' . $i),
+                'total_line_cost' => $request->get('upqty' . $i) * $request->get('upitemprice' . $i),
+                'notes' => $request->get('detNote' . $i),
+                'item_disc_perc' =>  $request->get('upper' . $i),
+                'item_disc_value' => $request->get('updisval' . $i),
+                'item_bonus_qty' => $request->get('upitemBonas' . $i),
+                'item_vat_value' => $request->get('uptotalvat1' . $i),
+                'final_line_cost' => ($request->get('upqty' . $i) * $request->get('upitemprice' . $i)) - $request->get('updisval' . $i),
+
+            ];
+            if ($batch) {
+                $detailUpdate['batch_no'] = $batch->batch_no;
+                $detailUpdate['expired_date'] = $batch->expired_date;
+            }
+
+            array_push($detailsUpdate, $detailUpdate);
+            //this for updating total qty
+            $totalQtyUp = [
+                'id' => $batch->id,
+                'item_total_qty' => $batch->item_total_qty - ($request->get('upqty' . $i) + $request->get('upitemBonas' . $i)),
+            ];
+            array_push($updateTotals, $totalQtyUp);
+
+            //this for updating stock_transaction_items
+            $TransactionItemup = [
+                'item_id' => $detailUpdate['item_id'],
+                'batch_no' => $detailUpdate['batch_no'],
+                'expired_date' => $detailUpdate['expired_date'],
+                'item_qty' => $detailUpdate['item_qty'],
+                'item_price' => $detailUpdate['item_price'],
+                'total_line_cost' => $detailUpdate['total_line_cost'],
+            ];
+            array_push($TransactionItems, $TransactionItemup);
+        }
+        Log::info($counterrrr);
+
+        // Master
+
+        $personObj = Person::where('id', $request->get('clientPerson'))->first();
+        $invObj = Invoice::where('id', $id)->first();
+        $data = [
+            'pay_type_id' => $invObj->pay_type_id,
+            'person_id' => $invObj->person_id,
+            'stock_id' => $request->get('stock_id_update'),
+            'person_name' => $invObj->person_name,
+            'person_type_id' => $invObj->person_type_id,
+            'order_id' => $request->get('order_id_update'),
+            'invoice_type_id' => 1,
+            'notes' => $request->get('notes'),
+            'currency_id' => $invObj->currency_id,
+            'sales_rep_id' => $invObj->sales_rep_id,
+            'marketing_rep_id' => $request->get('marketPerson'),
+            'invoice_date' => Carbon::parse($request->get('invoice_date')),
+            'total_disc_value'=>$request->get('total_disc_value'),
+            'total_items_price' => $request->get('total_items_price'),
+            'total_vat_value' => $request->get('total_vat_value'),
+            'total_bonus_qty' => $request->get('total_bonus_qty'),
+            'local_net_invoice' => $request->get('local_net_invoice'),
+            'branch_id' => $invObj->branch_id,
+        ];
+
+        $data['stock_id'] = $request->get('stock_id_update');
+
+
+        DB::beginTransaction();
+        try {
+            // Disable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+
+
+            if ($request->get('action') == 'save') {
+                $data['confirmed'] = 0;
+            } elseif ($request->get('action') == 'confirm') {
+                //in confirm
+                //update total items
+                foreach ($updateTotals as $updateQty) {
+
+
+                    Stocks_items_total::where('id', $updateQty['id'])->update($updateQty);
+                }
+                //insert row in stock-transaction
+                $maxCode = Stocks_transaction::where('primary_stock_id', $data['stock_id'])->where('transaction_type_id', 103)->latest('code')->first();
+
+                $maxCode = ($maxCode != null) ? intval($maxCode['code']) : 0;
+                $maxCode++;
+                $data_transaction = [
+                    'code' => $maxCode,
+                    'transaction_type_id' => 103,
+                    'primary_stock_id' => $data['stock_id'],
+                    'person_id' => $data['person_id'],
+                    'person_name' => $data['person_name'],
+                    'person_type_id' => $data['person_type_id'],
+                    'referance_type' => $data['order_id'] ? 1 : 0,
+                    'confirmed' => 1,
+
+                ];
+                $stocks_transaction = Stocks_transaction::create($data_transaction);
+                //end
+                //insert row in stock-transaction - items
+                foreach ($TransactionItems as $Item) {
+
+                    $Item['transaction_id'] = $stocks_transaction->id;
+                    $TransactionItem = Stock_transaction_item::create($Item);
+                }
+                //invoice updates
+
+                $data['stk_transaction_id'] = $stocks_transaction->id;
+                $data['confirmed'] = 1;
+            }
+            Invoice::where('id', $id)->update($data);
+
+            foreach ($details as $Item) {
+
+                $Item['invoice_id'] = $id;
+                $Invoice_Item = Invoice_item::create($Item);
+            }
+
+            foreach ($detailsUpdate as $updte) {
+
+                $updte['invoice_id'] = $id;
+                Invoice_item::where('id', $updte['id'])->update($updte);
+            }
+            $request->session()->flash('flash_success', "تم اضافة فاتورة بيع :");
+            DB::commit();
+            // Enable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        } catch (\Throwable $e) {
+            // throw $th;
+            DB::rollback();
+
+            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+        }
     }
 
     /**
@@ -368,7 +605,18 @@ class SaleInvoiceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $row = Invoice::where('id', $id)->first();
+        // Delete File ..
+
+
+        try {
+            $row->item()->delete();
+            $row->delete();
+        } catch (QueryException $q) {
+
+            return redirect()->back()->with('flash_danger', $q->getMessage());
+        }
+        return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
     }
 
 
@@ -574,6 +822,34 @@ class SaleInvoiceController extends Controller
 
 
             echo json_encode(array($row->batch_no,  date_format($date, "d-m-Y"), $row->item_total_qty, $outs, $disc));
+        }
+    }
+
+     /***
+     * Del
+     */
+    public function DeleteInvoiceItem(Request $req)
+    {
+
+
+        if ($req->ajax()) {
+
+            $obo = Invoice_item::where('id', $req->id)->first();
+
+            $invoices = Invoice::where('id', $obo->invoice_id)->first();
+
+            
+            $ss = [
+                'total_disc_value'=> $invoices->total_disc_value - $obo->item_disc_value,
+                'total_items_price' => $invoices->total_items_price - $obo->total_line_cost,
+                'total_vat_value' => $invoices->total_vat_value - $obo->item_vat_value,
+                'total_bonus_qty' => $invoices->total_bonus_qty - $obo->item_bonus_qty,
+                'local_net_invoice' => $invoices->local_net_invoice - $obo->final_line_cost,
+            ];
+
+            Invoice::where('id', $obo->invoice_id)->update($ss);
+
+            Invoice_item::where('id', $req->id)->delete();
         }
     }
 }

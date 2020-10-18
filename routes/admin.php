@@ -80,5 +80,7 @@ Route::namespace('Admin')->group(function () {
     Route::get('/editSelectBatchInvoice.fetch', 'SaleInvoiceController@editSelectBatch')->name('editSelectBatchInvoice.fetch');
     
     Route::get('addInvoiceRow/fetch', 'SaleInvoiceController@addRow')->name('addInvoiceRow.fetch');
+    Route::get('/saleInvoice/Remove/Item', 'SaleInvoiceController@DeleteInvoiceItem');
+
 
 });

@@ -38,6 +38,12 @@
 	th {
 		text-align: right
 	}
+	.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
 </style>
 @endsection
 @section('crumb')
