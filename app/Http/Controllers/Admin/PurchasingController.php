@@ -139,6 +139,7 @@ class PurchasingController extends Controller
         $max++;
         $data = [
             'purch_order_no' => $max,
+            'order_decision_status_id'=>100,
             'person_id' => $request->get('person_id'),
             'person_name' => $request->get('person_name'),
             'order_type_id' => 2,

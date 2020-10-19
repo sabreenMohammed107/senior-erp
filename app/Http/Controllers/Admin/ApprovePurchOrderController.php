@@ -9,6 +9,7 @@ use App\Models\Order_item;
 use App\Models\Stock;
 use App\Models\Person;
 use App\Models\Currency;
+use App\Models\Item;
 use App\Models\Representative;
 use App\Models\Stocks_items_total;
 use Illuminate\Support\Collection;
@@ -16,7 +17,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 
-class ApproveSalesOrderController extends Controller
+class ApprovePurchOrderController extends Controller
 {
     protected $object;
     protected $viewName;
@@ -29,9 +30,8 @@ class ApproveSalesOrderController extends Controller
 
 
         $this->object = $object;
-        $this->viewName = 'approve-sales-order.';
-        $this->routeName = 'approve-sales-order.';
-
+        $this->viewName = 'approve-purch-order.';
+        $this->routeName = 'approve-purch-order.';
         $this->message = 'تم حفظ البيانات';
         $this->errormessage =  "لم يتم حفظها بسبب خطأ ما حاول مرة أخرى و تأكد من البيانات المدخله";
     }
@@ -47,19 +47,17 @@ class ApproveSalesOrderController extends Controller
         $branches = $user->branch;
         $row = new Branch();
         $branch_id = 0;
-        $orders = Order::where('branch_id', $branch_id)->where('order_type_id',1)->where('confirmed',1)->get();
-        $stocks = Stock::where('branch_id', $branch_id)->get();
-        return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
+        $orders = Order::where('branch_id', $branch_id)->where('order_type_id',2)->where('confirmed',1)->get();
+        return view($this->viewName . 'index', compact('branches', 'row', 'orders'));
     }
+
     public function branchFetch(Request $request)
     {
         $branch_id = $request->input('branch_id');
         $row = Branch::where('id', $branch_id)->first();
-        $orders = Order::where('branch_id', $branch_id)->where('order_type_id',1)->where('confirmed',1)->get();
-        $stocks = Stock::where('branch_id', $branch_id)->get();
-        return view($this->viewName . 'preIndex', compact('row', 'orders', 'stocks'))->render();
+        $orders = Order::where('branch_id', $branch_id)->where('order_type_id',2)->where('confirmed',1)->get();
+        return view($this->viewName . 'preIndex', compact('row', 'orders'))->render();
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -101,32 +99,18 @@ class ApproveSalesOrderController extends Controller
      */
     public function edit($id)
     {
-        $orderObj =Order::where('id', $id)->first();
+        $orderObj = Order::where('id', $id)->first();
 
         $orderItems = Order_item::where('order_id', $id)->get();
-        $stocks = Stock::where('branch_id', $orderObj->branch_id)->get();
-        $persons = Person::where('person_type_id', 101)->get();
+        $persons = Person::where('person_type_id', 100)->get();
         $currencies = Currency::get();
-
-        $xx = Stocks_items_total::where('stock_id', $orderObj->stock_id)->with('item')->get();
-        $collection = new Collection($xx);
-        $itemsss = $collection->unique('item_id');
-        $items = [];
-        foreach ($itemsss as $detail) {
-            array_push($items, $detail->item);
-        }
+        $items = Item::where('person_id', $orderObj->person_id)->orWhereNull('person_id')->get();
         $branch = Branch::where('id', $orderObj->branch_id)->first();
-        $personObj = Person::where('id', $orderObj->person_id)->first();
-        $saleCode = NULL;
-        $MarktCode = NULL;
-        if ($personObj) {
-            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
 
-            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
-        }
-        return view($this->viewName . 'edit', compact('stocks','branch', 'persons', 'orderObj','saleCode','MarktCode', 'currencies', 'items', 'orderItems'));
+        return view($this->viewName . 'edit', compact('branch', 'persons', 'orderObj', 'currencies', 'items', 'orderItems'));
     }
- /**
+
+    /**
      * approveOrder
      */
     public function approveOrder(Request $request){

@@ -91,4 +91,11 @@ Route::namespace('Admin')->group(function () {
  Route::get('/dynamicCurrencyRate.fetch', 'SaleInvoiceController@dynamicCurrencyRate')->name('dynamicCurrencyRate.fetch');
 
   Route::get('/purchOrder/Remove/Item', 'PurchasingController@DeleteOrderItem');
+   /*********************==approve-oreder==******************* */
+   Route::resource('/approve-purch-order', 'ApprovePurchOrderController');
+   Route::get('/dynamicApprovalOrder-purch.fetch', 'ApprovePurchOrderController@branchFetch')->name('dynamicApprovalOrder-purch.fetch');
+   Route::post('/approveOrder-purch', 'ApprovePurchOrderController@approveOrder')->name('approveOrder-purch');
+
+   Route::post('/rejectOrder-purch', 'ApprovePurchOrderController@rejectOrder')->name('rejectOrder-purch');
+
 });
