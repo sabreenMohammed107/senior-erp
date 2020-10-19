@@ -350,7 +350,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly id="currency-rate" class="form-control" placeholder="">
+                                                            <input type="text" readonly id="currency-rate" value="{{$currencies[0]->conversion_rate ?? ''}}" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
