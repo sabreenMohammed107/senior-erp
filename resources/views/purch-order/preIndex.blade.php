@@ -77,9 +77,9 @@
 			<td>
 				<div class="product-buttons">
 					<!-- <button data-toggle="tooltip" title="View" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button> -->
-					<a  href="{{ route('sales-order.show',$order->id)}}"><button title="view" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button></a>
+					<a  href="{{ route('purch-order.show',$order->id)}}"><button title="view" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button></a>
 
-					<a @if($order->confirmed == 1) class="isDisabled" @endif href="{{ route('sales-order.edit',$order->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+					<a @if($order->confirmed == 1) class="isDisabled" @endif href="{{ route('purch-order.edit',$order->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
 					<button @if($order->confirmed == 1) class="isDisabled" @endif data-toggle="modal" data-target="#delete{{$order->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
 				</div>
 		
@@ -101,7 +101,7 @@
                     </div>
                     <div class="modal-footer info-md">
                         <a data-dismiss="modal" href="#">إلغــاء</a>
-						<form id="delete" style="display: inline;" action="{{route('sales-order.destroy',$order->id)}}" method="POST">
+						<form id="delete" style="display: inline;" action="{{route('purch-order.destroy',$order->id)}}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit">حذف</button>

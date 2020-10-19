@@ -615,7 +615,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="rows">
-                                            0 @include('sale-invoice.editallwithStock')
+                                             @include('sale-invoice.editallwithStock')
                                         </tbody>
                                     </table>
                                 </div>

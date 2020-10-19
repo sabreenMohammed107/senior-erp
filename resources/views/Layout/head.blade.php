@@ -97,6 +97,13 @@
       /* Add some space below the input */
       text-align: right;
     }
+
+    .isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
   </style>
   @yield('style')
 

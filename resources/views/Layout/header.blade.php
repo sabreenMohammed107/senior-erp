@@ -220,6 +220,7 @@
 													<a href="{{route('sales-order.index')}}" class="dropdown-item"> أوامر البيع </a>
 													<a href="{{route('approve-sales-order.index')}}" class="dropdown-item">الموافقة على أمر البيع</a>
 													<a href="{{route('sale-invoice.index')}}" class="dropdown-item">فاتورة المبيعات</a>
+													<a href="{{route('purch-order.index')}}" class="dropdown-item"> أوامر الشراء </a>
 
 
 												</div>
@@ -275,6 +276,7 @@
 											<li><a href="{{route('approve-sales-order.index')}}" class="dropdown-item">الموافقة على أمر البيع</a></li>
 											<li> <a href="{{route('sale-invoice.index')}}" class="dropdown-item">فاتورة المبيعات</a>
 											</li>
+											<li><a href="{{route('purch-order.index')}}" class="dropdown-item"> أوامر الشراء </a></li>
 										</ul>
 									</li>
 									<li>

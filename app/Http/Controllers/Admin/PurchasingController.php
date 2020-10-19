@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Currency;
@@ -23,7 +24,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Database\QueryException;
 
-class SaleOrderController extends Controller
+class PurchasingController extends Controller
 {
     protected $object;
     protected $viewName;
@@ -37,8 +38,8 @@ class SaleOrderController extends Controller
 
         $this->object = $object;
 
-        $this->viewName = 'sales-order.';
-        $this->routeName = 'sales-order.';
+        $this->viewName = 'purch-order.';
+        $this->routeName = 'purch-order.';
 
         $this->message = 'تم حفظ البيانات';
         $this->errormessage =  "لم يتم حفظها بسبب خطأ ما حاول مرة أخرى و تأكد من البيانات المدخله";
@@ -55,10 +56,12 @@ class SaleOrderController extends Controller
         $branches = $user->branch;
         $row = new Branch();
         $branch_id = 0;
-        $orders = Order::where('branch_id', $branch_id)->where('order_type_id',1)->get();
+        $orders = Order::where('branch_id', $branch_id)->where('order_type_id', 2)->get();
         $stocks = Stock::where('branch_id', $branch_id)->get();
         return view($this->viewName . 'index', compact('branches', 'row', 'orders', 'stocks'));
     }
+
+
     /**
      * Display a listing of the resource after getting Branch.
      *
@@ -68,9 +71,9 @@ class SaleOrderController extends Controller
     {
         $branch_id = $request->input('branch_id');
         $row = Branch::where('id', $branch_id)->first();
-        $orders = Order::where('branch_id', $branch_id)->where('order_type_id',1)->get();
-        $stocks = Stock::where('branch_id', $branch_id)->get();
-        return view($this->viewName . 'preIndex', compact('row', 'orders', 'stocks'))->render();
+        $orders = Order::where('branch_id', $branch_id)->where('order_type_id', 2)->get();
+
+        return view($this->viewName . 'preIndex', compact('row', 'orders',))->render();
     }
     /**
      * Show the form for creating with request a new resource.
@@ -83,12 +86,12 @@ class SaleOrderController extends Controller
         $id = $request->input('branch');
 
         $branch = Branch::where('id', $id)->first();
-        $stocks = Stock::where('branch_id', $id)->get();
-        $persons = Person::where('person_type_id', 101)->get();
+        $persons = Person::where('person_type_id', 100)->get();
         $currencies = Currency::get();
 
-        return view($this->viewName . 'new', compact('stocks', 'persons', 'branch', 'currencies'));
+        return view($this->viewName . 'new', compact('persons', 'branch', 'currencies'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -115,7 +118,6 @@ class SaleOrderController extends Controller
         $qunty = 1;
         $disc = 0;
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
 
             $detail = [
                 'item_id' => $request->get('select' . $i),
@@ -123,68 +125,51 @@ class SaleOrderController extends Controller
                 'item_price' => $request->get('itemprice' . $i),
                 'total_line_cost' => $request->get('qty' . $i) * $request->get('itemprice' . $i),
                 'notes' => $request->get('detNote' . $i),
-                'item_disc_perc' =>  $request->get('per' . $i),
-                'item_disc_value' => $request->get('disval' . $i),
-                'final_line_cost' => ($request->get('qty' . $i) * $request->get('itemprice' . $i)) - $request->get('disval' . $i),
 
             ];
-            if ($batch) {
-                $detail['batch_no'] = $batch->batch_no;
-                $detail['expired_date'] = $batch->expired_date;
-            }
+
             if ($request->get('qty' . $i)) {
                 array_push($details, $detail);
             }
         }
         // Master
-        $personObj = Person::where('id', $request->get('person_id'))->first();
-        if ($personObj) {
-            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
-
-            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
-        }
-        $max = Order::where('branch_id', $request->input('branch'))->where('order_type_id', 1)->latest('purch_order_no')->first();
+        $max = Order::where('branch_id', $request->input('branch'))->where('order_type_id', 2)->latest('purch_order_no')->first();
 
         $max = ($max != null) ? intval($max['purch_order_no']) : 0;
         $max++;
-
         $data = [
             'purch_order_no' => $max,
             'person_id' => $request->get('person_id'),
-            'stock_id' => $request->get('stock_id'),
             'person_name' => $request->get('person_name'),
-            'order_type_id' => 1,
+            'order_type_id' => 2,
             'order_description' => $request->get('order_description'),
-
+            'person_type_id' => 100,
             'currency_id' => $request->get('currency_id'),
-            'sales_rep_id' => $saleCode->id ?? 0,
-            'marketing_rep_id' => $MarktCode->id ?? 0,
             'order_date' => Carbon::parse($request->get('order_date')),
             'received_date_suggested' => Carbon::parse($request->get('received_date_suggested')),
             'order_value' => $request->get('order_value'),
-            'total_disc_value' => $request->get('total_disc_value'),
-            'total_final_cost' => $request->get('total_final_cost'),
+            'notes' => $request->get('notes'),
             'branch_id' =>  $request->get('branch'),
         ];
         DB::beginTransaction();
         try {
             // Disable foreign key checks!
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-         
-         
+
+
 
             if ($request->get('action') == 'save') {
-                $data['confirmed'] =0;
-            }elseif ($request->get('action') == 'confirm') {
-                $data['confirmed'] =1;
+                $data['confirmed'] = 0;
+            } elseif ($request->get('action') == 'confirm') {
+                $data['confirmed'] = 1;
             }
             $order = Order::create($data);
             foreach ($details as $Item) {
 
                 $Item['order_id'] = $order->id;
-                $Invoice_Item = Order_item::create($Item);
+                $order_Item = Order_item::create($Item);
             }
-            $request->session()->flash('flash_success', "تم اضافة أمر بيع :");
+            $request->session()->flash('flash_success', "تم اضافة أمر شراء :");
             DB::commit();
             // Enable foreign key checks!
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -208,27 +193,12 @@ class SaleOrderController extends Controller
         $orderObj = Order::where('id', $id)->first();
 
         $orderItems = Order_item::where('order_id', $id)->get();
-        $stocks =  $stocks = Stock::where('branch_id', $orderObj->branch_id)->get();
-        $persons = Person::where('person_type_id', 101)->get();
+        $persons = Person::where('person_type_id', 100)->get();
         $currencies = Currency::get();
-
-        $xx = Stocks_items_total::where('stock_id', $orderObj->stock_id)->with('item')->get();
-        $collection = new Collection($xx);
-        $itemsss = $collection->unique('item_id');
-        $items = [];
-        foreach ($itemsss as $detail) {
-            array_push($items, $detail->item);
-        }
+        $items = Item::where('person_id', $orderObj->person_id)->orWhereNull('person_id')->get();
         $branch = Branch::where('id', $orderObj->branch_id)->first();
-        $personObj = Person::where('id', $orderObj->person_id)->first();
-        $saleCode = NULL;
-        $MarktCode = NULL;
-        if ($personObj) {
-            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
 
-            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
-        }
-        return view($this->viewName . 'view', compact('stocks', 'branch', 'persons', 'orderObj', 'saleCode', 'MarktCode', 'currencies', 'items', 'orderItems'));
+        return view($this->viewName . 'view', compact('branch', 'persons', 'orderObj', 'currencies', 'items', 'orderItems'));
     }
 
     /**
@@ -242,27 +212,12 @@ class SaleOrderController extends Controller
         $orderObj = Order::where('id', $id)->first();
 
         $orderItems = Order_item::where('order_id', $id)->get();
-        $stocks =  $stocks = Stock::where('branch_id', $orderObj->branch_id)->get();
-        $persons = Person::where('person_type_id', 101)->get();
+        $persons = Person::where('person_type_id', 100)->get();
         $currencies = Currency::get();
-
-        $xx = Stocks_items_total::where('stock_id', $orderObj->stock_id)->with('item')->get();
-        $collection = new Collection($xx);
-        $itemsss = $collection->unique('item_id');
-        $items = [];
-        foreach ($itemsss as $detail) {
-            array_push($items, $detail->item);
-        }
+        $items = Item::where('person_id', $orderObj->person_id)->orWhereNull('person_id')->get();
         $branch = Branch::where('id', $orderObj->branch_id)->first();
-        $personObj = Person::where('id', $orderObj->person_id)->first();
-        $saleCode = NULL;
-        $MarktCode = NULL;
-        if ($personObj) {
-            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
 
-            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
-        }
-        return view($this->viewName . 'edit', compact('stocks', 'branch', 'persons', 'orderObj', 'saleCode', 'MarktCode', 'currencies', 'items', 'orderItems'));
+        return view($this->viewName . 'edit', compact('branch', 'persons', 'orderObj', 'currencies', 'items', 'orderItems'));
     }
 
     /**
@@ -278,10 +233,8 @@ class SaleOrderController extends Controller
 
         $details = [];
         $price = 1;
-        $qunty = 1;
-        $disc = 0;
+
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
 
             $detail = [
                 'item_id' => $request->get('select' . $i),
@@ -289,15 +242,9 @@ class SaleOrderController extends Controller
                 'item_price' => $request->get('itemprice' . $i),
                 'total_line_cost' => $request->get('qty' . $i) * $request->get('itemprice' . $i),
                 'notes' => $request->get('detNote' . $i),
-                'item_disc_perc' =>  $request->get('per' . $i),
-                'item_disc_value' => $request->get('disval' . $i),
-                'final_line_cost' => ($request->get('qty' . $i) * $request->get('itemprice' . $i)) - $request->get('disval' . $i),
 
             ];
-            if ($batch) {
-                $detail['batch_no'] = $batch->batch_no;
-                $detail['expired_date'] = $batch->expired_date;
-            }
+
             if ($request->get('qty' . $i)) {
                 array_push($details, $detail);
             }
@@ -317,45 +264,35 @@ class SaleOrderController extends Controller
                 'item_price' => $request->get('upitemprice' . $i),
                 'total_line_cost' => $request->get('upqty' . $i) * $request->get('upitemprice' . $i),
                 'notes' => $request->get('updetNote' . $i),
-                'item_disc_perc' =>  $request->get('upper' . $i),
-                'item_disc_value' => $request->get('updisval' . $i),
-                'final_line_cost' => ($request->get('upqty' . $i) * $request->get('upitemprice' . $i)) - $request->get('updisval' . $i),
 
             ];
             array_push($detailsUpdate, $detailUpdate);
         }
         // Master
-        $personObj = Person::where('id', $request->get('person_id'))->first();
-        if ($personObj) {
-            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
 
-            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
-        }
 
         $data = [
-            'purch_order_no' => 4,
+
             'person_id' => $request->get('person_id'),
-            'stock_id' => $request->get('stock_id'),
+
             'person_name' => $request->get('person_name'),
-            'order_type_id' => 1,
+
             'order_description' => $request->get('order_description'),
 
             'currency_id' => $request->get('currency_id'),
-            'sales_rep_id' => $saleCode->id ?? 0,
-            'marketing_rep_id' => $MarktCode->id ?? 0,
+
             'order_date' => Carbon::parse($request->get('order_date')),
             'received_date_suggested' => Carbon::parse($request->get('received_date_suggested')),
             'order_value' => $request->get('order_value'),
-            'total_disc_value' => $request->get('total_disc_value'),
-            'total_final_cost' => $request->get('total_final_cost'),
+            'notes' => $request->get('notes'),
             'branch_id' =>  $request->get('branch'),
         ];
         DB::beginTransaction();
         try {
             if ($request->get('action') == 'save') {
-                $data['confirmed'] =0;
-            }elseif ($request->get('action') == 'confirm') {
-                $data['confirmed'] =1;
+                $data['confirmed'] = 0;
+            } elseif ($request->get('action') == 'confirm') {
+                $data['confirmed'] = 1;
             }
             // Disable foreign key checks!
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -404,6 +341,7 @@ class SaleOrderController extends Controller
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
     }
 
+
     /***
      * 
      */
@@ -412,25 +350,12 @@ class SaleOrderController extends Controller
 
         if ($req->ajax()) {
             $rowCount = $req->rowcount;
-            $stock_id = $req->stock;
-
-            //get subcategories
-            // $sub = stocks_item_category::where('stock_id', $stock_id)->pluck('item_category_id');
-
-            // $items = Item::whereIN('item_category_id', $sub)->get();
-            $xx = Stocks_items_total::where('stock_id', $stock_id)->with('item')->get();
+            $supplier = $req->supplier;
 
 
-            $collection = new Collection($xx);
+            $items = Item::where('person_id', $supplier)->orWhereNull('person_id')->get();
 
-            // Get all unique items.
-            $itemsss = $collection->unique('item_id');
-            $items = [];
-            foreach ($itemsss as $detail) {
-                array_push($items, $detail->item);
-            }
-            \Log::info($items);
-            $ajaxComponent = view('sales-order.ajaxAdd', [
+            $ajaxComponent = view('purch-order.ajaxAdd', [
                 'rowCount' => $rowCount,
                 'items' => $items,
 
@@ -438,84 +363,6 @@ class SaleOrderController extends Controller
 
 
             return $ajaxComponent->render();
-        }
-    }
-    /**
-     * 
-     */
-    public function editSelectBatch(Request $req)
-    {
-
-        if ($req->ajax()) {
-
-            $select_value = $req->select_value;
-            $person = $req->person;
-            $row = Stocks_items_total::where('id', $select_value)->first();
-           
-            $personObj = Person::where('id', $person)->first();
-            $date = date_create($row->expired_date);
-           
-            $disc = 0;
-
-            $ItemPrice = Item::where('id', $row->item_id)->first();
-
-            $Clientprice = Items_price::where('item_id', $row->item_id)->where('client_id', $person)->first();
-
-            $Categoryprice = Items_price::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
-            $outs = 0;
-            if ($Clientprice) {
-
-                $outs = $Clientprice->item_price;
-            } elseif ($Categoryprice) {
-
-                $outs = $Categoryprice->item_price;
-            } else {
-
-                $outs = $ItemPrice->retail_price;
-            }
-            //discount
-
-            $ClientDis = Items_discount::where('item_id', $row->item_id)->where('client_id', $person)->first();
-
-            $CategoryDis = Items_discount::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
-            if ($ClientDis) {
-
-                $disc = $ClientDis->item_discount_price;
-            } elseif ($CategoryDis) {
-
-                $disc = $CategoryDis->item_discount_price;
-            } else {
-
-                $disc = 0;
-            }
-
-
-            echo json_encode(array($row->batch_no,  date_format($date, "d-m-Y"), $row->item_total_qty, $outs ,$disc));
-        }
-    }
-
-    /***
-     * 
-     */
-    public function editSelectValPerson(Request $req)
-    {
-        if ($req->ajax()) {
-
-            $select_value = $req->select_value;
-
-
-            $personObj = Person::where('id', $select_value)->first();
-
-            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
-
-            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
-
-
-
-
-
-
-            echo json_encode(array($saleCode->code, $saleCode->ar_name, $MarktCode->code, $MarktCode->ar_name, $personObj->name));
         }
     }
 
@@ -528,26 +375,10 @@ class SaleOrderController extends Controller
         if ($req->ajax()) {
 
             $select_value = $req->select_value;
-            $select_stock = $req->select_stock;
-            $out = [];
 
             $items = Item::where('id', $select_value)->first();
 
-
-
-            $data = Stocks_items_total::where('item_id', $select_value)->where('stock_id', $select_stock)->get();
-
-            Log::info($select_stock);
-
-            $output = '<option value="" selected="" disabled="">إختر الباتش</option>';
-            foreach ($data as $row) {
-                $date = date_create($row->expired_date);
-                $output .= '<option value="' . $row->id . '">' . $row->batch_no . '-' . date_format($date, "d-m-Y") . '-' . $row->item_total_qty . '</option>';
-            }
-
-
-
-            echo json_encode(array($items->ar_name, $items->uom->ar_name ?? '', $output));
+            echo json_encode(array($items->ar_name, $items->uom->ar_name ?? '', $items->retail_price, $items->request_limit));
         }
     }
 
@@ -565,8 +396,7 @@ class SaleOrderController extends Controller
             $orderss = Order::where('id', $obo->order_id)->first();
             $ss = [
                 'order_value' => $orderss->order_value - $obo->total_line_cost,
-                'total_disc_value' => $orderss->total_disc_value - $obo->item_disc_value,
-                'total_final_cost' => $orderss->total_final_cost - $obo->final_line_cost,
+
             ];
 
             Order::where('id', $obo->order_id)->update($ss);
@@ -575,27 +405,5 @@ class SaleOrderController extends Controller
         }
     }
 
-
-     /***
-     * currency
-     */
-    public function dynamicCurrencyRate(Request $request)
-    {
-        if ($request->ajax()) {
-
-            $currency_id = $request->currency;
-
-
-            $data = Currency::where('id', $currency_id)->first();
-
-
-
-
-            $output = $data->conversion_rate;
-
-
-
-            echo  $output;
-        }
-    }
+    
 }

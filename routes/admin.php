@@ -82,5 +82,13 @@ Route::namespace('Admin')->group(function () {
     Route::get('addInvoiceRow/fetch', 'SaleInvoiceController@addRow')->name('addInvoiceRow.fetch');
     Route::get('/saleInvoice/Remove/Item', 'SaleInvoiceController@DeleteInvoiceItem');
 
+ /*********************==purch-order==******************* */
+ Route::resource('/purch-order', 'PurchasingController');
+ Route::get('/purch-order.creation', 'PurchasingController@creation')->name('purch-order.creation');
+ Route::get('/selectBranch-purchOrder.fetch', 'PurchasingController@branchFetch')->name('selectBranch-purchOrder.fetch');
+ Route::get('/editSelect-purch-val.fetch', 'PurchasingController@editSelectVal')->name('editSelect-purch-val.fetch');
+ Route::get('addRow-purchOrder/fetch', 'PurchasingController@addRow')->name('addRow-purchOrder.fetch');
+ Route::get('/dynamicCurrencyRate.fetch', 'SaleInvoiceController@dynamicCurrencyRate')->name('dynamicCurrencyRate.fetch');
 
+  Route::get('/purchOrder/Remove/Item', 'PurchasingController@DeleteOrderItem');
 });
