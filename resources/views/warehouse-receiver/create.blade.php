@@ -327,7 +327,6 @@
 
 <script>
 	function order() {
-		alert('ss');
 		document.getElementById('orders').style.display = 'block';
 		$('#rows').html('');
 
