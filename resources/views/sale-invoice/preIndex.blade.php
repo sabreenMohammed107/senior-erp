@@ -88,7 +88,7 @@
                 <div class="product-buttons">
                     <a  href="{{route('sale-invoice.show',$invoice->id)}}"><button title="View" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button></a>
                     <a @if($invoice->confirmed == 1) class="isDisabled" @endif href="{{route('sale-invoice.edit',$invoice->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                    <button data-toggle="modal" data-target="#del" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <button data-toggle="modal" @if($invoice->confirmed == 1) class="isDisabled" @endif  data-target="#del" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 </div>
             </td>
         </tr>
