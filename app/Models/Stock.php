@@ -41,4 +41,9 @@ class Stock extends Model
     {
         return $this->belongsToMany(Transaction_type::class,'stocks_transaction_types','stock_id','transaction_type_id');
     }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch','branch_id');
+    }
 }

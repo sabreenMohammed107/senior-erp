@@ -98,4 +98,18 @@ Route::namespace('Admin')->group(function () {
 
    Route::post('/rejectOrder-purch', 'ApprovePurchOrderController@rejectOrder')->name('rejectOrder-purch');
 
+ /*********************==warehouse-receiver==******************* */
+ Route::resource('/warehouse-receiver', 'WarehouseReceiverController');
+ Route::get('/dynamicStocks-receiver.fetch', 'WarehouseReceiverController@branchFetch')->name('dynamicStocks-receiver.fetch');
+ Route::get('/warehouse-receiver.creation', 'WarehouseReceiverController@creation')->name('warehouse-receiver.creation');
+ Route::get('/editSelectpurchOrder.fetch', 'WarehouseReceiverController@fetchOrdersItem')->name('editSelectpurchOrder.fetch');
+ Route::get('addRow-warehouse-receiver/fetch', 'WarehouseReceiverController@addRow')->name('addRow-warehouse-receiver.fetch');
+
+ Route::get('editSelectVal-warehouse-receiver/fetch', 'WarehouseReceiverController@editSelectVal')->name('editSelectVal-warehouse-receiver.fetch');
+ Route::get('/warehouse-receiver/Remove-virtual/Item', 'WarehouseReceiverController@DeletevirtualItem');
+
+
+
+
 });
+ 
