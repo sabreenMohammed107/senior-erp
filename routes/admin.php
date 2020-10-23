@@ -108,7 +108,14 @@ Route::namespace('Admin')->group(function () {
  Route::get('editSelectVal-warehouse-receiver/fetch', 'WarehouseReceiverController@editSelectVal')->name('editSelectVal-warehouse-receiver.fetch');
  Route::get('/warehouse-receiver/Remove-virtual/Item', 'WarehouseReceiverController@DeletevirtualItem');
 
+/*********************************purch Invoice************************************** */
+Route::resource('/purch-invoice', 'PurchInvoiceController');
+    
+Route::get('/dynamicBranchPurchInvoice.fetch', 'PurchInvoiceController@branchFetch')->name('dynamicBranchPurchInvoice.fetch');
+Route::get('/purch-invoice.creation', 'PurchInvoiceController@creation')->name('purch-invoice.creation');
 
+Route::get('addInvoice-purchRow/fetch', 'PurchInvoiceController@addRow')->name('addInvoice-purchRow.fetch');
+Route::get('/dynamic-transactionItems-Invoice.fetch', 'PurchInvoiceController@itemsInvoice')->name('dynamic-transactionItems-Invoice.fetch');
 
 
 });

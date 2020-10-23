@@ -59,7 +59,7 @@ class SaleInvoiceController extends Controller
         $branches = $user->branch;
         $row = new Branch();
         $branch_id = 0;
-        $invoices = Invoice::where('branch_id', $branch_id)->get();
+        $invoices = Invoice::where('branch_id', $branch_id)->where('invoice_type_id',1)->get();
         $stocks = Stock::where('branch_id', $branch_id)->get();
 
         return view($this->viewName . 'index', compact('branches', 'row', 'invoices', 'stocks'));
@@ -74,7 +74,7 @@ class SaleInvoiceController extends Controller
     {
         $branch_id = $request->input('branch_id');
         $row = Branch::where('id', $branch_id)->first();
-        $invoices = Invoice::where('branch_id', $branch_id)->get();
+        $invoices = Invoice::where('branch_id', $branch_id)->where('invoice_type_id',1)->get();
         $stocks = Stock::where('branch_id', $branch_id)->get();
 
         return view($this->viewName . 'preIndex', compact('row', 'invoices', 'stocks',))->render();

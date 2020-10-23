@@ -21,7 +21,9 @@ class CreateGlchartAccountsTable extends Migration
             $table->tinyInteger('gl_item_level')->nullable();
             $table->BigInteger('parent_id')->unsigned()->nullable();
             $table->tinyInteger('system_item')->nullable();
-
+            $table->float('open_balance',8,2)->nullable();
+            $table->dateTime('open_balance_date', 6)->nullable();
+            $table->tinyInteger('balance_type')->nullable();
             $table->timestamps();
         });
     }
