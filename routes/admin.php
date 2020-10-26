@@ -117,6 +117,11 @@ Route::get('/purch-invoice.creation', 'PurchInvoiceController@creation')->name('
 Route::get('addInvoice-purchRow/fetch', 'PurchInvoiceController@addRow')->name('addInvoice-purchRow.fetch');
 Route::get('/dynamic-transactionItems-Invoice.fetch', 'PurchInvoiceController@itemsInvoice')->name('dynamic-transactionItems-Invoice.fetch');
 
+Route::get('editSelectVal-purch-invoice/fetch', 'PurchInvoiceController@editSelectVal')->name('editSelectVal-purch-invoice.fetch');
+Route::get('addInvoice-purchRow-local/fetch', 'PurchInvoiceController@addRowLocal')->name('addInvoice-purchRow-local.fetch');
+Route::get('/purchInvoice/Remove/Item', 'PurchInvoiceController@DeleteInvoiceItem');
+Route::get('/localInvoice/Remove/Item', 'PurchInvoiceController@DeleteLocalItem');
+
 
 });
  

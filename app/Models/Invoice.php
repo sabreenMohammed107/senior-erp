@@ -43,4 +43,13 @@ class Invoice extends Model
     {
         return $this->hasMany('App\Models\Invoice_item','invoice_id','id');
     }
+    public function additive()
+    {
+        return $this->belongsToMany('App\Models\Additive_item','inv_additive_items','invoice_id','additive_item_id');
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo('App\Models\Stocks_transaction','stk_transaction_id');
+    }
 }

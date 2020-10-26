@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Stocks_items_total;
 
 $counter = 1;
 
@@ -9,12 +8,12 @@ $counter = 1;
 $counterrrr = 1;
 ?>
 
-@foreach($transactionsItems as $i=> $itemo)
+@foreach($invItems as $i=> $itemo)
 <tr data-id="{{$counter}}">
     <input type="hidden" name="counter" value="{{$counter}}">
     <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}" value="{{$counter}}"></td>
     <td>
-        <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_order_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
+        <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_inv_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
         <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
         <input type="hidden" id="upitemId{{$counter}}" name="upitemId{{$counter}}" readonly value="{{$itemo->item_id}}">
 
@@ -36,7 +35,7 @@ $counterrrr = 1;
     }
     ?>
     <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$itemo->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$itemo->item_qty ?? ''}}">
-    <input type="hidden" id="upitemBatch{{$counter}}" name="upitemBatch{{$counter}}" readonly value="{{$data->id}}">
+    <input type="hidden" id="upitemBatch{{$counter}}" name="upitemBatch{{$counter}}" readonly value="{{$data->id ?? 0}}">
 
    <span id="batch_search{{$counter}}" style="display:none;"></span>
     </td>
@@ -54,7 +53,7 @@ $counterrrr = 1;
    
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" style="width: 200px"  id="itemprice{{$counter}}" value="{{$itemo->item_price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control item_price" placeholder="">
+            <input type="number" step="0.01" style="width: 200px"   id="itemprice{{$counter}}" value="{{$itemo->item_price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control item_price" placeholder="">
         </div>
     </td>
 
@@ -70,10 +69,33 @@ $counterrrr = 1;
     <td>
 
       <div class="product-buttons">
-           <button id="del{{$counter}}" onclick="deleteRow({{$counter}})" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-
+           <button type="button" data-toggle="modal" data-target="#del{{$counter}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+          
         </div>
-     
+        <!--Delete-->
+        <div id="del{{$counter}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header header-color-modal bg-color-2">
+                        <h4 class="modal-title" style="text-align:right">حذف بيانات الصنف</h4>
+                        <div class="modal-close-area modal-close-df">
+                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+                        <h2></h2>
+                        <h4>هل تريد حذف جميع بيانات الصنف ؟ </h4>
+                        <h4>سيتم حذف المنتجات التي لم يتم حفظ تدوينها</h4>
+                    </div>
+                    <div class="modal-footer info-md">
+                        <a data-dismiss="modal" href="#">إلغــاء</a>
+                       <a href="#" onclick="DeleteInvoiceItem({{$itemo->id}},{{$counter}})">حـذف</a>
+                       </div>
+                </div>
+            </div>
+        </div> 
+        <!--/Delete-->
 
 
     </td>
@@ -83,8 +105,8 @@ $counterrrr = 1;
 <?php
 ++$counter;
 $counterrrr++;
-if(is_countable($transactionsItems)) {
-    if ($counter > count($transactionsItems)) {
+if(is_countable($invItems)) {
+    if ($counter > count($invItems)) {
 
 
 ?>
