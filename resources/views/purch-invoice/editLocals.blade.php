@@ -48,8 +48,8 @@ $counterrrr = 1;
                     <div class="modal-body">
                         <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
                         <h2></h2>
-                        <h4>هل تريد حذف جميع بيانات الصنف ؟ </h4>
-                        <h4>سيتم حذف المنتجات التي لم يتم حفظ تدوينها</h4>
+                        <h4>هل تريد حذف هذه الأضافات ؟ </h4>
+                        <h4>سيتم حذف هذه الإضافات كليا من الجداول المربوطه بها   </h4>
                     </div>
                     <div class="modal-footer info-md">
                         <a data-dismiss="modal" href="#">إلغــاء</a>

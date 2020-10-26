@@ -136,7 +136,7 @@ class PurchInvoiceController extends Controller
                 'item_qty' => $request->get('qty' . $i),
                 'item_price' => $request->get('itemprice' . $i),
                 'batch_no' => $request->get('Batch' . $i),
-                'total_line_cost' =>$request->get('qty' . $i)*$request->get('itemprice' . $i),
+                'total_line_cost' => $request->get('qty' . $i) * $request->get('itemprice' . $i),
                 'expired_date' => Carbon::parse($request->get('exDate' . $i)),
                 'notes' => $request->get('detNote' . $i),
 
@@ -176,16 +176,16 @@ class PurchInvoiceController extends Controller
 
         for ($i = 1; $i <= $counterrrr; $i++) {
 
-            
+
             $batch = $row = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
 
 
             $detailUpdate = [
                 'item_id' => $request->get('upitemId' . $i),
                 'item_qty' => $request->get('upqty' . $i),
-               
+
                 'item_price' => $request->get('upitemprice' . $i),
-                'total_line_cost' =>$request->get('upqty' . $i)*$request->get('upitemprice' . $i),
+                'total_line_cost' => $request->get('upqty' . $i) * $request->get('upitemprice' . $i),
 
                 'notes' => $request->get('updetNote' . $i),
 
@@ -259,7 +259,7 @@ class PurchInvoiceController extends Controller
             'branch_id' =>  $request->get('branch'),
         ];
         if ($request->get('optionsRadios1') == 'option1') {
-            $data['purch_invoice_reference'] = 1 ;
+            $data['purch_invoice_reference'] = 1;
         } else {
             $data['purch_invoice_reference'] = 0;
         }
@@ -350,7 +350,7 @@ class PurchInvoiceController extends Controller
             foreach ($details as $Item) {
 
                 $Item['invoice_id'] = $invoice->id;
-              
+
                 $Invoice_Item = Invoice_item::create($Item);
             }
 
@@ -397,9 +397,8 @@ class PurchInvoiceController extends Controller
         $stocks_transactions = Stocks_transaction::where('transaction_type_id', 101)->where('confirmed', 1)->get();
         $transactionsItems = Stock_transaction_item::where('transaction_id', $id)->get();
         $locals = Additive_item::all();
-        $localsItems =Inv_additive_item::where('invoice_id', $id)->get();
-        return view($this->viewName . 'view', compact('invObj', 'invItems','locals','localsItems', 'stocks', 'persons', 'stocks_transactions', 'branch', 'transactionsItems', 'currencies'));
-   
+        $localsItems = Inv_additive_item::where('invoice_id', $id)->get();
+        return view($this->viewName . 'view', compact('invObj', 'invItems', 'locals', 'localsItems', 'stocks', 'persons', 'stocks_transactions', 'branch', 'transactionsItems', 'currencies'));
     }
 
     /**
@@ -420,8 +419,8 @@ class PurchInvoiceController extends Controller
         $stocks_transactions = Stocks_transaction::where('transaction_type_id', 101)->where('confirmed', 1)->get();
         $transactionsItems = Stock_transaction_item::where('transaction_id', $id)->get();
         $locals = Additive_item::all();
-        $localsItems =Inv_additive_item::where('invoice_id', $id)->get();
-        return view($this->viewName . 'edit', compact('invObj', 'invItems','locals','localsItems', 'stocks', 'persons', 'stocks_transactions', 'branch', 'transactionsItems', 'currencies'));
+        $localsItems = Inv_additive_item::where('invoice_id', $id)->get();
+        return view($this->viewName . 'edit', compact('invObj', 'invItems', 'locals', 'localsItems', 'stocks', 'persons', 'stocks_transactions', 'branch', 'transactionsItems', 'currencies'));
     }
 
     /**
@@ -491,7 +490,7 @@ class PurchInvoiceController extends Controller
 
         for ($i = 1; $i <= $counterrrr; $i++) {
 
-            
+
             $batch = $row = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
 
 
@@ -499,9 +498,9 @@ class PurchInvoiceController extends Controller
                 'id' => $request->get('item_inv_id' . $i),
                 'item_id' => $request->get('upitemId' . $i),
                 'item_qty' => $request->get('upqty' . $i),
-            
+
                 'item_price' => $request->get('upitemprice' . $i),
-               
+
                 'notes' => $request->get('updetNote' . $i),
 
             ];
@@ -549,24 +548,24 @@ class PurchInvoiceController extends Controller
         }
         // Master
         $personObj = Person::where('id', $request->get('person_id'))->first();
-      
+
 
 
         $data = [
 
-           
+
             'invoice_serial' => $request->get('invoice_serial'),
-           
+
             'notes' => $request->get('notes'),
-           
+
             'invoice_date' => Carbon::parse($request->get('invoice_date')),
             'total_items_price' => $request->get('total_items_price'),
             'total_invoice_additive' => $request->get('local_total'),
             'local_net_invoice' => $request->get('local_net_invoice'),
-            
+
         ];
-       
-       
+
+
 
         DB::beginTransaction();
         try {
@@ -600,17 +599,17 @@ class PurchInvoiceController extends Controller
             }
             if ($details) {
                 //insert row in stock-transaction
-                $maxCode = Stocks_transaction::where('primary_stock_id', Invoice::where('id',$id)->first()->primary_stock_id)->where('transaction_type_id', 103)->latest('code')->first();
+                $maxCode = Stocks_transaction::where('primary_stock_id', Invoice::where('id', $id)->first()->primary_stock_id)->where('transaction_type_id', 103)->latest('code')->first();
 
                 $maxCode = ($maxCode != null) ? intval($maxCode['code']) : 0;
                 $maxCode++;
                 $data_transaction = [
                     'code' => $maxCode,
                     'transaction_type_id' => 101,
-                    'primary_stock_id' =>Invoice::where('id',$id)->first()->primary_stock_id ?? '',
-                    'person_id' => Invoice::where('id',$id)->first()->person_id ?? '',
-                    'person_name' => Invoice::where('id',$id)->first()->person_name ?? '',
-                    'person_type_id' =>Invoice::where('id',$id)->first()->person_type_id ?? '',
+                    'primary_stock_id' => Invoice::where('id', $id)->first()->primary_stock_id ?? '',
+                    'person_id' => Invoice::where('id', $id)->first()->person_id ?? '',
+                    'person_name' => Invoice::where('id', $id)->first()->person_name ?? '',
+                    'person_type_id' => Invoice::where('id', $id)->first()->person_type_id ?? '',
                     'referance_type' => 0,
                     'confirmed' => 0,
 
@@ -650,18 +649,18 @@ class PurchInvoiceController extends Controller
             foreach ($details as $Item) {
 
                 $Item['invoice_id'] = $id;
-                $Item['total_line_cost'] =$Item['item_qty']*$Item['item_price'];
+                $Item['total_line_cost'] = $Item['item_qty'] * $Item['item_price'];
                 $Invoice_Item = Invoice_item::create($Item);
             }
 
             foreach ($detailsUpdate as $updte) {
 
                 $updte['invoice_id'] = $id;
-                $updte['total_line_cost'] = $updte['item_qty']*$updte['item_price'];
+                $updte['total_line_cost'] = $updte['item_qty'] * $updte['item_price'];
                 Invoice_item::where('id', $updte['id'])->update($updte);
             }
             //locals
-            $invoice=Invoice::where('id',$id)->first();
+            $invoice = Invoice::where('id', $id)->first();
 
             if ($locals) {
                 $invoice->additive()->sync($locals);
@@ -701,7 +700,6 @@ class PurchInvoiceController extends Controller
             return redirect()->back()->with('flash_danger', $q->getMessage());
         }
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
-   
     }
 
 
@@ -789,12 +787,10 @@ class PurchInvoiceController extends Controller
 
             echo json_encode(array($items->ar_name, $items->uom->ar_name ?? ''));
         }
-
-
     }
 
 
-     /***
+    /***
      * Del
      */
     public function DeleteLocalItem(Request $req)
@@ -803,20 +799,19 @@ class PurchInvoiceController extends Controller
 
         if ($req->ajax()) {
 
-            $obo = Invoice_item::where('id', $req->id)->first();
+            // $obo = Invoice_item::where('id', $req->id)->first();
+            $obo = Inv_additive_item::where('id', $req->id)->first();
 
-            $invoices = Invoice::where('id', $obo->invoice_id)->first();
+            $invoices = Invoice::where('id', $req->invoice_id)->first();
 
-            
+
             $ss = [
-                'total_invoice_additive' => $invoices->total_items_price - $obo->total_invoice_additive,
-                'local_net_invoice' =>  $invoices->local_net_invoice - $obo->total_invoice_additive,
-               
-            ];
-            Invoice::where('id', $obo->invoice_id)->update($ss);
-            $invoices->additive()->detach();
-            Invoice_item::where('id', $req->id)->delete();
+                'total_invoice_additive' => $invoices->total_invoice_additive - $obo->additive_item_value,
+                'local_net_invoice' =>  $invoices->local_net_invoice - $obo->additive_item_value,
 
+            ];
+            Invoice::where('id', $req->invoice_id)->update($ss);
+            $obo->delete();
         }
     }
 }

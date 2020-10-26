@@ -887,19 +887,18 @@
         $('.modal-open').css('overflow-y', 'scroll');
         $.ajax({
             type: 'GET',
-            url: "{{url('/localInvoice/Remove/Item')}}",
+            url: "{{url('/local-purchInvoice/Remove/Item')}}",
             data: {
                 id: id,
                 invoice_id: '{{$invObj->id ?? 0}}',
             },
             success: function(data) {
-                alert(data);
+               alert(data);
                 localCalculations(index);
                 headCalculations(index);
                 location.reload(true);
             },
             error: function(request, status, error) {
-                alert("data");
                 console.log(request.responseText);
             }
         });
