@@ -48,6 +48,6 @@ class User extends Authenticatable
     }
     public function stock()
     {
-        return $this->belongsToMany(Models\Branch::class,'users_stocks','user_id','stock_id');
+        return $this->belongsToMany(Models\Stock::class,'users_stocks','user_id','stock_id');
     }
 }

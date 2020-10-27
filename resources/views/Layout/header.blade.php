@@ -224,6 +224,7 @@
 													<a href="{{route('approve-purch-order.index')}}" class="dropdown-item">الموافقة على أمر الشراء</a>
 													<a href="{{route('warehouse-receiver.index')}}" class="dropdown-item">حركات المخزن </a>
 													<a href="{{route('purch-invoice.index')}}" class="dropdown-item">فاتورة مشتريات</a>
+													<a href="{{route('expired-items.index')}}" class="dropdown-item">الأصناف التالفة </a>
 
 
 												</div>
@@ -281,10 +282,9 @@
 											</li>
 											<li><a href="{{route('purch-order.index')}}" class="dropdown-item"> أوامر الشراء </a></li>
 											<li><a href="{{route('approve-purch-order.index')}}" class="dropdown-item">الموافقة على أمر الشراء</a></li>
-											<li> <a href="{{route('warehouse-receiver.index')}}" class="dropdown-item">حركات المخزن </a>
-											<li> <a href="{{route('purch-invoice.index')}}" class="dropdown-item">فاتورة مشتريات</a>
-
-											</li>
+											<li> <a href="{{route('warehouse-receiver.index')}}" class="dropdown-item">حركات المخزن </a></li>
+											<li> <a href="{{route('purch-invoice.index')}}" class="dropdown-item">فاتورة مشتريات</a></li>
+										<li><a href="{{route('expired-items.index')}}" class="dropdown-item">الأصناف التالفة </a></li>
 										</ul>
 									</li>
 									<li>
