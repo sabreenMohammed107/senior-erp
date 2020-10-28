@@ -1,4 +1,4 @@
-@include('Layout.head')
+    @include('Layout.head')
 
 <body>
 
