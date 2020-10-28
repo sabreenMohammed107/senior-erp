@@ -923,16 +923,12 @@
     }
 
     // list inside table
-    //Start row functions
-    function deleteRow(index) {
-        $('tr[data-id=' + index + ']').remove();
-        var trs = $('#table > tbody').html();
-        $('#table').bootstrapTable('destroy');
-        $('#rows').html(trs);
-        $('#table').bootstrapTable();
-        console.log(trs);
-        console.log(index);
-        headCalculations(index);
+      // list inside table
+      function deleteRow(index) {
+        //delete Row
+
+        $('#table > tbody > tr[data-id=' + index + ']').remove();
+
 
     }
 

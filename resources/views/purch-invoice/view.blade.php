@@ -79,63 +79,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <form action="{{route('purch-invoice.store')}}" id="formid" method="post">
-                    @csrf
+               
                     <div class="mg-b-23">
                         <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
-                        <button data-toggle="modal" data-target="#confi" type="button" class="btn btn-primary waves-effect waves-light mg-b-15"> تأكيد</button>
-
-                        <button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
-
-                        <!--save Company-->
-                        <div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header header-color-modal bg-color-2">
-                                        <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
-                                        <div class="modal-close-area modal-close-df">
-                                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="modal-body">
-                                        <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
-
-                                        <h4>هل تريد حفظ البيانات ؟ </h4>
-                                    </div>
-                                    <div class="modal-footer info-md">
-                                        <a data-dismiss="modal" href="#">إلغــاء</a>
-
-                                        <button class="btn btn-primary waves-effect waves-light" name="action" value="save" onclick="document.getElementById('formid').submit();">حفظ</button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/save Company-->
-                        <!--confi Company-->
-                        <div id="confi" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header header-color-modal bg-color-2">
-                                        <h4 class="modal-title" style="text-align:right"> تأكيد الحفظ</h4>
-                                        <div class="modal-close-area modal-close-df">
-                                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="modal-body">
-                                        <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
-
-                                        <h4>هل تريد تأكيد حفظ البيانات ؟ </h4>
-                                    </div>
-                                    <div class="modal-footer info-md">
-                                        <a data-dismiss="modal" href="#">إلغــاء</a>
-                                        <button class="btn btn-primary waves-effect waves-light" name="action" value="confirm" onclick="document.getElementById('formid').submit();">حفظ</button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/conf Company-->
+                      
+                      
 
                         <!--cancle Company-->
                         <div id="cancle" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
@@ -179,7 +127,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                                                             <div class="input-mark-inner mg-b-22">
-                                                            <input type="hidden" value="{{$branch->id ?? 0}}" name="branch" class="form-control" placeholder="">
+                                                                <input type="hidden" value="{{$branch->id ?? 0}}" name="branch" class="form-control" placeholder="">
 
                                                                 <input type="text" value="{{$branch->code ?? ''}}" class="form-control" placeholder="" readonly>
                                                             </div>
@@ -209,7 +157,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" class="form-control" placeholder="" readonly>
+                                                                <input type="text" value="{{$invObj->invoice_no}}" class="form-control" placeholder="" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -221,7 +169,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" name="invoice_serial" class="form-control" placeholder="">
+                                                                <input type="text" name="invoice_serial" value="{{$invObj->invoice_serial}}" class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -233,7 +181,11 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="date" name="invoice_date" class="form-control" placeholder="">
+                                                                <?php
+                                                                $date = date_create($invObj->invoice_date);
+                                                                ?>
+
+                                                                <input type="date" name="invoice_date" value="{{ date_format($date, 'Y-m-d')}}" class="form-control" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -245,9 +197,11 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select data-placeholder="Choose a Country..." id="currency_id" class="chosen-select">
+                                                                <select data-placeholder="Choose a Country..." disabled id="currency_id" class="chosen-select">
                                                                     @foreach($currencies as $cur)
-                                                                    <option value="{{$cur->id}}">{{$cur->name}} /{{$cur->conversion_rate}}</option>
+                                                                    <option @if ($invObj->currency_id == $cur->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$cur->id}}">{{$cur->name}} /{{$cur->conversion_rate}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -262,9 +216,11 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select data-placeholder="Choose a Country..." id="person_id" name="person_id" class="chosen-select">
+                                                                <select data-placeholder="Choose a Country..." disabled id="person_id" name="person_id" class="chosen-select">
                                                                     @foreach($persons as $person)
-                                                                    <option value="{{$person->id}}">{{$person->name}} / {{$person->code}}</option>
+                                                                    <option @if ($invObj->person_id == $person->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$person->id}}">{{$person->name}} / {{$person->code}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -281,9 +237,9 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="bt-df-checkbox" style="direction:rtl">
-                                                                <input class="radio-checked" type="radio" onclick="stock()" value="option1" id="optionsRadios1" name="optionsRadios1">
+                                                                <input class="radio-checked" disabled @if($invObj->purch_invoice_reference == 1) checked="" @endif type="radio" onclick="stock()" value="option1" id="optionsRadios1" name="optionsRadios1">
                                                                 <label><b> عام </b></label>
-                                                                <input class="" type="radio" value="option2" checked="" onclick="orders()" id="optionsRadios2" name="optionsRadios1">
+                                                                <input class="" type="radio"  disabled value="option2" @if($invObj->purch_invoice_reference == 0) checked="" @endif onclick="orders()" id="optionsRadios2" name="optionsRadios1">
                                                                 <label><b> أمر مشتريات </b></label>
                                                             </div>
                                                         </div>
@@ -293,13 +249,15 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row" id="stock">
+                                                    <div class="row" @if($invObj->purch_invoice_reference == 0) style="display:none" @endif id="stock">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select data-placeholder="إختر المخزن" id="stock_id" name="stock_id" class="chosen-select" tabindex="-1">
+                                                                <select data-placeholder="إختر المخزن" disabled id="stock_id" name="stock_id" class="chosen-select" tabindex="-1">
                                                                     <option value="">Select</option>
                                                                     @foreach($stocks as $stock)
-                                                                    <option value="{{$stock->id}}">{{$stock->ar_name}} / {{$stock->code}}</option>
+                                                                    <option @if ($invObj->stock_id == $stock->id)
+                                                                        selected="selected"
+                                                                        @endif value="{{$stock->id}}">{{$stock->ar_name}} / {{$stock->code}}</option>
 
                                                                     @endforeach
                                                                 </select>
@@ -311,11 +269,15 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row" id="order">
+                                                    <div class="row" id="order"  @if($invObj->purch_invoice_reference == 1) style="display:none" @endif>
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select data-placeholder="إختر المخزن" id="transaction_id" name="transaction_id" class="chosen-select" tabindex="-1">
-                                                                    <option value="">Select</option>
+                                                                <select data-placeholder="إختر المخزن" id="transaction_id" disabled name="transaction_id" class="chosen-select" tabindex="-1">
+                                                                    <option value="">@if($invObj->stk_transaction_id)
+                                                                        {{date_format(date_create( $invObj->transaction->transaction_date),"Y-m-d")}}/{{$invObj->transaction->code}}
+                                                                        @else
+                                                                         select
+                                                                          @endif</option>
                                                                     @foreach($stocks_transactions as $trans)
                                                                     <?php
                                                                     $date = null;
@@ -334,7 +296,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <textarea class="form-control" name="notes" placeholder=""></textarea>
+                                                                <textarea class="form-control" name="notes" placeholder="">{{$invObj->notes}}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -346,7 +308,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" id="total_items_price" name="total_items_price" class="form-control" placeholder="" readonly>
+                                                                <input type="text" id="total_items_price" name="total_items_price" value="{{$invObj->total_items_price}}" class="form-control" placeholder="" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -358,7 +320,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" id="local_total" name="local_total" class="form-control" placeholder="" readonly>
+                                                                <input type="text" id="local_total" name="local_total" value="{{$invObj->total_invoice_additive}}" class="form-control" placeholder="" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -370,7 +332,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <input type="text" id="total_items_all" name="local_net_invoice" class="form-control" placeholder="" readonly>
+                                                                <input type="text" id="total_items_all" name="local_net_invoice" value="{{$invObj->local_net_invoice}}" class="form-control" placeholder="" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -382,18 +344,66 @@
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mg-b-22 shadow">
                                                     <h4 style="text-align:right">الإضافات</h4>
-                                                    <button id="addLocal" onclick="addLocalRow()" type="button" class="btn_add_item">إضافة بند</button>
+                                                    <button id="addLocal" disabled onclick="addLocalRow()" type="button" class="btn_add_item">إضافة بند</button>
                                                     <table class="table  table-bordered" id="local_table" data-toggle="table" data-pagination="true" data-toolbar="#toolbar" style="direction:rtl;">
                                                         <thead>
                                                             <tr>
                                                                 <th data-field="index">#</th>
                                                                 <th>البند المضاف</th>
                                                                 <th>قيمة البند المضتف</th>
-                                                                <th>حذف</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="rows_local">
+                                                        <?php
 
+use App\Models\Stocks_items_total;
+
+$localCountt = 1;
+
+?>
+<?php
+$counterrrr = 1;
+?>
+
+@foreach($localsItems as  $itemo)
+<tr data-id="{{$localCountt}}">
+    <input type="hidden" name="localCountt" value="{{$localCountt}}">
+    <td> <input style="width: 30px;" type="number" readonly id="first_id{{$localCountt}}" value="{{$localCountt}}"></td>
+    <td>
+       
+        <select data-placeholder="Choose a Country..." disabled id="select_add{{$localCountt}}" name="select_add{{$localCountt}}" class="form-control" style="width: 130px">
+            @foreach ($locals as $Item)
+            <option @if ($itemo->additive_item_id == $Item->id)
+                selected="selected"
+                @endif
+                value="{{$Item->id}}">{{$Item->name}}</option>
+            @endforeach
+        </select>
+    </td>
+    <td>
+    
+        <div class="input-mark-inner">
+            <input type="text" class="form-control" readonly value="{{$itemo->additive_item_value}}" oninput="localStyle({{$localCountt}})" id="localVal{{$localCountt}}" name="localVal{{$localCountt}}" placeholder="200" style="width: 130px">
+        </div>
+    </td>
+   
+</tr>
+<?php
+++$localCountt;
+$counterrrr++;
+if (is_countable($localsItems)) {
+    if ($localCountt > count($localsItems)) {
+
+
+?>
+
+        @break
+<?php
+    }
+}
+
+?>
+@endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -403,7 +413,7 @@
                                         <div class="row res-rtl" style="display: flex ">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
                                                 <h3 style="text-align:right">الأصناف</h3>
-                                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                                <button id="add" disabled type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
                                                 <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
                                             </div>
                                         </div>
@@ -424,19 +434,109 @@
                                                         <th>سعر الصنف</th>
                                                         <th> التكلفة</th>
                                                         <th>ملاحظات</th>
-                                                        <th>حذف</th>
+                                                       
                                                     </tr>
                                                 </thead>
                                                 <tbody id="rows">
 
-                                                    @include('purch-invoice.allwithStock')
+                                                <?php
+
+
+$counter = 1;
+
+?>
+<?php
+$counterrrr = 1;
+?>
+
+@foreach($invItems as $i=> $itemo)
+<tr data-id="{{$counter}}">
+    <input type="hidden" name="counter" value="{{$counter}}">
+    <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}" value="{{$counter}}"></td>
+    <td>
+        <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_order_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
+        <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
+        <input type="hidden" id="upitemId{{$counter}}" name="upitemId{{$counter}}" readonly value="{{$itemo->item_id}}">
+
+        <span id="item_search{{$counter}}" style="display:none;"></span>
+
+    </td>
+    <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
+    <td id="ar_name{{$counter}}" class="ar_name">{{$itemo->item->ar_name ?? ''}}</td>
+
+   
+    <td>
+    <?php
+    $data = App\Models\Stocks_items_total::where('item_id', $itemo->item_id)
+    ->where('expired_date', $itemo->expired_date)->where('batch_no', $itemo->batch_no)->first();
+    $dateBatch =null;
+    if($data){
+        $dateBatch = date_create($itemo->expired_date);
+
+    }
+    ?>
+    <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$itemo->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$itemo->item_qty ?? ''}}">
+    <input type="hidden" id="upitemBatch{{$counter}}" name="upitemBatch{{$counter}}" readonly value="{{$data->id ?? 0}}">
+
+   <span id="batch_search{{$counter}}" style="display:none;"></span>
+    </td>
+    <td id="batchNum{{$counter}}" class="batchNum">{{$itemo->batch_no}} </td>
+    <?php
+   
+    $date = date_create($itemo->expired_date);
+    ?>
+    <td id="batchDate{{$counter}}" class="batchDate">{{ date_format($date, "d-m-Y")}} </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" style="width: 200px" readonly oninput="itemQty({{$counter}})" value="{{$itemo->item_qty}}"  name="upqty{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
+        </div>
+    </td>
+   
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="number" step="0.01" readonly style="width: 200px"   id="itemprice{{$counter}}" value="{{$itemo->item_price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control item_price" placeholder="">
+        </div>
+    </td>
+
+    <td id="total{{$counter}}" class="total_item_price">
+        {{$itemo->total_line_cost}}
+    </td>
+    <td>
+        <div class="input-mark-inner mg-b-22">
+            <input type="text" readonly style="width: 200px" onkeypress="enterForRow(event,{{$counter}})" name="updetNote{{$counter}}" value="{{$itemo->notes}}" class="form-control detNote" placeholder="ملاحظات">
+        </div>
+    </td>
+   
+ 
+
+</tr>
+
+<?php
+++$counter;
+$counterrrr++;
+if(is_countable($invItems)) {
+    if ($counter > count($invItems)) {
+
+
+?>
+
+    @break
+<?php 
+}
+}
+
+?>
+@endforeach
+<input type="number" style="display: none;" value="{{$counterrrr}}" name="qqq" class="form-control item_quantity" placeholder="">
+
+
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                </form>
+               
             </div>
         </div>
     </div>
