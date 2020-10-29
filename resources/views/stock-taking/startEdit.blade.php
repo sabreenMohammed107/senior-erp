@@ -286,6 +286,8 @@
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                                     <div class="input-mask-title">
                                                         <label><b>كود الشخص</b></label>
+
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
