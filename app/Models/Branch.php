@@ -20,7 +20,7 @@ class Branch extends Model
         'notes',
         'start_code',
         'end_code',
-       
+
     ];
     public function branch()
     {
