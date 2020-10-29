@@ -262,18 +262,12 @@ class StockTakingController extends Controller
 
                 ];
                 array_push($subtractives, $TransItemssub);
-                //this for updating total qty
-                $totalQtyUp = [
-                    'id' => $request->get('take_item_id' . $i),
-                    'item_total_qty' => $request->get('physical_qty' . $i),
-                ];
-                array_push($updateTotals, $totalQtyUp);
-            }
+          
 
             $item = new Item();
         }
 
-
+    }
 
         //save Start Firstly
         DB::beginTransaction();
@@ -310,7 +304,7 @@ class StockTakingController extends Controller
                 //additive loop
                 foreach ($details as $updates) {
                     // adding value to physical 107
-                    \Log::info(['updates',$updates]);
+                    \Log::info(['updates', $updates]);
                     if ($updates['additive_qty'] > 0) {
                         //saving in stock_transaction & stock_transaction_items
 
@@ -321,13 +315,13 @@ class StockTakingController extends Controller
                         $Transdata = [
                             'code' => $maxCode,
                             'transaction_type_id' => 107,
-                            'primary_stock_id' => Stock_taking::where('id', $id)->first()->stock_id ?? '' ,
+                            'primary_stock_id' => Stock_taking::where('id', $id)->first()->stock_id ?? '',
                             'person_id' => Stock_taking::where('id', $id)->first()->person_id ?? '',
-                            'person_name' => Person::where('id',Stock_taking::where('id', $id)->first()->person_id)->first()->name ?? '',
+                            'person_name' => Person::where('id', Stock_taking::where('id', $id)->first()->person_id)->first()->name ?? '',
                             'person_type_id' => 100,
-                            'transaction_date' =>Stock_taking::where('id', $id)->first()->taking_date ?? '',
-                            'notes' =>Stock_taking::where('id', $id)->first()->notes ?? '',
-                            'confirmed'=>1,
+                            'transaction_date' => Stock_taking::where('id', $id)->first()->taking_date ?? '',
+                            'notes' => Stock_taking::where('id', $id)->first()->notes ?? '',
+                            'confirmed' => 1,
 
                         ];
                         $trans = Stocks_transaction::create($Transdata);
@@ -335,15 +329,16 @@ class StockTakingController extends Controller
 
                             $adds['transaction_id'] = $trans->id;
                             Stock_transaction_item::create($adds);
+                            //update Total
+                            $xxitems_total = Stocks_items_total::where('stock_id', $trans->primary_stock_id)->where('item_id', $adds['item_id'])->where('batch_no', $adds['batch_no'])->where('expired_date', $adds['expired_date'])->first();
+                            if ($xxitems_total) {
+                                $xxitems_total->item_total_qty = $xxitems_total->item_total_qty + $adds['item_qty'];
+                                $xxitems_total->update();
+                            }
                         }
-                        //update total items
-                        foreach ($updateTotals as $updateQty) {
-
-
-                            Stocks_items_total::where('id', $updateQty['id'])->update($updateQty);
-                        }
+                    break;  
                     }
-                    break;
+                  
                 }
                 //subtractive loop
                 foreach ($details as $updates) {
@@ -357,13 +352,13 @@ class StockTakingController extends Controller
                         $Transdata = [
                             'code' => $maxCode,
                             'transaction_type_id' => 108,
-                            'primary_stock_id' => Stock_taking::where('id', $id)->first()->stock_id ?? '' ,
+                            'primary_stock_id' => Stock_taking::where('id', $id)->first()->stock_id ?? '',
                             'person_id' => Stock_taking::where('id', $id)->first()->person_id ?? '',
-                            'person_name' => Person::where('id',Stock_taking::where('id', $id)->first()->person_id)->first()->name ?? '',
+                            'person_name' => Person::where('id', Stock_taking::where('id', $id)->first()->person_id)->first()->name ?? '',
                             'person_type_id' => 100,
-                            'transaction_date' =>Stock_taking::where('id', $id)->first()->taking_date ?? '',
-                            'notes' =>Stock_taking::where('id', $id)->first()->notes ?? '',
-                            'confirmed'=>1,
+                            'transaction_date' => Stock_taking::where('id', $id)->first()->taking_date ?? '',
+                            'notes' => Stock_taking::where('id', $id)->first()->notes ?? '',
+                            'confirmed' => 1,
 
                         ];
                         $trans = Stocks_transaction::create($Transdata);
@@ -371,19 +366,20 @@ class StockTakingController extends Controller
 
                             $subs['transaction_id'] = $trans->id;
                             Stock_transaction_item::create($subs);
+                           //update Total
+                            $xxitems_total = Stocks_items_total::where('stock_id', $trans->primary_stock_id)->where('item_id', $subs['item_id'])->where('batch_no', $subs['batch_no'])->where('expired_date', $subs['expired_date'])->first();
+                            if ($xxitems_total) {
+                                $xxitems_total->item_total_qty = $xxitems_total->item_total_qty - $subs['item_qty'];
+                                $xxitems_total->update();
+                            }
                         }
-
-                        //update total items
-                        foreach ($updateTotals as $updateQty) {
-
-
-                            Stocks_items_total::where('id', $updateQty['id'])->update($updateQty);
-                        }
-                        break;
+                    break;
                     }
-                }
-            }
 
+                   
+                }
+            
+            }
 
             DB::commit();
             // Enable foreign key checks!
