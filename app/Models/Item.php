@@ -27,7 +27,10 @@ class Item extends Model
      {
          return $this->belongsTo('App\Models\Item_category','item_category_id');
      }
-
+     public function person()
+     {
+         return $this->belongsTo('App\Models\Person','person_id');
+     }
      public function type()
      {
          return $this->belongsTo('App\Models\Item_type','item_type_id');

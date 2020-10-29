@@ -225,7 +225,7 @@
 													<a href="{{route('warehouse-receiver.index')}}" class="dropdown-item">حركات المخزن </a>
 													<a href="{{route('purch-invoice.index')}}" class="dropdown-item">فاتورة مشتريات</a>
 													<a href="{{route('expired-items.index')}}" class="dropdown-item">الأصناف التالفة </a>
-
+													<a href="{{route('stock-taking.index')}}" class="dropdown-item">جرد المخازن </a>
 
 												</div>
 											</li>
@@ -285,6 +285,8 @@
 											<li> <a href="{{route('warehouse-receiver.index')}}" class="dropdown-item">حركات المخزن </a></li>
 											<li> <a href="{{route('purch-invoice.index')}}" class="dropdown-item">فاتورة مشتريات</a></li>
 										<li><a href="{{route('expired-items.index')}}" class="dropdown-item">الأصناف التالفة </a></li>
+										<li><a href="{{route('stock-taking.index')}}" class="dropdown-item">جرد المخازن </a></li>
+
 										</ul>
 									</li>
 									<li>

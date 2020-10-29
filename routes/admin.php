@@ -133,13 +133,10 @@ Route::namespace('Admin')->group(function () {
   Route::get('/expired-items-editSelectBatch.fetch', 'ExpiredItemsController@editSelectBatch')->name('expired-items-editSelectBatch.fetch');
   Route::get('/expired-items/Remove/Item', 'ExpiredItemsController@DeleteItem');
 
-
-
-
-
+  /************************************StockTakingController********************************** */
+  Route::resource('/stock-taking', 'StockTakingController');
+  Route::get('/stock-taking.creation', 'StockTakingController@creation')->name('stock-taking.creation');
+  Route::get('/stock-taking-selectStock.fetch', 'StockTakingController@stockFetch')->name('stock-taking-selectStock.fetch');
+  Route::get('/stock-taking-selectValPerson.fetch', 'StockTakingController@FetchData')->name('stock-taking-selectValPerson.fetch');
 
 });
-
-
-
-
