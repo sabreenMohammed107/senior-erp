@@ -205,7 +205,7 @@
 												<div role="menu" class="dropdown-menu animated zoomIn">
 													<a href="{{url('/Financial/Banks')}}" class="dropdown-item">البنوك</a>
 													<a href="{{url('/Financial/CashBox')}}" class="dropdown-item">الخزن</a>
-													<a href="#" class="dropdown-item">الماليات</a>
+													<a href="{{url('/Financial/GLChart')}}" class="dropdown-item">شجرة الحسابات</a>
 													<a href="#" class="dropdown-item">الماليات</a>
 													<a href="#" class="dropdown-item">الماليات</a>
 												</div>
