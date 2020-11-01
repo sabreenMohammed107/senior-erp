@@ -115,7 +115,7 @@ class SaleOrderController extends Controller
         $qunty = 1;
         $disc = 0;
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            $batch =Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
 
             $detail = [
                 'item_id' => $request->get('select' . $i),
@@ -281,7 +281,7 @@ class SaleOrderController extends Controller
         $qunty = 1;
         $disc = 0;
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            $batch =  Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
 
             $detail = [
                 'item_id' => $request->get('select' . $i),

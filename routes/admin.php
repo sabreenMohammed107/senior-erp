@@ -138,5 +138,13 @@ Route::namespace('Admin')->group(function () {
   Route::get('/stock-taking.creation', 'StockTakingController@creation')->name('stock-taking.creation');
   Route::get('/stock-taking-selectStock.fetch', 'StockTakingController@stockFetch')->name('stock-taking-selectStock.fetch');
   Route::get('/stock-taking-selectValPerson.fetch', 'StockTakingController@FetchData')->name('stock-taking-selectValPerson.fetch');
+  /************************************outging-stock-trans********************************** */
+  Route::resource('/outging-stock-trans', 'OutgingStockTransController');
+  Route::get('/outging-stock-trans.creation', 'OutgingStockTransController@creation')->name('outging-stock-trans.creation');
+  Route::get('/outging-stock-trans-selectStock.fetch', 'OutgingStockTransController@stockFetch')->name('outging-stock-trans-selectStock.fetch');
+  Route::get('addRow-outging-stock-trans/fetch', 'OutgingStockTransController@addRow')->name('addRow-outging-stock-trans.fetch');
+  Route::get('/editSelectVal-outging-stock-trans.fetch', 'OutgingStockTransController@editSelectVal')->name('editSelectVal-outging-stock-trans.fetch');
+  Route::get('/editSelectBatch-outging-stock-trans.fetch', 'OutgingStockTransController@editSelectBatch')->name('editSelectBatch-outging-stock-trans.fetch');
+  Route::get('/outging-stock-trans/Remove-virtual/Item', 'OutgingStockTransController@DeletevirtualItem');
 
 });

@@ -41,6 +41,10 @@ class Stocks_transaction extends Model
      {
          return $this->belongsTo('App\Models\Stock','primary_stock_id');
      }
+     public function secondry()
+     {
+         return $this->belongsTo('App\Models\Stock','secondary_stock_id');
+     }
 
       //relation
       public function person()
