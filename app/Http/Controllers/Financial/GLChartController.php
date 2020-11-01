@@ -98,7 +98,7 @@ class GLChartController extends Controller
             DB::commit();
             return redirect('/Financial/GLChart')->with('flash_success','تم حفظ بيانات الحساب بنجاح');
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
             DB::rollBack();
             return redirect('/Financial/GLChart')->with('flash_danger','لم يتم حفظ بيانات الحساب .. حاول مرة أخرى');
         }
@@ -135,7 +135,7 @@ class GLChartController extends Controller
                 return redirect('/Financial/GLChart')->with('flash_success','تم حذف بيانات الحساب بنجاح');
 
             } catch (\Throwable $th) {
-                throw $th;
+                // throw $th;
                 DB::rollBack();
                 return redirect('/Financial/GLChart')->with('flash_danger','لم يتم حذف بيانات الحساب لوجود خطأ ما ');
             }
