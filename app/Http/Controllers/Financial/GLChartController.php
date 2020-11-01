@@ -11,13 +11,14 @@ use App\Exceptions\Handler;
 use App\Http\Controllers\Financial\Handlers\LevelsHandler;
 use App\Models\Financial_entry;
 use PhpParser\Node\Expr\AssignOp\Concat;
+use stdClass;
 
 class GLChartController extends Controller
 {
     // -- /Financial/GLChart
     public function index()
     {
-        return view('/financial/GLChart/index');
+        return view('Financial.GLChart.index');
     }
 
     // -- /Financial/GLChart/Fetch
@@ -32,7 +33,17 @@ class GLChartController extends Controller
     public function Add(Request $request)
     { 
         $parent_id = $request->id;  
-        $parent = Glchart_account::find($parent_id);
+        if ($parent_id == 0) {
+            $parent_id = null;
+            $parent = new stdClass();
+            $parent->gl_item_level = 0;
+            $parent->ar_name = "شجرة الحسابات";
+            $parent->en_name = "Accounts tree";
+            $parent->id  = null;
+            $parent->code = '';
+        }else{
+            $parent = Glchart_account::find($parent_id);
+        }
         if ($parent->gl_item_level == 6) {
             return redirect('/Financial/GLChart')->with('flash_info','لا يمكن تجاوز المستوى السادس في شجرة الحسابات');
         }
@@ -48,6 +59,9 @@ class GLChartController extends Controller
     // -- /Financial/GLChart/Edit
     public function Edit(Request $request)
     {
+        if($request->id == 0){
+            return redirect('/Financial/GLChart')->with('flash_info','لا يمكن تعديل شجرة الحسابات');
+        }
         $id = $request->id;  
         $node = Glchart_account::find($id);
         return view('Financial.GLChart.edit', [

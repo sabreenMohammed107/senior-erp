@@ -34,6 +34,13 @@
                     </div>
                 </div>
             @endif
+            @if(Session::has('flash_info'))
+                <div class="col-lg-12" style="direction: rtl;">
+                    <div class="alert alert-info">
+                        <strong><i class="fa fa-info-circle"></i> {!! session('flash_info') !!}</strong>
+                    </div>
+                </div>
+            @endif
             @if(Session::has('flash_delete'))
                 @section('script')
                 Swal.fire(

@@ -69,7 +69,7 @@
 <form action="{{url('/Financial/GLChart/Create')}}" method="post">
 {{ csrf_field() }}
 <div class="container-fluid">
-<a href="{{url('/Financial/GLChart')}}" class="btn btn-primary waves-effect waves-light mg-b-15" data-toggle="modal" data-target="#bk">رجــــوع</a>
+<a href="{{url('/Financial/GLChart')}}" class="btn btn-primary waves-effect waves-light mg-b-15">رجــــوع</a>
 	{{-- <button class="btn btn-primary waves-effect waves-light mg-b-15" data-toggle="modal" data-target="#cn">مسح</button> --}}
 	<a href="{{url('/Financial/GLChart')}}" class="btn btn-primary waves-effect waves-light mg-b-15">إلغــــاء</a>
 

@@ -382,6 +382,7 @@
 					var items_array = data;
 					var products = [{
 						id: "0",
+						code: null,
 						text: "شجرة الحسابات",
 						expanded: true,
 						items: items_array,
