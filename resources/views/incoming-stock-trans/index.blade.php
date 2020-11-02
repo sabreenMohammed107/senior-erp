@@ -47,12 +47,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <div class="breadcome-heading">
             <div class="add-product">
-                <form action="{{route('outging-stock-trans.creation')}}" method="get">
-                    <input type="hidden" value="{{$row->id}}" id="stock" name="stock">
-
-                    <button type="submit" style="direction:ltr;margin-top:-20px;background: rgba(139,0,0,.7);color:white;padding:5px ; border-color: rgba(139,0,0,.7);">إضافة حركة</button>
-
-                </form>
+                
 
             </div>
         </div>
@@ -106,7 +101,7 @@
                                 </div>
                             </div>
                             <div id="preIndex">
-                                @include('outging-stock-trans.preIndex')
+                                @include('incoming-stock-trans.preIndex')
                             </div>
 
                         </div>
@@ -131,7 +126,7 @@
 
 
             $.ajax({
-                url: "{{route('outging-stock-trans-selectStock.fetch')}}",
+                url: "{{route('incoming-stock-trans-selectStock.fetch')}}",
                 method: "get",
                 data: {
                     stock_id: stock,

@@ -226,7 +226,9 @@
 													<a href="{{route('purch-invoice.index')}}" class="dropdown-item">فاتورة مشتريات</a>
 													<a href="{{route('expired-items.index')}}" class="dropdown-item">الأصناف التالفة </a>
 													<a href="{{route('stock-taking.index')}}" class="dropdown-item">جرد المخازن </a>
-													<a href="{{route('outging-stock-trans.index')}}" class="dropdown-item">حركات المخزن</a>
+													<a href="{{route('outging-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الصادر </a>
+													<a href="{{route('incoming-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الوارد</a>
+													<a href="{{route('closing-stock-trans.index')}}" class="dropdown-item">إغلاق الإستلام</a>
 
 												</div>
 											</li>
@@ -272,7 +274,6 @@
 										<a data-toggle="collapse" data-target="#demoevent" href="#">المخزون <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
 										<ul id="demoevent" class="collapse dropdown-header-top">
 											<li><a href="{{route('items.index')}}" class="dropdown-item"> الأصناف </a></li>
-											<li><a href="#" class="dropdown-item">المخزون</a></li>
 											<li><a href="{{route('stocks.index')}}" class="dropdown-item"> المخازن </a>
 											</li>
 											<li><a href="{{route('item-price.index')}}" class="dropdown-item">اسعار الاصناف</a></li>
@@ -287,7 +288,10 @@
 											<li> <a href="{{route('purch-invoice.index')}}" class="dropdown-item">فاتورة مشتريات</a></li>
 											<li><a href="{{route('expired-items.index')}}" class="dropdown-item">الأصناف التالفة </a></li>
 											<li><a href="{{route('stock-taking.index')}}" class="dropdown-item">جرد المخازن </a></li>
-											<li><a href="{{route('outging-stock-trans.index')}}" class="dropdown-item">حركات المخزن</a></li>
+											<li><a href="{{route('outging-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الصادر </a></li>
+											<li><a href="{{route('incoming-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الوارد</a></li>
+											<li><a href="{{route('closing-stock-trans.index')}}" class="dropdown-item">إغلاق الإستلام</a></li>
+
 										</ul>
 									</li>
 									<li>

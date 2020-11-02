@@ -20,8 +20,9 @@ $counterrrr = 1;
         <span id="item_search{{$counter}}" style="display:none;"></span>
 
     </td>
-    <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
     <td id="ar_name{{$counter}}" class="ar_name">{{$itemo->item->ar_name ?? ''}}</td>
+
+    <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
 
 
     <td>

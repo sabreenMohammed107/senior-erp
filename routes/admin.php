@@ -147,4 +147,14 @@ Route::namespace('Admin')->group(function () {
   Route::get('/editSelectBatch-outging-stock-trans.fetch', 'OutgingStockTransController@editSelectBatch')->name('editSelectBatch-outging-stock-trans.fetch');
   Route::get('/outging-stock-trans/Remove-virtual/Item', 'OutgingStockTransController@DeletevirtualItem');
 
+  /******************************incoming-stock-trans********************************** */
+  Route::resource('/incoming-stock-trans', 'IncomingStockTransController');
+  Route::get('/incoming-stock-trans.creation', 'IncomingStockTransController@creation')->name('incoming-stock-trans.creation');
+  Route::get('/incoming-stock-trans-selectStock.fetch', 'IncomingStockTransController@stockFetch')->name('incoming-stock-trans-selectStock.fetch');
+ /******************************closing-stock-trans********************************** */
+ Route::resource('/closing-stock-trans', 'ClosingStockTransController');
+ Route::get('/closing-stock-trans-selectStock.fetch', 'ClosingStockTransController@stockFetch')->name('closing-stock-trans-selectStock.fetch');
+
+
+
 });
