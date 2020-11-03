@@ -90,7 +90,7 @@
                                     <div class="modal-footer info-md">
                                         <a data-dismiss="modal" href="#">إلغــاء</a>
 
-                                        <a class="btn btn-primary waves-effect waves-light" href="{{route('incoming-stock-trans.edit',$stockRow->id)}}">رجــــــوع</a>
+                                        <a class="btn btn-primary waves-effect waves-light" href="{{route('incoming-stock-trans.edit',$row->id)}}">رجــــــوع</a>
 
                                     </div>
                                 </div>

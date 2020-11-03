@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Financial_entry;
+use App\Models\Financial_subsystem;
 use App\Models\Item;
 use App\Models\Stock;
 use App\Models\Stock_transaction_item;
@@ -80,12 +82,13 @@ class ClosingStockTransController extends Controller
     {
         //update Details
         $counterrrr = $request->get('counter');
-
+        $financeArray = [];
         $detailsUpdate = [];
         $updateTotals = [];
         for ($i = 1; $i <= $counterrrr; $i++) {
             $itemTrams = Stock_transaction_item::where('id', $request->get('transItem' . $i))->first();
             if ($itemTrams) {
+                $item = Item::where('id', $itemTrams->item_id)->first();
                 $detailUpdate = [
                     'item_id' => $itemTrams->item_id,
                     'item_qty' => $request->get('remain' . $i),
@@ -96,6 +99,13 @@ class ClosingStockTransController extends Controller
                 ];
                 if ($request->get('remain' . $i)) {
                     array_push($detailsUpdate, $detailUpdate);
+                }
+                //finance
+                if ($item) {
+                    $finance = [
+                        'totalPrice' => $request->get('remain' . $i) * $item->average_price,
+                    ];
+                    array_push($financeArray, $finance);
                 }
             }
         }
@@ -133,7 +143,47 @@ class ClosingStockTransController extends Controller
                 $outgo->rcvd_confirmed = 2;
                 $outgo->update();
             }
+            //Make Finance Entry
 
+            $stockBranch = Stock::where('id', $request->input('stock_id'))->first();
+            $maxF = Financial_entry::where('trans_type_id', 117)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
+
+            $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+            $maxF++;
+            //sum of prices
+            $PricesSum = 0.0;
+
+            foreach ($financeArray as $finance) {
+
+                $PricesSum += $finance['totalPrice'];
+            }
+            //Finance Entry add 2 records
+
+            $firstFinance = new Financial_entry();
+            $firstFinance->trans_type_id = 117;
+            $firstFinance->entry_serial = $maxF;
+            $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+            $firstFinance->stock_id =  $request->input('stock_id');
+            $firstFinance->branch_id = $stockBranch->branch_id;
+            $firstFinance->credit = $PricesSum;
+            $firstFinance->debit = 0;
+            $firstFinance->gl_item_id = $stockBranch->gl_item_id;
+
+            $firstFinance->save();
+            //second row
+            $secondFinance = new Financial_entry();
+            $secondFinance->trans_type_id = 104;
+            $secondFinance->entry_serial = $maxF;
+            $secondFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+            $secondFinance->stock_id =  $request->input('stock_id');
+            $secondFinance->branch_id = $stockBranch->branch_id;
+            $secondFinance->debit = $PricesSum;
+            $secondFinance->credit =0;
+            $secondFinance->gl_item_id = Financial_subsystem::where('id', 109)->first()->gl_item_id ?? 0;
+
+            $secondFinance->save();
+
+            //End Finance
             $request->session()->flash('flash_success', "تم اضافة حركة إغلاق :");
             DB::commit();
             // Enable foreign key checks!
@@ -155,7 +205,7 @@ class ClosingStockTransController extends Controller
      */
     public function show($id)
     {
-           }
+    }
 
     /**
      * Show the form for editing the specified resource.

@@ -81,8 +81,8 @@
             <td>
                 <div class="product-buttons">
                 <a href="{{ route('incoming-stock-trans.show',$incoming->id)}}"> <button title="Show" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button></a>
-                    <a  @if($incoming->confirmed == 1) class="isDisabled" @endif href="{{ route('incoming-stock-trans.edit',$incoming->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                   {{--<button @if($incoming->confirmed == 1) class="isDisabled" @endif data-toggle="modal" data-target="#delete{{$incoming->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <a  @if($incoming->rcvd_confirmed == 1) class="isDisabled" @endif href="{{ route('incoming-stock-trans.edit',$incoming->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                   {{--<button @if($incoming->rcvd_confirmed == 1) class="isDisabled" @endif data-toggle="modal" data-target="#delete{{$incoming->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                    --}}  </div>
 
                 <!--Delete-->

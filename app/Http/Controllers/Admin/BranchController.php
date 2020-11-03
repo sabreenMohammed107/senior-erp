@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Branch ;
+use App\Models\Branch;
+use App\Models\Users_branch;
+use App\User;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Database\QueryException;
+
 class BranchController extends Controller
 {
     protected $object;
@@ -20,7 +23,7 @@ class BranchController extends Controller
 
 
         $this->object = $object;
-        
+
         $this->viewName = 'branch.';
         $this->routeName = 'branch.';
 
@@ -58,10 +61,10 @@ class BranchController extends Controller
     public function store(Request $request)
     {
         $max = Branch::latest('code')->first();
-      
+
         $max = ($max != null) ? intval($max['code']) : 0;
         $max++;
-       
+
 
         $data = [
             'ar_name' => $request->input('ar_name'),
@@ -80,17 +83,32 @@ class BranchController extends Controller
 
         ];
 
-
+        DB::beginTransaction();
 
         try {
-            $this->object::create($data);
-        } catch (QueryException $q) {
+            // Disable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            //update user Branches on saving
+            $branch = Branch::create($data);
+            //Auth User
+            $userId = User::where('id', 1)->first();
+            $relate = [
+                'user_id' => $userId->id,
+                'branch_id' => $branch->id,
 
-            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->errormessage);
+            ];
+            Users_branch::create($relate);
+
+            DB::commit();
+            // Enable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
         }
-
-
-        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
     }
 
     /**
@@ -132,7 +150,7 @@ class BranchController extends Controller
             'ar_name' => $request->input('ar_name'),
             'en_name' => $request->input('en_name'),
             'email' => $request->input('email'),
-          
+
             'address' => $request->input('address'),
             'phone' => $request->input('phone'),
             'mobile1' => $request->input('mobile1'),
@@ -176,18 +194,18 @@ class BranchController extends Controller
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
     }
 
-     /***
+    /***
      * 
      */
     public function search(Request $request)
     {
-        $name= $request->input('searchData');
+        $name = $request->input('searchData');
 
         $rows = Branch::where('ar_name', 'like', '%' . $name . '%')->orderBy('created_at', 'Desc')->paginate(8);
         if ($request->ajax()) {
             return view($this->viewName . 'result', compact('rows'))->render();
-           }else{
-               return view($this->viewName . 'index', compact('rows'));
-           }
+        } else {
+            return view($this->viewName . 'index', compact('rows'));
+        }
     }
 }
