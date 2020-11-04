@@ -801,7 +801,6 @@ class SaleInvoiceController extends Controller
 
                 $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
-
                 //Make Finance Entry
                 $stockBranch = Stock::where('id',  $data['stock_id'])->first();
                 $maxF = Financial_entry::where('trans_type_id', 110)->where('branch_id', $data['branch_id'])->latest('entry_serial')->first();
