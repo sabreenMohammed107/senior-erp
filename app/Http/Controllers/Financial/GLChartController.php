@@ -147,7 +147,7 @@ class GLChartController extends Controller
     static public function GetNodeChildren(int $parent_id = null)
     {
         
-        $GLChart = Glchart_account::where('parent_id','=',$parent_id)->get();
+        $GLChart = Glchart_account::where('parent_id','=',$parent_id)->orderBy('id')->get();
         $Tree = array();
         foreach ($GLChart as $i => $acc) {
             $node = $acc;
