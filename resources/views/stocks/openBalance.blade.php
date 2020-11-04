@@ -175,36 +175,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <style>
-                                    #myInput {
-                                        background-image: url('/css/searchicon.png');
-                                        /* Add a search icon to input */
-                                        background-position: 10px 12px;
-                                        /* Position the search icon */
-                                        background-repeat: no-repeat;
-                                        /* Do not repeat the icon image */
-                                        width: 30%;
-                                        /* Full-width */
-                                        font-size: 16px;
-                                        float: right;
-                                        /* Increase font-size */
-                                        padding: 12px 20px 12px 40px;
-                                        /* Add some padding */
-                                        border: 1px solid #ddd;
-                                        /* Add a grey border */
-                                        margin-bottom: 12px;
-                                        /* Add some space below the input */
-                                        text-align: right;
-                                    }
-                                </style>
+                                <div class="row res-rtl" style="display: flex ">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
+										<h3 style="text-align:right">الأصناف</h3>
+										<button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+										<input type="text" id="myInput" placeholder="إبحث  الصنف ..">
+									</div>
+								</div>
+								<div style="overflow-x:auto;">
 
-                                <h3 style="text-align:right">الأصناف</h3>
-                                <button id="add" @if($confirmed==1) disabled @endif type="button" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة صنف</button>
 
-                                <input type="text" id="myInput" onkeyup="myFunction()"  placeholder="إبحث باسم الصنف ..">
-
-                                <table class="table table-bordered" id="table" style="direction:rtl;">
-                                    <thead>
+									<table class="table  table-bordered" id="table" style="direction:rtl;">
+									    <thead>
                                         <tr>
                                         <th>Serial</th>
                                             <th data-field="id">كود البند</th>
@@ -353,11 +335,11 @@
             success: function(data) {
                 var result = $.parseJSON(data);
 
-                $("#ar_name" + index + "").text(result[0] + ' - ' +result[1]);
-                $("#uom" + index + "").text(result[2]);
+                $("#ar_name" + index + "").text(result[0] );
+                $("#uom" + index + "").text(result[1]);
 
-                $('#select' + index + ' option:selected').val(select_value).trigger('chosen:updated');;
-                $('#select' + index + ' option:selected').text(text).trigger('chosen:updated');;
+                // $('#select' + index + ' option:selected').val(select_value).trigger('chosen:updated');;
+                // $('#select' + index + ' option:selected').text(text).trigger('chosen:updated');;
 
             },
             error: function(request, status, error) {

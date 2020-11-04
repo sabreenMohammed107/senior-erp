@@ -57,33 +57,36 @@
             <th>تاريخ الحركة</th>
             <th>كود مخزن الصادر</th>
             <th>كود مخزن الوارد</th>
+            <th>التأكيد</th>
             <th>تأكيد الإستلام</th>
             <th>ملاحظات</th>
             <th>عرض / تعديل</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($rows as $index=>$outging)
+        @foreach($rows as $index=>$incoming)
         <tr>
             <td></td>
             <td>{{$index+1}}</td>
-            <td>{{$outging->code}}</td>
+            <td>{{$incoming->code}}</td>
             <td><?php
-             $date = date_create($outging->transaction_date) ?>
+             $date = date_create($incoming->transaction_date) ?>
                 {{ date_format($date,"d-m-Y") }}</td>
-            <td>{{$outging->transaction->code ?? ''}} / {{$outging->transaction->ar_name ?? ''}}</td>
-            <td>{{$outging->secondry->code ?? ''}} / {{$outging->secondry->ar_name ?? ''}}</td>
-            <td>@if($outging->confirmed==1) تم تأكيد الإستلام@else لم يتم تأكيد الإستلام @endif</td>
-            <td>{{$outging->notes}}</td>
+                <td>{{$incoming->transaction->code ?? ''}} / {{$incoming->transaction->ar_name ?? ''}}</td>
+            <td>{{$incoming->secondry->code ?? ''}} / {{$incoming->secondry->ar_name ?? ''}}</td>
+            <td>@if($incoming->confirmed==1) تم تأكيد @else لم يتم تأكيد  @endif</td>
+
+            <td>@if($incoming->rcvd_confirmed==1) تم تأكيد الإستلام@else لم يتم تأكيد الإستلام @endif</td>
+            <td>{{$incoming->notes}}</td>
             <td>
                 <div class="product-buttons">
-                <a   href="{{ route('outging-stock-trans.show',$outging->id)}}"><button title="Show" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button></a>
-                    <a  @if($outging->confirmed == 1) class="isDisabled" @endif href="{{ route('outging-stock-trans.edit',$outging->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                   {{--<button @if($outging->confirmed == 1) class="isDisabled" @endif data-toggle="modal" data-target="#delete{{$outging->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                {{--<a   href="{{ route('closing-stock-trans.show',$incoming->id)}}"><button title="Show" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button></a>--}}
+                    <a @if($incoming->rcvd_confirmed == 1 || $incoming->rcvd_confirmed == 2) class="isDisabled" @endif  href="{{ route('closing-stock-trans.edit',$incoming->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                   {{--<button @if($incoming->rcvd_confirmed == 1 || $incoming->rcvd_confirmed == 2) class="isDisabled" @endif data-toggle="modal" data-target="#delete{{$incoming->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                    --}}  </div>
 
                 <!--Delete-->
-                <div id="delete{{$outging->id}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+                <div id="delete{{$incoming->id}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header header-color-modal bg-color-2">
@@ -100,7 +103,7 @@
                             </div>
                             <div class="modal-footer info-md">
                                 <a data-dismiss="modal" href="#">إلغــاء</a>
-                                <form id="delete" style="display: inline;" action="{{route('outging-stock-trans.destroy',$outging->id)}}" method="POST">
+                                <form id="delete" style="display: inline;" action="{{route('closing-stock-trans.destroy',$incoming->id)}}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit">حذف</button>

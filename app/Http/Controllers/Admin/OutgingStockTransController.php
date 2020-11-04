@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Financial_entry;
+use App\Models\Financial_subsystem;
 use App\Models\Item;
 use App\Models\Stock;
 use App\Models\Stock_transaction_item;
@@ -82,7 +84,7 @@ class OutgingStockTransController extends Controller
 
         $stock = Stock::where('id', $id)->first();
         $user = User::where('id', 1)->first();
-        $secondStocks = $user->stock->where('id','!=',$id);
+        $secondStocks = $user->stock->where('id', '!=', $id);
         return view($this->viewName . 'add', compact('stock', 'secondStocks'));
     }
     /**
@@ -97,9 +99,10 @@ class OutgingStockTransController extends Controller
 
         $details = [];
         $updateTotals = [];
+        $financeArray = [];
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
-
+            $item = Item::where('id', $request->get('select' . $i))->first();
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -121,9 +124,18 @@ class OutgingStockTransController extends Controller
                 ];
                 array_push($updateTotals, $totalQtyUp);
             }
+
+            //finance
+            if ($item) {
+                $finance = [
+                    'totalPrice' => $request->get('qty' . $i) * $item->average_price,
+                ];
+                array_push($financeArray, $finance);
+            }
+           
         }
         // Master
-
+        \Log::info(['financeArray :',$financeArray]);
         $max = Stocks_transaction::where('transaction_type_id', 105)->where('primary_stock_id', $request->input('stock_id'))->latest('code')->first();
 
         $max = ($max != null) ? intval($max['code']) : 0;
@@ -152,7 +164,50 @@ class OutgingStockTransController extends Controller
                 foreach ($updateTotals as $total) {
                     Stocks_items_total::where('id', $total['id'])->update($total);
                 }
+
+
+                //Make Finance Entry
+
+                $stockBranch = Stock::where('id', $request->input('stock_id'))->first();
+                $maxF = Financial_entry::where('trans_type_id', 103)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
+
+                $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                $maxF++;
+                //sum of prices
+                $PricesSum=0.0;
+               
+                foreach ($financeArray as $finance) {
+                  
+                    $PricesSum += $finance['totalPrice'];
+                }
+                //Finance Entry add 2 records
+              
+                $firstFinance = new Financial_entry();
+                $firstFinance->trans_type_id = 103;
+                $firstFinance->entry_serial =$maxF;
+                $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $firstFinance->stock_id =  $request->input('stock_id');
+                $firstFinance->branch_id =$stockBranch->branch_id;
+                $firstFinance->credit =$PricesSum;
+                $firstFinance->debit = 0;
+                $firstFinance->gl_item_id =$stockBranch->gl_item_id;
+
+                $firstFinance->save();
+                //second row
+                $secondFinance = new Financial_entry();
+                $secondFinance->trans_type_id = 103;
+                $secondFinance->entry_serial =$maxF;
+                $secondFinance->entry_date =Carbon::parse($request->get('transaction_date'));
+                $secondFinance->stock_id =  $request->input('stock_id');
+                $secondFinance->branch_id =$stockBranch->branch_id;
+                $secondFinance->debit =$PricesSum;
+                $secondFinance->credit =0;
+                $secondFinance->gl_item_id = Financial_subsystem::where('id',102)->first()->gl_item_id ?? 0;
+
+                $secondFinance->save();
             }
+            //End Finance
+            // Master
             $trans = Stocks_transaction::create($data);
             foreach ($details as $Item) {
                 $Item['transaction_id'] = $trans->id;
@@ -213,11 +268,12 @@ class OutgingStockTransController extends Controller
     public function update(Request $request, $id)
     {
         $count = $request->rowCount;
-
+        $financeArray = [];
         $details = [];
         $updateTotals = [];
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            $item = Item::where('id', $request->get('select' . $i))->first();
 
             $detail = [
                 'item_id' => $request->get('select' . $i),
@@ -240,6 +296,13 @@ class OutgingStockTransController extends Controller
                 ];
                 array_push($updateTotals, $totalQtyUp);
             }
+             //finance
+             if ($item) {
+                $finance = [
+                    'totalPrice' => $request->get('qty' . $i) * $item->average_price,
+                ];
+                array_push($financeArray, $finance);
+            }
         }
 
         //update Details
@@ -249,6 +312,7 @@ class OutgingStockTransController extends Controller
 
         for ($i = 1; $i <= $counterrrr; $i++) {
             $batchup = Stocks_items_total::where('id', $request->get('itemBatchSelect' . $i))->first();
+            $itemup = Item::where('id', $request->get('itemSelect' . $i))->first();
 
             $detailUpdate = [
                 'id' => $request->get('item_trans_id' . $i),
@@ -271,15 +335,23 @@ class OutgingStockTransController extends Controller
                 ];
                 array_push($updateTotals, $totalQtyUp2);
             }
+
+            //finance
+            if ($itemup) {
+                $finance = [
+                    'totalPrice' => $request->get('upqty' . $i) * $itemup->average_price,
+                ];
+                array_push($financeArray, $finance);
+            }
         }
         // Master
 
-      
+
         $data = [
-        
+
             'transaction_date' => Carbon::parse($request->get('transaction_date')),
-           
-           
+
+
             'notes' => $request->get('notes'),
 
         ];
@@ -293,12 +365,52 @@ class OutgingStockTransController extends Controller
             if ($request->get('action') == 'save') {
                 $data['confirmed'] = 0;
             } elseif ($request->get('action') == 'confirm') {
-              
+
                 $data['confirmed'] = 1;
                 //update total
                 foreach ($updateTotals as $total) {
                     Stocks_items_total::where('id', $total['id'])->update($total);
                 }
+
+                 //Make Finance Entry
+
+                 $stockBranch = Stock::where('id', $request->input('stock_id'))->first();
+                 $maxF = Financial_entry::where('trans_type_id', 103)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
+ 
+                 $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                 $maxF++;
+                 //sum of prices
+                 $PricesSum=0.0;
+                
+                 foreach ($financeArray as $finance) {
+                   
+                     $PricesSum += $finance['totalPrice'];
+                 }
+                 //Finance Entry add 2 records
+               
+                 $firstFinance = new Financial_entry();
+                 $firstFinance->trans_type_id = 103;
+                 $firstFinance->entry_serial =$maxF;
+                 $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                 $firstFinance->stock_id =  $request->input('stock_id');
+                 $firstFinance->branch_id =$stockBranch->branch_id;
+                 $firstFinance->credit =$PricesSum;
+                 $firstFinance->gl_item_id =$stockBranch->gl_item_id;
+ 
+                 $firstFinance->save();
+                 //second row
+                 $secondFinance = new Financial_entry();
+                 $secondFinance->trans_type_id = 103;
+                 $secondFinance->entry_serial =$maxF;
+                 $secondFinance->entry_date =Carbon::parse($request->get('transaction_date'));
+                 $secondFinance->stock_id =  $request->input('stock_id');
+                 $secondFinance->branch_id =$stockBranch->branch_id;
+                 $secondFinance->debit =$PricesSum;
+                 $secondFinance->gl_item_id = Financial_subsystem::where('id',102)->first()->gl_item_id ?? 0;
+ 
+                 $secondFinance->save();
+             
+             //End Finance
             }
             Stocks_transaction::where('id', $id)->update($data);
             foreach ($details as $Item) {
@@ -342,7 +454,6 @@ class OutgingStockTransController extends Controller
             return redirect()->back()->with('flash_danger', $q->getMessage());
         }
         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
-   
     }
     /***
      * 
@@ -433,16 +544,17 @@ class OutgingStockTransController extends Controller
     }
 
 
-    public function DeletevirtualItem(Request $req){
+    public function DeletevirtualItem(Request $req)
+    {
 
         if ($req->ajax()) {
 
 
-         
+
             $id = $req->id;
 
-        
-         
+
+
             Stock_transaction_item::where('id', $req->id)->delete();
         }
     }

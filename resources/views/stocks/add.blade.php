@@ -124,51 +124,17 @@
 													<input name="" type="date" class="form-control" placeholder="تاريخ رصيد العميل" style="text-align:right">
 												</div> -->
 												<div class="form-group">
-													<label class=""> تاريخ الرصيد المفتوح</label>
-													<input name="open_balance_date" type="date" class="form-control" placeholder="تاريخ رصيد العميل" style="text-align:right">
-												</div>
-												<!--<div class="form-group">
-													<label class="">حد رصيد العميل</label>
-													<input name="" type="text" class="form-control" placeholder="حد رصيد العميل">
-												</div>
-													<div class="form-group">
-													<label>
-														<input type="checkbox" class="i-checks" checked> مخزن رئيسي
-													</label>
-												</div>
-												<div class="form-group">
-													<label>
-														<input type="checkbox" class="i-checks" checked> رصيد مفتوح
-													</label>
-												</div>
-											 <div class="form-group">
-													<div class="chosen-select-single mg-b-20">
-														<label><b>كود الصنف</b> </label>
-														<select data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
-															<option value="">Select</option>
-															<option value="United States">United States</option>
-															<option value="United Kingdom">United Kingdom</option>
-															<option value="Afghanistan">Afghanistan</option>
-															<option value="Aland Islands">Aland Islands</option>
-															<option value="Albania">Albania</option>
-															<option value="Algeria">Algeria</option>
-															<option value="American Samoa">American Samoa</option>
-															<option value="Andorra">Andorra</option>
-															<option value="Angola">Angola</option>
-															<option value="Anguilla">Anguilla</option>
-															<option value="Antarctica">Antarctica</option>
-															<option value="Antigua and Barbuda">Antigua and Barbuda</option>
-															<option value="Argentina">Argentina</option>
-															<option value="Armenia">Armenia</option>
-															<option value="Aruba">Aruba</option>
-															<option value="Australia">Australia</option>
-														</select>
-													</div>
-												</div>
-												<div class="form-group">
-													<label class="">إسم الصنف</label>
-													<input name="" type="text" class="form-control" placeholder="إسم الصنف">
-												</div> -->
+											<div class="chosen-select-single mg-b-20">
+												<label> <span style="color:red" > * </span>رقم الحساب </label>
+												<select data-placeholder="Choose a charts..."  name="gl_item_id" required class="chosen-select" >
+													<option value="">Select</option>
+													@foreach($charts as $type)
+													<option value="{{$type->id}}">{{$type->code}} - {{$type->ar_name}}</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
+											
 												<div class="form-group">
 													<label class="">ملاحظات</label>
 													<textarea name="notes" placeholder="ملاحظات" style="max-height:50px"></textarea>
@@ -192,6 +158,9 @@
 @endsection
 @section('scripts')
 <script>
-
+$(document).ready(function(){
+	$('select').chosen();
+    $('form').validate();
+});
 </script>
 @endsection

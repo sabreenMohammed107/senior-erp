@@ -47,12 +47,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <div class="breadcome-heading">
             <div class="add-product">
-                <form action="{{route('outging-stock-trans.creation')}}" method="get">
-                    <input type="hidden" value="{{$row->id}}" id="stock" name="stock">
-
-                    <button type="submit" style="direction:ltr;margin-top:-20px;background: rgba(139,0,0,.7);color:white;padding:5px ; border-color: rgba(139,0,0,.7);">إضافة حركة</button>
-
-                </form>
+                
 
             </div>
         </div>
@@ -63,7 +58,7 @@
                 <a href="#"></a> المخزن <span class="bread-slash"> / </span>
             </li>
             <li>
-                <span class="bread-blod">  حركات المخزن  </span>
+                <span class="bread-blod">إغلاق حركات المخزن</span>
             </li>
         </ul>
     </div>
@@ -82,7 +77,7 @@
                 <div class="sparkline13-list">
                     <div class="sparkline13-hd">
                         <div class="main-sparkline13-hd">
-                            <h1 style="direction:rtl">حركات المخزن</h1>
+                            <h1 style="direction:rtl">إغلاق حركات المخزن</h1>
                         </div>
                     </div>
                     <div class="sparkline13-graph">
@@ -93,7 +88,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
-                                                <label>رقم المخزن </label>
+                                                <label>كود المخزن </label>
                                                 <select data-placeholder="Choose a Country..." name="select_stock" class="chosen-select" tabindex="-1">
                                                     <option value="">Select</option>
                                                     @foreach($stocks as $type)
@@ -106,7 +101,7 @@
                                 </div>
                             </div>
                             <div id="preIndex">
-                                @include('outging-stock-trans.preIndex')
+                                @include('closing-stock-trans.preIndex')
                             </div>
 
                         </div>
@@ -131,7 +126,7 @@
 
 
             $.ajax({
-                url: "{{route('outging-stock-trans-selectStock.fetch')}}",
+                url: "{{route('closing-stock-trans-selectStock.fetch')}}",
                 method: "get",
                 data: {
                     stock_id: stock,

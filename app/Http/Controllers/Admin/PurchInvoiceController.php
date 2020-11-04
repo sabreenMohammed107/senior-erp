@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Additive_item;
 use App\Models\Branch;
 use App\Models\Currency;
+use App\Models\Financial_entry;
+use App\Models\Financial_subsystem;
 use App\Models\Inv_additive_item;
 use App\Models\Invoice;
 use App\Models\Invoice_item;
@@ -245,7 +247,6 @@ class PurchInvoiceController extends Controller
             'invoice_no' => $max,
             'invoice_serial' => $request->get('invoice_serial'),
             'person_id' => $request->get('person_id'),
-            'stock_id' => $request->get('stock_id'),
             'person_name' => $personObj->name ?? '',
             'person_type_id' => $personObj->person_type_id ?? 0,
             'stk_transaction_id' => $request->get('transaction_id'),
@@ -297,7 +298,108 @@ class PurchInvoiceController extends Controller
                         $trans->update();
                     }
                 }
+
+                //Make Finance Entry
+
+                $stockBranch = Stock::where('id', $data['stock_id'])->first();
+                $maxF = Financial_entry::whereIN('trans_type_id', [101, 100])->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
+
+                $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                $maxF++;
+
+                //Finance Entry add 2 records 
+
+                $firstFinance = new Financial_entry();
+                $firstFinance->trans_type_id = 101;
+                $firstFinance->entry_serial = $maxF;
+                $firstFinance->entry_date = $data['invoice_date'];
+                $firstFinance->stock_id = $data['stock_id'];
+                $firstFinance->branch_id = $stockBranch->branch_id;
+                $firstFinance->debit = $request->get('total_items_price');
+                $firstFinance->credit = 0;
+                $firstFinance->gl_item_id = Financial_subsystem::where('id', 110)->first()->gl_item_id ?? 0;
+
+
+
+                $firstFinance->save();
+                //second row
+                $secondFinance = new Financial_entry();
+                $secondFinance->trans_type_id = 101;
+                $secondFinance->entry_serial = $maxF;
+                $secondFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $secondFinance->stock_id =  $request->input('stock_id');
+                $secondFinance->branch_id = $stockBranch->branch_id;
+                $secondFinance->credit = $request->get('total_items_price');
+                $secondFinance->debit = 0;
+                $secondFinance->gl_item_id = Financial_subsystem::where('id', 100)->first()->gl_item_id ?? 0;
+                $secondFinance->save();
+                //third on purch with type =100
+                $third = new Financial_entry();
+                $third->trans_type_id = 100;
+                $third->entry_serial = $maxF;
+                $third->entry_date = $data['invoice_date'];
+                $third->stock_id = $data['stock_id'];
+                $third->branch_id = $stockBranch->branch_id;
+                $third->debit = $request->get('total_items_price');
+                $third->credit = 0;
+                $third->gl_item_id = $stockBranch->gl_item_id;
+
+                $third->save();
+
+                //fourth on purch with type =100
+                $fourth = new Financial_entry();
+                $fourth->trans_type_id = 100;
+                $fourth->entry_serial = $maxF;
+                $fourth->entry_date = Carbon::parse($request->get('transaction_date'));
+                $fourth->stock_id =  $request->input('stock_id');
+                $fourth->branch_id = $stockBranch->branch_id;
+                $fourth->credit = $request->get('total_items_price');
+                $fourth->debit = 0;
+                $fourth->gl_item_id = Financial_subsystem::where('id', 110)->first()->gl_item_id ?? 0;
+                $fourth->save();
+
+                //End Finance
+                //saving Local Finance
+                foreach ($locals as $finLocal) {
+                    $localFinance = new Financial_entry();
+                    $localFinance->trans_type_id = 100;
+                    $localFinance->entry_serial = $maxF;
+                    $localFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                    $localFinance->stock_id =  $request->input('stock_id');
+                    $localFinance->branch_id = $stockBranch->branch_id;
+
+                    if ($finLocal['additive_item_id'] == 1) {
+                        $localFinance->credit = 0;
+                        $localFinance->debit = $finLocal['additive_item_value'];
+                        $localFinance->gl_item_id = Additive_item::where('id', $finLocal['additive_item_id'])->first()->gl_item_id ?? 0;
+                        $localFinance->save();
+                    }
+                    if ($finLocal['additive_item_id'] == 2) {
+                        $localFinance->credit = 0;
+                        $localFinance->debit = $finLocal['additive_item_value'];
+                        $localFinance->gl_item_id = Additive_item::where('id', $finLocal['additive_item_id'])->first()->gl_item_id ?? 0;
+                        $localFinance->save();
+                    }
+                    if ($finLocal['additive_item_id'] == 3) {
+                        $localFinance->credit = $finLocal['additive_item_value'];
+                        $localFinance->debit = 0;
+                        $localFinance->gl_item_id = Additive_item::where('id', $finLocal['additive_item_id'])->first()->gl_item_id ?? 0;
+                        $localFinance->save();
+                    }
+                }
+                //Final Local
+                $finalFinance = new Financial_entry();
+                $finalFinance->trans_type_id = 100;
+                $finalFinance->entry_serial = $maxF;
+                $finalFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $finalFinance->stock_id =  $request->input('stock_id');
+                $finalFinance->branch_id = $stockBranch->branch_id;
+                $finalFinance->credit = $request->get('local_total');
+                $finalFinance->debit = 0;
+                $finalFinance->gl_item_id = Financial_subsystem::where('id', 110)->first()->gl_item_id ?? 0;
+                $finalFinance->save();
             }
+            //End
             if ($details) {
                 //insert row in stock-transaction
                 $maxCode = Stocks_transaction::where('primary_stock_id', $data['stock_id'])->where('transaction_type_id', 103)->latest('code')->first();
@@ -443,7 +545,7 @@ class PurchInvoiceController extends Controller
         $itemsTotals = [];
 
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
 
             $detail = [
 
@@ -529,6 +631,7 @@ class PurchInvoiceController extends Controller
         $localCounter = $request->get('rowCountt');
 
         $locals = [];
+        $Financiallocals = [];
 
         for ($i = 1; $i <= $localCounter; $i++) {
 
@@ -544,8 +647,32 @@ class PurchInvoiceController extends Controller
 
 
             array_push($locals, $local);
+            array_push($Financiallocals, $local);
+        }
+        $updateLocal = [];
+
+        $localCounterup =$request->get('localCountt');
+
+        for ($i = 1; $i <= $localCounterup; $i++) {
+
+
+
+
+            $uplocal = [
+                'additive_item_id' => $request->get('select_addUp' . $i),
+                'additive_item_value' => $request->get('localValUp' . $i),
+
+
+            ];
+
+
+            array_push($updateLocal, $uplocal);
+            array_push($Financiallocals, $uplocal);
             \Log::info($locals);
         }
+
+        \Log::info(['Financiallocals : ', $Financiallocals]);
+
         // Master
         $personObj = Person::where('id', $request->get('person_id'))->first();
 
@@ -596,6 +723,109 @@ class PurchInvoiceController extends Controller
                         $trans->update();
                     }
                 }
+
+
+                //Make Finance Entry
+                $finInvoice = Invoice::where('id', $id)->first();
+                $stockBranch = Stock::where('id', $finInvoice->stock_id)->first();
+                $maxF = Financial_entry::whereIN('trans_type_id', [101, 100])->where('branch_id', $finInvoice->branch_id)->latest('entry_serial')->first();
+
+                $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                $maxF++;
+
+                //Finance Entry add 2 records 
+
+                $firstFinance = new Financial_entry();
+                $firstFinance->trans_type_id = 101;
+                $firstFinance->entry_serial = $maxF;
+                $firstFinance->entry_date = $data['invoice_date'];
+                $firstFinance->stock_id = $finInvoice->stock_id ?? 0;
+                $firstFinance->branch_id = $finInvoice->branch_id;
+                $firstFinance->debit = $request->get('total_items_price');
+                $firstFinance->credit = 0;
+                $firstFinance->gl_item_id = Financial_subsystem::where('id', 110)->first()->gl_item_id ?? 0;
+
+
+
+                $firstFinance->save();
+                //second row
+                $secondFinance = new Financial_entry();
+                $secondFinance->trans_type_id = 101;
+                $secondFinance->entry_serial = $maxF;
+                $secondFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $secondFinance->stock_id =  $finInvoice->stock_id ?? 0;
+                $secondFinance->branch_id = $finInvoice->branch_id;
+                $secondFinance->credit = $request->get('total_items_price');
+                $secondFinance->debit = 0;
+                $secondFinance->gl_item_id = Financial_subsystem::where('id', 100)->first()->gl_item_id ?? 0;
+                $secondFinance->save();
+                //third on purch with type =100
+                $third = new Financial_entry();
+                $third->trans_type_id = 100;
+                $third->entry_serial = $maxF;
+                $third->entry_date = $data['invoice_date'];
+                $third->stock_id =  $finInvoice->stock_id ?? 0;
+                $third->branch_id = $finInvoice->branch_id;
+                $third->debit = $request->get('total_items_price');
+                $third->credit = 0;
+                $third->gl_item_id = $stockBranch->gl_item_id ?? 0;
+
+                $third->save();
+
+                //fourth on purch with type =100
+                $fourth = new Financial_entry();
+                $fourth->trans_type_id = 100;
+                $fourth->entry_serial = $maxF;
+                $fourth->entry_date = Carbon::parse($request->get('transaction_date'));
+                $fourth->stock_id =  $finInvoice->stock_id ?? 0;
+                $fourth->branch_id = $finInvoice->branch_id;
+                $fourth->credit = $request->get('total_items_price');
+                $fourth->debit = 0;
+                $fourth->gl_item_id = Financial_subsystem::where('id', 110)->first()->gl_item_id ?? 0;
+                $fourth->save();
+
+                //End Finance
+                //saving Local Finance
+                foreach ($Financiallocals as $finLocal) {
+                    $localFinance = new Financial_entry();
+                    $localFinance->trans_type_id = 100;
+                    $localFinance->entry_serial = $maxF;
+                    $localFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                    $localFinance->stock_id =   $finInvoice->stock_id ?? 0;
+                    $localFinance->branch_id = $finInvoice->branch_id;
+
+                    if ($finLocal['additive_item_id'] == 3) {
+                        $localFinance->credit = 0;
+                        $localFinance->debit = $finLocal['additive_item_value'];
+                        $localFinance->gl_item_id = Additive_item::where('id', $finLocal['additive_item_id'])->first()->gl_item_id ?? 0;
+                        $localFinance->save();
+                    }
+                    if ($finLocal['additive_item_id'] == 2) {
+                        $localFinance->credit = 0;
+                        $localFinance->debit = $finLocal['additive_item_value'];
+                        $localFinance->gl_item_id = Additive_item::where('id', $finLocal['additive_item_id'])->first()->gl_item_id ?? 0;
+                        $localFinance->save();
+                    }
+                    if ($finLocal['additive_item_id'] == 1) {
+                        $localFinance->credit = $finLocal['additive_item_value'];
+                        $localFinance->debit = 0;
+                        $localFinance->gl_item_id = Additive_item::where('id', $finLocal['additive_item_id'])->first()->gl_item_id ?? 0;
+                        $localFinance->save();
+                    }
+                }
+                //Final Local
+                $finalFinance = new Financial_entry();
+                $finalFinance->trans_type_id = 100;
+                $finalFinance->entry_serial = $maxF;
+                $finalFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $finalFinance->stock_id =  $finInvoice->stock_id ?? 0;
+                $finalFinance->branch_id = $finInvoice->branch_id;
+                $finalFinance->credit = $request->get('local_total');
+                $finalFinance->debit = 0;
+                $finalFinance->gl_item_id = Financial_subsystem::where('id', 110)->first()->gl_item_id ?? 0;
+                $finalFinance->save();
+
+                //End
             }
             if ($details) {
                 //insert row in stock-transaction
@@ -662,11 +892,16 @@ class PurchInvoiceController extends Controller
             //locals
             $invoice = Invoice::where('id', $id)->first();
 
-            if ($locals) {
-                $invoice->additive()->sync($locals);
+
+             //locals
+             if ($Financiallocals) {
+
+                $invoice->additive()->sync($Financiallocals);
             } else {
                 $invoice->additive()->detach();
             }
+
+           
             $request->session()->flash('flash_success', "تم اضافة فاتورة بيع :");
             DB::commit();
             // Enable foreign key checks!
