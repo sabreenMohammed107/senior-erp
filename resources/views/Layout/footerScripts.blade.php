@@ -83,7 +83,7 @@
     <script src="{{ asset('webassets/js/main.js')}}"></script>
     <!-- tawk chat JS
 		============================================ -->
-    <script src="{{ asset('webassets/js/tawk-chat.js')}}"></script>
+    <!-- <script src="{{ asset('webassets/js/tawk-chat.js')}}"></script> -->
 
 
 @yield('scripts')

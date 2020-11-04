@@ -11,11 +11,11 @@ $counterrrr = 1;
 
 @foreach($localsItems as  $itemo)
 <tr data-id="{{$localCountt}}">
-    <input type="hidden" name="localCountt" value="{{$localCountt}}">
-    <td> <input style="width: 30px;" type="number" readonly id="first_id{{$localCountt}}" value="{{$localCountt}}"></td>
+    <input type="hidden" name="localCounttyy" value="{{$localCountt}}">
+    <td> <input style="width: 30px;" type="number" name="localCountt" readonly id="first_id{{$localCountt}}" value="{{$localCountt}}"></td>
     <td>
-       
-        <select data-placeholder="Choose a Country..." disabled id="select_add{{$localCountt}}" name="select_add{{$localCountt}}" class="form-control" style="width: 130px">
+    <input type="hidden" name="select_addUp{{$localCountt}}" value="{{$itemo->additive_item_id}}">
+        <select data-placeholder="Choose a Country..." disabled id="select_add{{$localCountt}}" name="select_addUp2{{$localCountt}}" class="form-control" style="width: 130px">
             @foreach ($locals as $Item)
             <option @if ($itemo->additive_item_id == $Item->id)
                 selected="selected"
@@ -27,7 +27,7 @@ $counterrrr = 1;
     <td>
     
         <div class="input-mark-inner">
-            <input type="text" class="form-control" value="{{$itemo->additive_item_value}}" oninput="localStyle({{$localCountt}})" id="localVal{{$localCountt}}" name="localVal{{$localCountt}}" placeholder="200" style="width: 130px">
+            <input type="text" class="form-control" value="{{$itemo->additive_item_value}}" oninput="localStyle({{$localCountt}})" id="localVal{{$localCountt}}" name="localValUp{{$localCountt}}" placeholder="200" style="width: 130px">
         </div>
     </td>
     <td>
@@ -77,3 +77,4 @@ if (is_countable($localsItems)) {
 
 ?>
 @endforeach
+<input type="hidden" name="localCounttx" value="{{$localCountt}}">

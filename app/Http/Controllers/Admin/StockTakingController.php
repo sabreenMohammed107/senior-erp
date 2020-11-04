@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Financial_entry;
+use App\Models\Financial_subsystem;
 use App\Models\Item;
 use App\Models\Person;
 use App\Models\Stock;
@@ -204,7 +206,8 @@ class StockTakingController extends Controller
         $additaves = [];
         $subtractives = [];
         $updateTotals = [];
-
+        $financeArrayAdditive = [];
+        $financeArraySubstractive = [];
         for ($i = 1; $i <= $count; $i++) {
             $item = Item::where('id', $request->get('selectItem' . $i))->first();
 
@@ -247,6 +250,14 @@ class StockTakingController extends Controller
                     'item_total_qty' => $request->get('physical_qty' . $i),
                 ];
                 array_push($updateTotals, $totalQtyUp);
+
+                //finance
+                if ($item) {
+                    $financeAdd = [
+                        'totalPrice' => $detail['additive_qty'] * $item->average_price,
+                    ];
+                    array_push($financeArrayAdditive, $financeAdd);
+                }
             }
 
 
@@ -262,12 +273,17 @@ class StockTakingController extends Controller
 
                 ];
                 array_push($subtractives, $TransItemssub);
-          
 
+                //finance
+                if ($item) {
+                    $financeSub = [
+                        'totalPrice' => $detail['subtractive_qty'] * $item->average_price,
+                    ];
+                    array_push($financeArraySubstractive, $financeSub);
+                }
+            }
             $item = new Item();
         }
-
-    }
 
         //save Start Firstly
         DB::beginTransaction();
@@ -325,6 +341,47 @@ class StockTakingController extends Controller
 
                         ];
                         $trans = Stocks_transaction::create($Transdata);
+                        //Make Finance Entry
+
+                        $stockBranch = Stock::where('id', $trans->primary_stock_id)->first();
+                        $maxF = Financial_entry::where('trans_type_id', 106)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
+
+                        $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                        $maxF++;
+                        //sum of prices
+                        $PricesSum = 0.0;
+
+                        foreach ($financeArrayAdditive as $finance) {
+
+                            $PricesSum += $finance['totalPrice'];
+                        }
+                        //Finance Entry add 2 records
+
+                        $firstFinance = new Financial_entry();
+                        $firstFinance->trans_type_id = 106;
+                        $firstFinance->entry_serial = $maxF;
+                        $firstFinance->entry_date = $trans->transaction_date;
+                        $firstFinance->stock_id = $trans->primary_stock_id;
+                        $firstFinance->branch_id = $stockBranch->branch_id;
+                        $firstFinance->credit = $PricesSum;
+                        $firstFinance->debit = 0;
+                        $firstFinance->gl_item_id = $stockBranch->gl_item_id;
+
+                        $firstFinance->save();
+                        //second row
+                        $secondFinance = new Financial_entry();
+                        $secondFinance->trans_type_id = 106;
+                        $secondFinance->entry_serial = $maxF;
+                        $secondFinance->entry_date = $trans->transaction_date;
+                        $secondFinance->stock_id =  $trans->primary_stock_id;
+                        $secondFinance->branch_id = $stockBranch->branch_id;
+                        $secondFinance->debit = $PricesSum;
+                        $secondFinance->credit = 0;
+                        $secondFinance->gl_item_id = Financial_subsystem::where('id', 105)->first()->gl_item_id ?? 0;
+
+                        $secondFinance->save();
+
+                        //End Finance
                         foreach ($additaves as $adds) {
 
                             $adds['transaction_id'] = $trans->id;
@@ -336,9 +393,8 @@ class StockTakingController extends Controller
                                 $xxitems_total->update();
                             }
                         }
-                    break;  
+                        break;
                     }
-                  
                 }
                 //subtractive loop
                 foreach ($details as $updates) {
@@ -362,23 +418,62 @@ class StockTakingController extends Controller
 
                         ];
                         $trans = Stocks_transaction::create($Transdata);
+
+                        //Make Finance Entry
+
+                        $stockBranch = Stock::where('id', $trans->primary_stock_id)->first();
+                        $maxF = Financial_entry::where('trans_type_id', 107)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
+
+                        $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                        $maxF++;
+                        //sum of prices
+                        $PricesSum = 0.0;
+
+                        foreach ($financeArraySubstractive as $finance) {
+
+                            $PricesSum += $finance['totalPrice'];
+                        }
+                        //Finance Entry add 2 records
+
+                        $firstFinance = new Financial_entry();
+                        $firstFinance->trans_type_id = 107;
+                        $firstFinance->entry_serial = $maxF;
+                        $firstFinance->entry_date = $trans->transaction_date;
+                        $firstFinance->stock_id = $trans->primary_stock_id;
+                        $firstFinance->branch_id = $stockBranch->branch_id;
+                        $firstFinance->credit = $PricesSum;
+                        $firstFinance->debit = 0;
+                        $firstFinance->gl_item_id = $stockBranch->gl_item_id;
+
+                        $firstFinance->save();
+                        //second row
+                        $secondFinance = new Financial_entry();
+                        $secondFinance->trans_type_id = 107;
+                        $secondFinance->entry_serial = $maxF;
+                        $secondFinance->entry_date = $trans->transaction_date;
+                        $secondFinance->stock_id =  $trans->primary_stock_id;
+                        $secondFinance->branch_id = $stockBranch->branch_id;
+                        $secondFinance->debit = $PricesSum;
+                        $secondFinance->credit = 0;
+                        $secondFinance->gl_item_id = Financial_subsystem::where('id', 104)->first()->gl_item_id ?? 0;
+
+                        $secondFinance->save();
+
+                        //End Finance
                         foreach ($subtractives as $subs) {
 
                             $subs['transaction_id'] = $trans->id;
                             Stock_transaction_item::create($subs);
-                           //update Total
+                            //update Total
                             $xxitems_total = Stocks_items_total::where('stock_id', $trans->primary_stock_id)->where('item_id', $subs['item_id'])->where('batch_no', $subs['batch_no'])->where('expired_date', $subs['expired_date'])->first();
                             if ($xxitems_total) {
                                 $xxitems_total->item_total_qty = $xxitems_total->item_total_qty - $subs['item_qty'];
                                 $xxitems_total->update();
                             }
                         }
-                    break;
+                        break;
                     }
-
-                   
                 }
-            
             }
 
             DB::commit();
