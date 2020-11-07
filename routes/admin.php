@@ -151,10 +151,30 @@ Route::namespace('Admin')->group(function () {
   Route::resource('/incoming-stock-trans', 'IncomingStockTransController');
   Route::get('/incoming-stock-trans.creation', 'IncomingStockTransController@creation')->name('incoming-stock-trans.creation');
   Route::get('/incoming-stock-trans-selectStock.fetch', 'IncomingStockTransController@stockFetch')->name('incoming-stock-trans-selectStock.fetch');
- /******************************closing-stock-trans********************************** */
- Route::resource('/closing-stock-trans', 'ClosingStockTransController');
- Route::get('/closing-stock-trans-selectStock.fetch', 'ClosingStockTransController@stockFetch')->name('closing-stock-trans-selectStock.fetch');
+  /******************************closing-stock-trans********************************** */
+  Route::resource('/closing-stock-trans', 'ClosingStockTransController');
+  Route::get('/closing-stock-trans-selectStock.fetch', 'ClosingStockTransController@stockFetch')->name('closing-stock-trans-selectStock.fetch');
+
+  /******************************revert-purch-********************************** */
+  Route::get('/revert-purch.show/{id}', 'RevertsPurchController@show')->name('revert-purch.show');
+  Route::get('/revert-purch.creation', 'RevertsPurchController@creation')->name('revert-purch.creation');
+  Route::post('/revert-purch.store', 'RevertsPurchController@store')->name('revert-purch.store');
+  Route::get('addRow-revert-purch/fetch', 'RevertsPurchController@addRow')->name('addRow-revert-purch.fetch');
+  Route::get('/editSelectVal-revert-purch.fetch', 'RevertsPurchController@editSelectVal')->name('editSelectVal-revert-purch.fetch');
+  Route::get('/editSelectBatch-revert-purch.fetch', 'RevertsPurchController@editSelectBatch')->name('editSelectBatch-revert-purch.fetch');
+  /******************************all-revert-purch********************************** */
+  Route::resource('/all-revert-purch', 'AllRevertPurchController');
+  Route::get('/dynamicBranch-all-revert-purch.fetch', 'AllRevertPurchController@branchFetch')->name('dynamicBranch-all-revert-purch.fetch');
+  /******************************all-revert-sale********************************** */
+  Route::resource('/all-revert-sale', 'AllRevertSaleController');
+  Route::get('/dynamicBranch-all-revert-sale.fetch', 'AllRevertSaleController@branchFetch')->name('dynamicBranch-all-revert-sale.fetch');
 
 
-
+  /******************************revert-sale-********************************** */
+  Route::get('/revert-sale.show/{id}', 'RevertsSaleController@show')->name('revert-sale.show');
+  Route::get('/revert-sale.creation', 'RevertsSaleController@creation')->name('revert-sale.creation');
+  Route::post('/revert-sale.store', 'RevertsSaleController@store')->name('revert-sale.store');
+  Route::get('addRow-revert-sale/fetch', 'RevertsSaleController@addRow')->name('addRow-revert-sale.fetch');
+  Route::get('/editSelectVal-revert-sale.fetch', 'RevertsSaleController@editSelectVal')->name('editSelectVal-revert-sale.fetch');
+  Route::get('/editSelectBatch-revert-sale.fetch', 'RevertsSaleController@editSelectBatch')->name('editSelectBatch-revert-sale.fetch');
 });

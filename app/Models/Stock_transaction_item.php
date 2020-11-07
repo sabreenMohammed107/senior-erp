@@ -18,6 +18,12 @@ class Stock_transaction_item extends Model
         'total_line_cost',
         'transaction_id',
         'notes',
+        'item_disc_value',
+        'item_bonus_qty',
+        'item_vat_value',
+        'item_vat_perc',
+        'item_disc_perc',
+        'final_line_cost',
 
     ];
 

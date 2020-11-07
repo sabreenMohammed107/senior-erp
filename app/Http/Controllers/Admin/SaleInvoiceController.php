@@ -657,6 +657,11 @@ class SaleInvoiceController extends Controller
                     'item_qty' => $detail['item_qty'],
                     'item_price' => $detail['item_price'],
                     'total_line_cost' => $detail['total_line_cost'],
+                    'item_disc_perc' => $detail['item_disc_perc'],
+                    'item_disc_value' =>$detail['item_disc_value'],
+                    'item_bonus_qty' => $detail['item_bonus_qty'],
+                    'item_vat_value' => $detail['item_vat_value'],
+                    'final_line_cost' => $detail['final_line_cost'],
                 ];
                 array_push($TransactionItems, $TransactionItem);
 
@@ -715,6 +720,12 @@ class SaleInvoiceController extends Controller
                 'item_qty' => $detailUpdate['item_qty'],
                 'item_price' => $detailUpdate['item_price'],
                 'total_line_cost' => $detailUpdate['total_line_cost'],
+                'item_disc_perc' => $detailUpdate['item_disc_perc'],
+                'item_disc_value' =>$detailUpdate['item_disc_value'],
+                'item_bonus_qty' => $detailUpdate['item_bonus_qty'],
+                'item_vat_value' => $detailUpdate['item_vat_value'],
+                'final_line_cost' => $detailUpdate['final_line_cost'],
+
             ];
             array_push($TransactionItems, $TransactionItemup);
 

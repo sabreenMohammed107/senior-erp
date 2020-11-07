@@ -20,7 +20,7 @@ class CreateItemsTable extends Migration
             $table->string('ar_name', 255)->nullable();
             $table->string('en_name', 255)->nullable();
             $table->tinyInteger('has_batch')->nullable();
-            $table->string('batch_no', 255)->nullable();
+           
             $table->tinyInteger('has_expired_date')->nullable();
             $table->dateTime('generated_end_date', 6)->nullable();
             $table->tinyInteger('allowed_serial')->nullable();
