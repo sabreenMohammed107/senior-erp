@@ -55,11 +55,11 @@
                                                         </div>
                                                         <div class="form-group res-mg-t-15">
                                                             <label class="">كود بداية عميل</label>
-                                                            <input name="start_code" value="{{$row->start_code}}" type="text" class="form-control" placeholder="كود البداية">
+                                                            <input name="start_code" readonly value="{{$row->start_code}}" type="text" class="form-control" placeholder="كود البداية">
                                                         </div>
                                                         <div class="form-group res-mg-t-15">
                                                             <label class="">كود نهاية عميل</label>
-                                                            <input name="end_code" value="{{$row->end_code}}" type="text" class="form-control" placeholder="كود النهاية">
+                                                            <input name="end_code" readonly value="{{$row->end_code}}" type="text" class="form-control" placeholder="كود النهاية">
                                                         </div>
 
 
