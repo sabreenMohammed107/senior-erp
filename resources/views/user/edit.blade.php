@@ -48,19 +48,23 @@
                                                 <div class="row res-rtl" style="display: flex ;">
 
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    <div class="form-group">
+                                                            <label class="">إسم المستخدم</label>
+                                                            <input name="name" value="{{$row->name}}" type="text" class="form-control" placeholder="إسم المستخدم">
+                                                        </div>  
+                                                        <label class="">كلمة المرور</label>
+                                                        <div class="form-group"> 
+                                                      
+                                                            <input id="myInput" name="password" type="password" value="{{$row->password}}" class="form-control" placeholder="كلمة المرور">
+                                                            <input type="checkbox" style="margin: 0 5px;" onclick="myFunction()">
+                                                           
+                                                        </div>
+                                                        <br>
                                                         <div class="form-group">
                                                             <label class=""> بريد الكترونى</label>
                                                             <input name="email" value="{{$row->email}}" type="text" class="form-control" placeholder="البريد الالكترونى">
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label class="">كلمة المرور</label>
-                                                            <input id="myInput" name="password" type="password" value="{{$row->password}}" class="form-control" placeholder="كلمة المرور">
-                                                            <input type="checkbox" onclick="myFunction()">Show Password
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label class="">إسم المستخدم</label>
-                                                            <input name="name" value="{{$row->name}}" type="text" class="form-control" placeholder="إسم المستخدم">
-                                                        </div>
+                                                       
                                                         <div class="form-group">
                                                             <label class="">الاسم بالكامل عربى </label>
                                                             <input name="ar_fullName" value="{{$row->ar_full_name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
@@ -78,13 +82,7 @@
                                                             <input name="mobile" value="{{$row->mobile}}" type="number" class="form-control" placeholder="رقم التليفون">
                                                         </div>
 
-                                                        <div class="form-group">
-                                                            <label class="">تاريخ القفل</label>
-                                                            <?php
-                                                            $date = date_create($row->lock_date);
-                                                            ?>
-                                                            <input name="lock_date" value="{{ date_format($date,'Y-m-d') }}" id="finish" type="date" class="form-control" placeholder="تاريخ القفل">
-                                                        </div>
+                                                      
                                                         <div class="form-group">
                                                             <label class=""> الاسم بالكامل انجليزى</label>
                                                             <input name="en_fullName" value="{{$row->en_full_name}}" type="text" class="form-control" placeholder=" الاسم بالكامل">
