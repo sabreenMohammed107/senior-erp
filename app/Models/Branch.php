@@ -24,6 +24,6 @@ class Branch extends Model
     ];
     public function branch()
     {
-        return $this->belongsToMany(User::class,'users_branches','branch_id','user_id');
+        return $this->belongsToMany('App\User','users_branches','branch_id','user_id');
     }
 }
