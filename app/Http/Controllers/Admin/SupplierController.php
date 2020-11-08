@@ -53,7 +53,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        $person_categories = Person_catrgory::all();
+        $person_categories = Person_catrgory::where('category_type','=',0)->get();
 
         $currencies = Currency::all();
 
@@ -177,7 +177,7 @@ class SupplierController extends Controller
     {
         $row = Person::where('id', $id)->first();
 
-        $person_categories = Person_catrgory::all();
+        $person_categories =  Person_catrgory::where('category_type','=',0)->get();
 
         $currencies = Currency::all();
 
@@ -194,7 +194,7 @@ class SupplierController extends Controller
     {
         $row = Person::where('id', $id)->first();
 
-        $person_categories = Person_catrgory::all();
+        $person_categories =  Person_catrgory::where('category_type','=',0)->get();
 
         $currencies = Currency::all();
 
