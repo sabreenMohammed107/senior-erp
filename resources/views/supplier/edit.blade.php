@@ -77,7 +77,7 @@
                         <div class="modal-footer info-md">
                             <a data-dismiss="modal" href="#">إلغــاء</a>
 
-                            <a class="btn btn-primary waves-effect waves-light" href="{{route('customer.index')}}">رجــــــوع</a>
+                            <a class="btn btn-primary waves-effect waves-light" href="{{route('supplier.index')}}">رجــــــوع</a>
 
                         </div>
                     </div>
@@ -124,7 +124,7 @@
 
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
-                                                <label><b>كود تصنيف العميل</b> </label>
+                                                <label><b>كود تصنيف المورد</b> </label>
                                                 <select data-placeholder="Choose a Country..." name="person_category_id" class="chosen-select" tabindex="-1">
                                                     <option value="">Select</option>
                                                     @foreach($person_categories as $obj)
@@ -194,10 +194,10 @@
 
                                                         <input name="person_open_balance_date" readonly value="{{date_format($date,"Y-m-d") }}" type="date" class="form-control" placeholder="تاريخ رصيد المورد" style="text-align:right">
                                                     </div>
-                                                    <div class="form-group">
+                                                   {{-- <!-- <div class="form-group">
                                                         <label class="">حد رصيد المورد</label>
                                                         <input name="person_limit_balance" readonly value="{{$row->person_limit_balance}}" type="text" class="form-control" placeholder="حد رصيد المورد">
-                                                    </div>
+                                                    </div> -->--}}
 
 
 
@@ -229,8 +229,8 @@
                                                         <input name="commercial_register" value="{{$row->commercial_register}}" type="text" class="form-control" placeholder="السجل التجاري">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="">كارت الضرائب</label>
-                                                        <input name="tax_card" value="{{$row->tax_card}}" type="text" class="form-control" placeholder="كارت الضرائب">
+                                                        <label class=""> البطاقة الضريبية</label>
+                                                        <input name="tax_card" value="{{$row->tax_card}}" type="text" class="form-control" placeholder="البطاقة الضريبيه">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="">مصلحة الضرائب</label>

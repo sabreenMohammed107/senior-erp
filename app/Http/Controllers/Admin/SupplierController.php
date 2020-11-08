@@ -145,7 +145,7 @@ class SupplierController extends Controller
                 $financeEntry->debit = 0;
             } else {
                 $financeEntry->credit = 0;
-                $financeEntry->credit = $data['person_open_balance'];
+                $financeEntry->debit = $data['person_open_balance'];
             }
             $gl = Financial_subsystem::where('id', 110)->first();
             $financeEntry->gl_item_id = $gl->gl_item_id;
