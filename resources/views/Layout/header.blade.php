@@ -173,8 +173,8 @@
 											<li class="nav-item dropdown res-dis-nn">
 												<a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span> التقارير </a>
 												<div role="menu" class="dropdown-menu animated zoomIn">
-													<a href="#" class="dropdown-item">التقارير</a>
-													<a href="#" class="dropdown-item">التقارير</a>
+													<a href="{{url('/Reports/Financial/Transactions/Create')}}" class="dropdown-item">تقرير القيود المحاسبية</a>
+													<a href="{{url('/Reports/Stock/Transactions/Create')}}" class="dropdown-item">تقرير حركة المخزن</a>
 													<a href="#" class="dropdown-item">التقارير</a>
 													<a href="#" class="dropdown-item">التقارير</a>
 													<a href="#" class="dropdown-item">التقارير</a>
@@ -300,9 +300,9 @@
 									<li>
 										<a data-toggle="collapse" data-target="#demopro" href="#">الماليات <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
 										<ul id="demopro" class="collapse dropdown-header-top">
-											<li><a href="#" class="dropdown-item">الماليات</a></li>
-											<li><a href="#" class="dropdown-item">الماليات</a></li>
-											<li><a href="#" class="dropdown-item">الماليات</a></li>
+											<li><a href="{{url('/Financial/Banks')}}" class="dropdown-item">البنوك</a></li>
+											<li><a href="{{url('/Financial/CashBox')}}" class="dropdown-item">الخزن</a></li>
+											<li><a href="{{url('/Financial/GLChart')}}" class="dropdown-item">شجرة الحسابات</a></li>
 											<li><a href="#" class="dropdown-item">الماليات</a></li>
 											<li><a href="#" class="dropdown-item">الماليات</a></li>
 										</ul>
@@ -330,8 +330,8 @@
 									<li>
 										<a data-toggle="collapse" data-target="#Charts" href="#">التقارير <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
 										<ul class="collapse dropdown-header-top">
-											<li><a href="#" class="dropdown-item">التقارير</a></li>
-											<li><a href="#" class="dropdown-item">التقارير</a></li>
+											<li><a href="{{url('/Reports/Financial/Transactions/Create')}}" class="dropdown-item">تقرير القيود المحاسبية</a></li>
+											<li><a href="{{url('/Reports/Stock/Transactions/Create')}}" class="dropdown-item">تقرير حركة المخزن</a></li>
 											<li><a href="#" class="dropdown-item">التقارير</a></li>
 											<li><a href="#" class="dropdown-item">التقارير</a></li>
 											<li><a href="#" class="dropdown-item">التقارير</a></li>
