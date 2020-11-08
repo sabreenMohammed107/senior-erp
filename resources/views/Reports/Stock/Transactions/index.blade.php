@@ -59,7 +59,7 @@
 @section('content')
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
-<form action="{{url('/Reports/Stock/Transactions/Fetch')}}" method="post">
+<form action="{{url('/Reports/Stock/Transactions/Fetch')}}" method="post" target="_blank">
     {{ csrf_field() }}
     <div class="container-fluid">
         <button class="btn btn-primary waves-effect waves-light mg-b-15" data-toggle="modal" data-target="#add">رجــــــوع</button>
