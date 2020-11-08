@@ -295,10 +295,10 @@ class SupplierController extends Controller
 
                 DB::commit();
                 return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
-            } catch (\Throwable $th) {
+            } catch (QueryException $q) {
                 DB::rollBack();
-                throw $th;
-                return redirect()->back()->with('flash_danger', 'لم يتم الحذف');
+                
+                return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
             }
         } else {
             return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
