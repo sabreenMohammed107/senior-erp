@@ -287,6 +287,9 @@ class SupplierController extends Controller
         if ($Transactions == 0) {
             DB::beginTransaction();
             try {
+
+                Financial_entry::where('trans_type_id', '=', 102)->where('person_id', '=', $id)->delete();
+
                 $row->delete();
                 File::delete($file_name);
 
