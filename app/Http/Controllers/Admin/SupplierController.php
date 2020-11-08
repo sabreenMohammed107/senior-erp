@@ -162,7 +162,7 @@ class SupplierController extends Controller
 
             DB::rollback();
 
-          
+
             return redirect()->back()->with('flash_danger', $e->getMessage());
         }
     }
@@ -281,16 +281,26 @@ class SupplierController extends Controller
 
         $file_name = public_path('uploads/persons/' . $file);
 
+        //Transactions check for open_balance
+        $Transactions = DB::table('finan_transactions')
+            ->where([['transaction_type_id', '<>', 102], ['person_id', '=', $id], ['person_type_id', '=', 100]])->count();
+        //Actions
+        if ($Transactions == 0) {
+            DB::beginTransaction();
+            try {
+                $row->delete();
+                File::delete($file_name);
 
-        //  }
-        try {
-            $row->delete();
-            File::delete($file_name);
-        } catch (QueryException $q) {
-
+                DB::commit();
+                return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                throw $th;
+                return redirect()->back()->with('flash_danger', 'لم يتم الحذف');
+            }
+        } else {
             return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
         }
-        return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
     }
 
 
