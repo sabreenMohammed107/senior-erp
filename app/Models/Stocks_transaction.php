@@ -55,4 +55,8 @@ class Stocks_transaction extends Model
       {
           return $this->hasMany('App\Models\Stock_transaction_item','transaction_id','id');
       }
+      public function type()
+     {
+         return $this->hasOne('App\Models\Transaction_type','id','transaction_type_id');
+     }
 }

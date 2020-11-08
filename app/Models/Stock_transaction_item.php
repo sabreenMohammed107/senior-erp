@@ -31,6 +31,10 @@ class Stock_transaction_item extends Model
      {
          return $this->belongsTo('App\Models\Item','item_id');
      }
+     public function t_item()
+     {
+         return $this->hasOne('App\Models\Item','id','item_id');
+     }
 
 
 }
