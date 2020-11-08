@@ -282,8 +282,7 @@ class SupplierController extends Controller
         $file_name = public_path('uploads/persons/' . $file);
 
         //Transactions check for open_balance
-        $Transactions = DB::table('finan_transactions')
-            ->where([['transaction_type_id', '<>', 102], ['person_id', '=', $id], ['person_type_id', '=', 100]])->count();
+        $Transactions =Financial_entry::where([['trans_type_id', '<>', 102], ['person_id', '=', $id], ['person_type_id', '=', 100]])->count();
         //Actions
         if ($Transactions == 0) {
             DB::beginTransaction();
