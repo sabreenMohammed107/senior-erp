@@ -114,14 +114,16 @@ class IncomingStockTransController extends Controller
                 ];
                 if ($request->get('transItemQty' . $i)) {
                     array_push($detailsUpdate, $detailUpdate);
-                }
-                //finance
+
+                    //finance
                 if ($item) {
                     $finance = [
                         'totalPrice' => $request->get('transItemQty' . $i) * $item->average_price,
                     ];
                     array_push($financeArray, $finance);
                 }
+                }
+                
             }
         }
         // Master

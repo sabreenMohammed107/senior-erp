@@ -62,7 +62,7 @@ class CustomerController extends Controller
     {
         $user = User::where('id', 1)->first();
         $branches = $user->branch;
-        $person_categories = Person_catrgory::all();
+        $person_categories = Person_catrgory::where('category_type','=',1)->get();
         $marketers = Representative::where('rep_type_id', 101)->get();
         $sales = Representative::where('rep_type_id', 100)->get();
         $currencies = Currency::all();
@@ -223,7 +223,7 @@ class CustomerController extends Controller
         $row = Person::where('id', $id)->first();
         $user = User::where('id', 1)->first();
         $branches = $user->branch;
-        $person_categories = Person_catrgory::all();
+        $person_categories =  Person_catrgory::where('category_type','=',1)->get();
         $marketers = Representative::where('rep_type_id', 101)->where('branch_id',$row->branch_id)->get();
         $sales = Representative::where('rep_type_id', 100)->where('branch_id',$row->branch_id)->get();
         $currencies = Currency::all();
@@ -244,7 +244,7 @@ class CustomerController extends Controller
         $row = Person::where('id', $id)->first();
         $user = User::where('id', 1)->first();
         $branches = $user->branch;
-        $person_categories = Person_catrgory::all();
+        $person_categories = Person_catrgory::where('category_type','=',1)->get();
         $marketers = Representative::where('rep_type_id', 101)->where('branch_id',$row->branch_id)->get();
         $sales = Representative::where('rep_type_id', 100)->where('branch_id',$row->branch_id)->get();
         $currencies = Currency::all();

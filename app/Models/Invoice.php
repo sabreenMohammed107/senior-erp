@@ -52,4 +52,13 @@ class Invoice extends Model
     {
         return $this->belongsTo('App\Models\Stocks_transaction','stk_transaction_id');
     }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch','branch_id');
+    }
+    public function person()
+    {
+        return $this->belongsTo('App\Models\Person','person_id');
+    }
 }

@@ -53,7 +53,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        $person_categories = Person_catrgory::all();
+        $person_categories = Person_catrgory::where('category_type','=',0)->get();
 
         $currencies = Currency::all();
 
@@ -145,7 +145,7 @@ class SupplierController extends Controller
                 $financeEntry->debit = 0;
             } else {
                 $financeEntry->credit = 0;
-                $financeEntry->credit = $data['person_open_balance'];
+                $financeEntry->debit = $data['person_open_balance'];
             }
             $gl = Financial_subsystem::where('id', 110)->first();
             $financeEntry->gl_item_id = $gl->gl_item_id;
@@ -162,7 +162,7 @@ class SupplierController extends Controller
 
             DB::rollback();
 
-          
+
             return redirect()->back()->with('flash_danger', $e->getMessage());
         }
     }
@@ -177,7 +177,7 @@ class SupplierController extends Controller
     {
         $row = Person::where('id', $id)->first();
 
-        $person_categories = Person_catrgory::all();
+        $person_categories =  Person_catrgory::where('category_type','=',0)->get();
 
         $currencies = Currency::all();
 
@@ -194,7 +194,7 @@ class SupplierController extends Controller
     {
         $row = Person::where('id', $id)->first();
 
-        $person_categories = Person_catrgory::all();
+        $person_categories =  Person_catrgory::where('category_type','=',0)->get();
 
         $currencies = Currency::all();
 
@@ -281,16 +281,28 @@ class SupplierController extends Controller
 
         $file_name = public_path('uploads/persons/' . $file);
 
+        //Transactions check for open_balance
+        $Transactions =Financial_entry::where('trans_type_id', '<>', 102)->where('person_id', '=', $id)->count();
+        //Actions
+        if ($Transactions == 0) {
+            DB::beginTransaction();
+            try {
 
-        //  }
-        try {
-            $row->delete();
-            File::delete($file_name);
-        } catch (QueryException $q) {
+                Financial_entry::where('trans_type_id', '=', 102)->where('person_id', '=', $id)->delete();
 
+                $row->delete();
+                File::delete($file_name);
+
+                DB::commit();
+                return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+            } catch (QueryException $q) {
+                DB::rollBack();
+                
+                return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
+            }
+        } else {
             return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
         }
-        return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
     }
 
 

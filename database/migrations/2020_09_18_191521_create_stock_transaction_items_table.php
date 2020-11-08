@@ -24,12 +24,12 @@ class CreateStockTransactionItemsTable extends Migration
             $table->float('total_line_cost',8,2)->nullable();
             $table->BigInteger('transaction_id')->unsigned()->nullable();
             $table->text('notes')->nullable();
-
-
-
-
-
-
+            $table->float('item_disc_value', 8, 2)->nullable();
+            $table->float('item_bonus_qty', 8, 2)->nullable();
+            $table->float('item_vat_value', 8, 2)->nullable();
+            $table->float('item_vat_perc', 8, 2)->nullable();
+            $table->float('item_disc_perc', 8, 2)->nullable();
+            $table->float('final_line_cost', 8, 2)->nullable();
 
             $table->timestamps();
         });

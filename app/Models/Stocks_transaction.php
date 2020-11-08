@@ -59,4 +59,10 @@ class Stocks_transaction extends Model
      {
          return $this->hasOne('App\Models\Transaction_type','id','transaction_type_id');
      }
+
+
+      public function invoice()
+      {
+          return $this->belongsTo('App\Models\Invoice','invoice_id');
+      }
 }

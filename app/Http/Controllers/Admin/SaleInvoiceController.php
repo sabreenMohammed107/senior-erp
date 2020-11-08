@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Cash_box;
 use App\Models\Currency;
+use App\Models\Financial_entry;
+use App\Models\Financial_subsystem;
 use App\Models\Invoice;
 use App\Models\Invoice_item;
 use App\Models\Item;
@@ -59,7 +62,7 @@ class SaleInvoiceController extends Controller
         $branches = $user->branch;
         $row = new Branch();
         $branch_id = 0;
-        $invoices = Invoice::where('branch_id', $branch_id)->where('invoice_type_id',1)->get();
+        $invoices = Invoice::where('branch_id', $branch_id)->where('invoice_type_id', 1)->get();
         $stocks = Stock::where('branch_id', $branch_id)->get();
 
         return view($this->viewName . 'index', compact('branches', 'row', 'invoices', 'stocks'));
@@ -74,7 +77,7 @@ class SaleInvoiceController extends Controller
     {
         $branch_id = $request->input('branch_id');
         $row = Branch::where('id', $branch_id)->first();
-        $invoices = Invoice::where('branch_id', $branch_id)->where('invoice_type_id',1)->get();
+        $invoices = Invoice::where('branch_id', $branch_id)->where('invoice_type_id', 1)->get();
         $stocks = Stock::where('branch_id', $branch_id)->get();
 
         return view($this->viewName . 'preIndex', compact('row', 'invoices', 'stocks',))->render();
@@ -131,9 +134,10 @@ class SaleInvoiceController extends Controller
         $price = 1;
         $qunty = 1;
         $disc = 0;
+        $financeArray = [];
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
-
+            $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            $item = Item::where('id',  $request->get('select' . $i))->first();
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -170,6 +174,13 @@ class SaleInvoiceController extends Controller
                     'total_line_cost' => $detail['total_line_cost'],
                 ];
                 array_push($TransactionItems, $TransactionItem);
+                //finance
+                if ($item) {
+                    $finance = [
+                        'totalPrice' => $request->get('qty' . $i) * $item->average_price,
+                    ];
+                    array_push($financeArray, $finance);
+                }
             }
         }
         //from order item
@@ -182,7 +193,7 @@ class SaleInvoiceController extends Controller
 
 
             $batch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
-
+            $itemup = Item::where('id',  $request->get('upitemId' . $i))->first();
             $detailUpdate = [
                 'item_id' => $request->get('upitemId' . $i),
                 'item_qty' => $request->get('upqty' . $i),
@@ -219,6 +230,13 @@ class SaleInvoiceController extends Controller
                 'total_line_cost' => $detailUpdate['total_line_cost'],
             ];
             array_push($TransactionItems, $TransactionItemup);
+            //finance
+            if ($itemup) {
+                $finance = [
+                    'totalPrice' => $request->get('upqty' . $i) * $itemup->average_price,
+                ];
+                array_push($financeArray, $finance);
+            }
         }
         Log::info($counterrrr);
 
@@ -235,7 +253,7 @@ class SaleInvoiceController extends Controller
             'invoice_no' => $max,
             'person_id' => $request->get('clientPerson'),
             'stock_id' => $request->get('stock_id'),
-            'person_name' => $request->get('person_name'),
+            'person_name' =>  $personObj->name ?? '',
             'person_type_id' => $personObj->person_type_id ?? 0,
             'order_id' => $request->get('orderPersons'),
             'invoice_type_id' => 1,
@@ -244,7 +262,7 @@ class SaleInvoiceController extends Controller
             'sales_rep_id' => $request->get('salePerson'),
             'marketing_rep_id' => $request->get('marketPerson'),
             'invoice_date' => Carbon::parse($request->get('invoice_date')),
-            'total_disc_value'=>$request->get('total_disc_value'),
+            'total_disc_value' => $request->get('total_disc_value'),
             'total_items_price' => $request->get('total_items_price'),
             'total_vat_value' => $request->get('total_vat_value'),
             'total_bonus_qty' => $request->get('total_bonus_qty'),
@@ -302,6 +320,202 @@ class SaleInvoiceController extends Controller
 
                 $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
+
+
+                //Make Finance Entry
+                $stockBranch = Stock::where('id',  $data['stock_id'])->first();
+                $maxF = Financial_entry::where('trans_type_id', 110)->where('branch_id', $data['branch_id'])->latest('entry_serial')->first();
+
+                $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                $maxF++;
+                //sum of prices
+                $PricesSum = 0.0;
+
+                foreach ($financeArray as $finance) {
+
+                    $PricesSum += $finance['totalPrice'];
+                }
+                //Finance Entry From Ageel
+                if ($request->get('pay_type_id') == 2) {
+
+
+                    $firstFinanceAgeel = new Financial_entry();
+                    $firstFinanceAgeel->trans_type_id = 110;
+                    $firstFinanceAgeel->entry_serial = $maxF;
+                    $firstFinanceAgeel->entry_date = $data['invoice_date'];
+                    $firstFinanceAgeel->stock_id = $data['stock_id'];
+                    $firstFinanceAgeel->branch_id = $data['branch_id'];
+                    $firstFinanceAgeel->person_id = $data['person_id'];
+                    $firstFinanceAgeel->person_name = $data['person_name'];
+                    $firstFinanceAgeel->debit = $request->get('local_net_invoice');
+                    $firstFinanceAgeel->credit = 0;
+                    $firstFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 115)->first()->gl_item_id ?? 0;
+
+                    $firstFinanceAgeel->save();
+
+                    //second
+                    $secondFinanceAgeel = new Financial_entry();
+                    $secondFinanceAgeel->trans_type_id = 110;
+                    $secondFinanceAgeel->entry_serial = $maxF;
+                    $secondFinanceAgeel->entry_date = $data['invoice_date'];
+                    $secondFinanceAgeel->stock_id = $data['stock_id'];
+                    $secondFinanceAgeel->branch_id = $data['branch_id'];
+                    $secondFinanceAgeel->person_id = $data['person_id'];
+                    $secondFinanceAgeel->person_name = $data['person_name'];
+                    $secondFinanceAgeel->debit = $request->get('total_disc_value');
+                    $secondFinanceAgeel->credit = 0;
+                    $secondFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 118)->first()->gl_item_id ?? 0;
+
+                    $secondFinanceAgeel->save();
+
+                    //third
+                    $thirdFinanceAgeel = new Financial_entry();
+                    $thirdFinanceAgeel->trans_type_id = 110;
+                    $thirdFinanceAgeel->entry_serial = $maxF;
+                    $thirdFinanceAgeel->entry_date = $data['invoice_date'];
+                    $thirdFinanceAgeel->stock_id = $data['stock_id'];
+                    $thirdFinanceAgeel->branch_id = $data['branch_id'];
+                    $thirdFinanceAgeel->person_id = $data['person_id'];
+                    $thirdFinanceAgeel->person_name = $data['person_name'];
+                    $thirdFinanceAgeel->debit = 0;
+                    $thirdFinanceAgeel->credit = $request->get('total_items_price');
+                    $thirdFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 114)->first()->gl_item_id ?? 0;
+
+                    $thirdFinanceAgeel->save();
+
+
+                    //forth
+                    $forthFinanceAgeel = new Financial_entry();
+                    $forthFinanceAgeel->trans_type_id = 110;
+                    $forthFinanceAgeel->entry_serial = $maxF;
+                    $forthFinanceAgeel->entry_date = $data['invoice_date'];
+                    $forthFinanceAgeel->stock_id = $data['stock_id'];
+                    $forthFinanceAgeel->branch_id = $data['branch_id'];
+                    $forthFinanceAgeel->person_id = $data['person_id'];
+                    $forthFinanceAgeel->person_name = $data['person_name'];
+                    $forthFinanceAgeel->debit = 0;
+                    $forthFinanceAgeel->credit = $request->get('total_vat_value');
+                    $forthFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 117)->first()->gl_item_id ?? 0;
+
+                    $forthFinanceAgeel->save();
+
+                    //five
+                    $fiveFinanceAgeel = new Financial_entry();
+                    $fiveFinanceAgeel->trans_type_id = 110;
+                    $fiveFinanceAgeel->entry_serial = $maxF;
+                    $fiveFinanceAgeel->entry_date = $data['invoice_date'];
+                    $fiveFinanceAgeel->stock_id = $data['stock_id'];
+                    $fiveFinanceAgeel->branch_id = $data['branch_id'];
+                    $fiveFinanceAgeel->person_id = $data['person_id'];
+                    $fiveFinanceAgeel->person_name = $data['person_name'];
+                    $fiveFinanceAgeel->debit = $PricesSum; // this value uder change
+                    $fiveFinanceAgeel->credit = 0;
+                    $fiveFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 116)->first()->gl_item_id ?? 0;
+
+                    $fiveFinanceAgeel->save();
+
+                    //six
+                    $sixFinanceAgeel = new Financial_entry();
+                    $sixFinanceAgeel->trans_type_id = 110;
+                    $sixFinanceAgeel->entry_serial = $maxF;
+                    $sixFinanceAgeel->entry_date = $data['invoice_date'];
+                    $sixFinanceAgeel->stock_id = $data['stock_id'];
+                    $sixFinanceAgeel->branch_id = $data['branch_id'];
+                    $sixFinanceAgeel->person_id = $data['person_id'];
+                    $sixFinanceAgeel->person_name = $data['person_name'];
+                    $sixFinanceAgeel->debit = 0;
+                    $sixFinanceAgeel->credit = $PricesSum; // this value uder change
+                    $sixFinanceAgeel->gl_item_id = $stockBranch->gl_item_id ?? 0;
+
+                    $sixFinanceAgeel->save();
+                }
+                //end
+
+                //Finance Entry From Nagdyyyy
+                if ($request->get('pay_type_id') == 1) {
+
+                    //Finance Entry add 2 records 
+
+                    $firstFinance = new Financial_entry();
+                    $firstFinance->trans_type_id = 110;
+                    $firstFinance->entry_serial = $maxF;
+                    $firstFinance->entry_date = $data['invoice_date'];
+                    $firstFinance->cash_box_id = Cash_box::where('branch_id', $data['branch_id'])->first()->id ?? 0;
+                    $firstFinance->branch_id = $data['branch_id'];
+                    $firstFinance->debit = $request->get('local_net_invoice');
+                    $firstFinance->credit = 0;
+                    $firstFinance->gl_item_id = Cash_box::where('branch_id', $data['branch_id'])->first()->gl_item_id ?? 0;
+
+                    $firstFinance->save();
+
+                    //second
+                    $secondFinance = new Financial_entry();
+                    $secondFinance->trans_type_id = 110;
+                    $secondFinance->entry_serial = $maxF;
+                    $secondFinance->entry_date = $data['invoice_date'];
+                    $secondFinance->stock_id = $data['stock_id'];
+                    $secondFinance->branch_id = $data['branch_id'];
+                    $secondFinance->debit = $request->get('total_disc_value');
+                    $secondFinance->credit = 0;
+                    $secondFinance->gl_item_id = Financial_subsystem::where('id', 118)->first()->gl_item_id ?? 0;
+
+                    $secondFinance->save();
+
+                    //third
+                    $third = new Financial_entry();
+                    $third->trans_type_id = 110;
+                    $third->entry_serial = $maxF;
+                    $third->entry_date = $data['invoice_date'];
+                    $third->cash_box_id = Cash_box::where('branch_id', $data['branch_id'])->first()->id ?? 0;
+                    $third->branch_id = $data['branch_id'];
+                    $third->debit = 0;
+                    $third->credit = $request->get('total_items_price');
+                    $third->gl_item_id =  Financial_subsystem::where('id', 113)->first()->gl_item_id ?? 0;
+
+                    $third->save();
+
+                    //fourth
+                    $fourth = new Financial_entry();
+                    $fourth->trans_type_id = 110;
+                    $fourth->entry_serial = $maxF;
+                    $fourth->entry_date = $data['invoice_date'];
+                    $fourth->stock_id = $data['stock_id'];
+                    $fourth->branch_id = $data['branch_id'];
+                    $fourth->debit = 0;
+                    $fourth->credit = $request->get('total_vat_value');
+                    $fourth->gl_item_id =  Financial_subsystem::where('id', 117)->first()->gl_item_id ?? 0;
+
+                    $fourth->save();
+
+                    //fiveth
+                    $fiveth = new Financial_entry();
+                    $fiveth->trans_type_id = 110;
+                    $fiveth->entry_serial = $maxF;
+                    $fiveth->entry_date = $data['invoice_date'];
+                    $fiveth->stock_id = $data['stock_id'];
+                    $fiveth->branch_id = $data['branch_id'];
+                    $fiveth->debit = $PricesSum; // this value uder change
+                    $fiveth->credit = 0;
+                    $fiveth->gl_item_id = Financial_subsystem::where('id', 116)->first()->gl_item_id ?? 0;
+
+                    $fiveth->save();
+
+
+                    //sixFinance
+                    $sixFinance = new Financial_entry();
+                    $sixFinance->trans_type_id = 110;
+                    $sixFinance->entry_serial = $maxF;
+                    $sixFinance->entry_date = $data['invoice_date'];
+                    $sixFinance->stock_id = $data['stock_id'];
+                    $sixFinance->branch_id = $data['branch_id'];
+                    $sixFinance->debit = 0;
+                    $sixFinance->credit = $PricesSum; // this value uder change
+                    $sixFinance->gl_item_id = $stockBranch->gl_item_id ?? 0;
+
+                    $sixFinance->save();
+                }
+                //end
+
             }
             $invoice = Invoice::create($data);
             foreach ($details as $Item) {
@@ -405,9 +619,10 @@ class SaleInvoiceController extends Controller
         $price = 1;
         $qunty = 1;
         $disc = 0;
+        $financeArray = [];
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
-
+            $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            $item = Item::where('id',  $request->get('select' . $i))->first();
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -442,8 +657,21 @@ class SaleInvoiceController extends Controller
                     'item_qty' => $detail['item_qty'],
                     'item_price' => $detail['item_price'],
                     'total_line_cost' => $detail['total_line_cost'],
+                    'item_disc_perc' => $detail['item_disc_perc'],
+                    'item_disc_value' =>$detail['item_disc_value'],
+                    'item_bonus_qty' => $detail['item_bonus_qty'],
+                    'item_vat_value' => $detail['item_vat_value'],
+                    'final_line_cost' => $detail['final_line_cost'],
                 ];
                 array_push($TransactionItems, $TransactionItem);
+
+                //finance
+                if ($item) {
+                    $finance = [
+                        'totalPrice' => $request->get('qty' . $i) * $item->average_price,
+                    ];
+                    array_push($financeArray, $finance);
+                }
             }
         }
         //from order item
@@ -456,7 +684,7 @@ class SaleInvoiceController extends Controller
 
 
             $batch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
-
+            $itemup = Item::where('id',  $request->get('upitemId' . $i))->first();
             $detailUpdate = [
                 'id' => $request->get('item_inv_id' . $i),
                 'item_id' => $request->get('upitemId' . $i),
@@ -492,8 +720,22 @@ class SaleInvoiceController extends Controller
                 'item_qty' => $detailUpdate['item_qty'],
                 'item_price' => $detailUpdate['item_price'],
                 'total_line_cost' => $detailUpdate['total_line_cost'],
+                'item_disc_perc' => $detailUpdate['item_disc_perc'],
+                'item_disc_value' =>$detailUpdate['item_disc_value'],
+                'item_bonus_qty' => $detailUpdate['item_bonus_qty'],
+                'item_vat_value' => $detailUpdate['item_vat_value'],
+                'final_line_cost' => $detailUpdate['final_line_cost'],
+
             ];
             array_push($TransactionItems, $TransactionItemup);
+
+            //finance
+            if ($itemup) {
+                $finance = [
+                    'totalPrice' => $request->get('upqty' . $i) * $itemup->average_price,
+                ];
+                array_push($financeArray, $finance);
+            }
         }
         Log::info($counterrrr);
 
@@ -514,7 +756,7 @@ class SaleInvoiceController extends Controller
             'sales_rep_id' => $invObj->sales_rep_id,
             'marketing_rep_id' => $request->get('marketPerson'),
             'invoice_date' => Carbon::parse($request->get('invoice_date')),
-            'total_disc_value'=>$request->get('total_disc_value'),
+            'total_disc_value' => $request->get('total_disc_value'),
             'total_items_price' => $request->get('total_items_price'),
             'total_vat_value' => $request->get('total_vat_value'),
             'total_bonus_qty' => $request->get('total_bonus_qty'),
@@ -570,6 +812,200 @@ class SaleInvoiceController extends Controller
 
                 $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
+                //Make Finance Entry
+                $stockBranch = Stock::where('id',  $data['stock_id'])->first();
+                $maxF = Financial_entry::where('trans_type_id', 110)->where('branch_id', $data['branch_id'])->latest('entry_serial')->first();
+
+                $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                $maxF++;
+                //sum of prices
+                $PricesSum = 0.0;
+
+                foreach ($financeArray as $finance) {
+
+                    $PricesSum += $finance['totalPrice'];
+                }
+                //Finance Entry From Ageel
+                if ($invObj->pay_type_id == 2) {
+
+
+                    $firstFinanceAgeel = new Financial_entry();
+                    $firstFinanceAgeel->trans_type_id = 110;
+                    $firstFinanceAgeel->entry_serial = $maxF;
+                    $firstFinanceAgeel->entry_date = $data['invoice_date'];
+                    $firstFinanceAgeel->stock_id = $data['stock_id'];
+                    $firstFinanceAgeel->branch_id = $data['branch_id'];
+                    $firstFinanceAgeel->person_id = $data['person_id'];
+                    $firstFinanceAgeel->person_name = $data['person_name'];
+                    $firstFinanceAgeel->debit = $request->get('local_net_invoice');
+                    $firstFinanceAgeel->credit = 0;
+                    $firstFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 115)->first()->gl_item_id ?? 0;
+
+                    $firstFinanceAgeel->save();
+
+                    //second
+                    $secondFinanceAgeel = new Financial_entry();
+                    $secondFinanceAgeel->trans_type_id = 110;
+                    $secondFinanceAgeel->entry_serial = $maxF;
+                    $secondFinanceAgeel->entry_date = $data['invoice_date'];
+                    $secondFinanceAgeel->stock_id = $data['stock_id'];
+                    $secondFinanceAgeel->branch_id = $data['branch_id'];
+                    $secondFinanceAgeel->person_id = $data['person_id'];
+                    $secondFinanceAgeel->person_name = $data['person_name'];
+                    $secondFinanceAgeel->debit = $request->get('total_disc_value');
+                    $secondFinanceAgeel->credit = 0;
+                    $secondFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 118)->first()->gl_item_id ?? 0;
+
+                    $secondFinanceAgeel->save();
+
+                    //third
+                    $thirdFinanceAgeel = new Financial_entry();
+                    $thirdFinanceAgeel->trans_type_id = 110;
+                    $thirdFinanceAgeel->entry_serial = $maxF;
+                    $thirdFinanceAgeel->entry_date = $data['invoice_date'];
+                    $thirdFinanceAgeel->stock_id = $data['stock_id'];
+                    $thirdFinanceAgeel->branch_id = $data['branch_id'];
+                    $thirdFinanceAgeel->person_id = $data['person_id'];
+                    $thirdFinanceAgeel->person_name = $data['person_name'];
+                    $thirdFinanceAgeel->debit = 0;
+                    $thirdFinanceAgeel->credit = $request->get('total_items_price');
+                    $thirdFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 114)->first()->gl_item_id ?? 0;
+
+                    $thirdFinanceAgeel->save();
+
+
+                    //forth
+                    $forthFinanceAgeel = new Financial_entry();
+                    $forthFinanceAgeel->trans_type_id = 110;
+                    $forthFinanceAgeel->entry_serial = $maxF;
+                    $forthFinanceAgeel->entry_date = $data['invoice_date'];
+                    $forthFinanceAgeel->stock_id = $data['stock_id'];
+                    $forthFinanceAgeel->branch_id = $data['branch_id'];
+                    $forthFinanceAgeel->person_id = $data['person_id'];
+                    $forthFinanceAgeel->person_name = $data['person_name'];
+                    $forthFinanceAgeel->debit = 0;
+                    $forthFinanceAgeel->credit = $request->get('total_vat_value');
+                    $forthFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 117)->first()->gl_item_id ?? 0;
+
+                    $forthFinanceAgeel->save();
+
+                    //five
+                    $fiveFinanceAgeel = new Financial_entry();
+                    $fiveFinanceAgeel->trans_type_id = 110;
+                    $fiveFinanceAgeel->entry_serial = $maxF;
+                    $fiveFinanceAgeel->entry_date = $data['invoice_date'];
+                    $fiveFinanceAgeel->stock_id = $data['stock_id'];
+                    $fiveFinanceAgeel->branch_id = $data['branch_id'];
+                    $fiveFinanceAgeel->person_id = $data['person_id'];
+                    $fiveFinanceAgeel->person_name = $data['person_name'];
+                    $fiveFinanceAgeel->debit = $PricesSum; // this value uder change
+                    $fiveFinanceAgeel->credit = 0;
+                    $fiveFinanceAgeel->gl_item_id = Financial_subsystem::where('id', 116)->first()->gl_item_id ?? 0;
+
+                    $fiveFinanceAgeel->save();
+
+                    //six
+                    $sixFinanceAgeel = new Financial_entry();
+                    $sixFinanceAgeel->trans_type_id = 110;
+                    $sixFinanceAgeel->entry_serial = $maxF;
+                    $sixFinanceAgeel->entry_date = $data['invoice_date'];
+                    $sixFinanceAgeel->stock_id = $data['stock_id'];
+                    $sixFinanceAgeel->branch_id = $data['branch_id'];
+                    $sixFinanceAgeel->person_id = $data['person_id'];
+                    $sixFinanceAgeel->person_name = $data['person_name'];
+                    $sixFinanceAgeel->debit = 0;
+                    $sixFinanceAgeel->credit = $PricesSum; // this value uder change
+                    $sixFinanceAgeel->gl_item_id = $stockBranch->gl_item_id ?? 0;
+
+                    $sixFinanceAgeel->save();
+                }
+                //end
+
+                //Finance Entry From Nagdyyyy
+                if ($invObj->pay_type_id == 1) {
+
+                    //Finance Entry add 2 records 
+
+                    $firstFinance = new Financial_entry();
+                    $firstFinance->trans_type_id = 110;
+                    $firstFinance->entry_serial = $maxF;
+                    $firstFinance->entry_date = $data['invoice_date'];
+                    $firstFinance->cash_box_id = Cash_box::where('branch_id', $data['branch_id'])->first()->id ?? 0;
+                    $firstFinance->branch_id = $data['branch_id'];
+                    $firstFinance->debit = $request->get('local_net_invoice');
+                    $firstFinance->credit = 0;
+                    $firstFinance->gl_item_id = Cash_box::where('branch_id', $data['branch_id'])->first()->gl_item_id ?? 0;
+
+                    $firstFinance->save();
+
+                    //second
+                    $secondFinance = new Financial_entry();
+                    $secondFinance->trans_type_id = 110;
+                    $secondFinance->entry_serial = $maxF;
+                    $secondFinance->entry_date = $data['invoice_date'];
+                    $secondFinance->stock_id = $data['stock_id'];
+                    $secondFinance->branch_id = $data['branch_id'];
+                    $secondFinance->debit = $request->get('total_disc_value');
+                    $secondFinance->credit = 0;
+                    $secondFinance->gl_item_id = Financial_subsystem::where('id', 118)->first()->gl_item_id ?? 0;
+
+                    $secondFinance->save();
+
+                    //third
+                    $third = new Financial_entry();
+                    $third->trans_type_id = 110;
+                    $third->entry_serial = $maxF;
+                    $third->entry_date = $data['invoice_date'];
+                    $third->cash_box_id = Cash_box::where('branch_id', $data['branch_id'])->first()->id ?? 0;
+                    $third->branch_id = $data['branch_id'];
+                    $third->debit = 0;
+                    $third->credit = $request->get('total_items_price');
+                    $third->gl_item_id =  Financial_subsystem::where('id', 113)->first()->gl_item_id ?? 0;
+
+                    $third->save();
+
+                    //fourth
+                    $fourth = new Financial_entry();
+                    $fourth->trans_type_id = 110;
+                    $fourth->entry_serial = $maxF;
+                    $fourth->entry_date = $data['invoice_date'];
+                    $fourth->stock_id = $data['stock_id'];
+                    $fourth->branch_id = $data['branch_id'];
+                    $fourth->debit = 0;
+                    $fourth->credit = $request->get('total_vat_value');
+                    $fourth->gl_item_id =  Financial_subsystem::where('id', 117)->first()->gl_item_id ?? 0;
+
+                    $fourth->save();
+
+                    //fiveth
+                    $fiveth = new Financial_entry();
+                    $fiveth->trans_type_id = 110;
+                    $fiveth->entry_serial = $maxF;
+                    $fiveth->entry_date = $data['invoice_date'];
+                    $fiveth->stock_id = $data['stock_id'];
+                    $fiveth->branch_id = $data['branch_id'];
+                    $fiveth->debit = $PricesSum; // this value uder change
+                    $fiveth->credit = 0;
+                    $fiveth->gl_item_id = Financial_subsystem::where('id', 116)->first()->gl_item_id ?? 0;
+
+                    $fiveth->save();
+
+
+                    //sixFinance
+                    $sixFinance = new Financial_entry();
+                    $sixFinance->trans_type_id = 110;
+                    $sixFinance->entry_serial = $maxF;
+                    $sixFinance->entry_date = $data['invoice_date'];
+                    $sixFinance->stock_id = $data['stock_id'];
+                    $sixFinance->branch_id = $data['branch_id'];
+                    $sixFinance->debit = 0;
+                    $sixFinance->credit = $PricesSum; // this value uder change
+                    $sixFinance->gl_item_id = $stockBranch->gl_item_id ?? 0;
+
+                    $sixFinance->save();
+                }
+                //end
+
             }
             Invoice::where('id', $id)->update($data);
 
@@ -825,7 +1261,7 @@ class SaleInvoiceController extends Controller
         }
     }
 
-     /***
+    /***
      * Del
      */
     public function DeleteInvoiceItem(Request $req)
@@ -838,9 +1274,9 @@ class SaleInvoiceController extends Controller
 
             $invoices = Invoice::where('id', $obo->invoice_id)->first();
 
-            
+
             $ss = [
-                'total_disc_value'=> $invoices->total_disc_value - $obo->item_disc_value,
+                'total_disc_value' => $invoices->total_disc_value - $obo->item_disc_value,
                 'total_items_price' => $invoices->total_items_price - $obo->total_line_cost,
                 'total_vat_value' => $invoices->total_vat_value - $obo->item_vat_value,
                 'total_bonus_qty' => $invoices->total_bonus_qty - $obo->item_bonus_qty,

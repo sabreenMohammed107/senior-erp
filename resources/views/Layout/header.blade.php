@@ -229,7 +229,9 @@
 													<a href="{{route('outging-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الصادر </a>
 													<a href="{{route('incoming-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الوارد</a>
 													<a href="{{route('closing-stock-trans.index')}}" class="dropdown-item">إغلاق الإستلام</a>
+													<a href="{{route('all-revert-purch.index')}}" class="dropdown-item"> بيان مرتجعات المشتريات</a>
 
+													
 												</div>
 											</li>
 											<li class="nav-item dropdown res-dis-nn">
@@ -291,6 +293,7 @@
 											<li><a href="{{route('outging-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الصادر </a></li>
 											<li><a href="{{route('incoming-stock-trans.index')}}" class="dropdown-item"> حركات المخزن الوارد</a></li>
 											<li><a href="{{route('closing-stock-trans.index')}}" class="dropdown-item">إغلاق الإستلام</a></li>
+											<li><a href="{{route('all-revert-purch.index')}}" class="dropdown-item"> بيان مرتجعات المشتريات</a></li>
 
 										</ul>
 									</li>

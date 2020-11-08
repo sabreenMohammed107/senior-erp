@@ -173,7 +173,7 @@ tbody tr td,th{
                     <td>{{date('d-m-Y', strtotime($TransItem->expired_date))}}</td>
                     <td>{{$TransItem->item_qty}}</td>
                     <td>{{$TransItem->item_qty * $TransItem->item->average_price}}جم</td>
-                    <td>{{$TransItem->total_bouns_qty}}</td>
+                    <td>{{$TransItem->item_bonus_qty}}</td>
                     <td>{{$TransItem->notes}}</td>
                 </tr>
             
@@ -231,7 +231,7 @@ tbody tr td,th{
                     <td>{{$Item->item_total_qty}}</td>
                     <td>{{$Item->total_item_price}}جم</td>
                     <td>{{$Item->item_qty_unconfirmed}}</td>
-                    <td>{{$Item->average_price}}</td>
+                    <td>{{$Item->average_price}}جم</td>
                 </tr>
             @endforeach
         </tbody>

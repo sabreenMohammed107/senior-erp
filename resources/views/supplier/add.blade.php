@@ -181,7 +181,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label>
-                                                            <input type="checkbox" name="balance_type" class="i-checks" checked> دائن
+                                                            <input type="checkbox" name="balance_type" class="i-checks" > دائن
                                                         </label>
                                                     </div>
                                                     <div class="form-group">
@@ -192,10 +192,10 @@
                                                         <label class="">تاريخ رصيد المورد</label>
                                                         <input name="person_open_balance_date" type="date" class="form-control" placeholder="تاريخ رصيد المورد" style="text-align:right">
                                                     </div>
-                                                    <div class="form-group">
+                                                   {{-- <!-- <div class="form-group">
                                                         <label class="">حد رصيد المورد</label>
                                                         <input name="person_limit_balance" type="text" class="form-control" placeholder="حد رصيد المورد">
-                                                    </div>
+                                                    </div> -->--}}
 
 
 
@@ -227,8 +227,8 @@
                                                         <input name="commercial_register" type="text" class="form-control" placeholder="السجل التجاري">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="">كارت الضرائب</label>
-                                                        <input name="tax_card" type="text" class="form-control" placeholder="كارت الضرائب">
+                                                        <label class="">البطاقة الضريبيه</label>
+                                                        <input name="tax_card" type="text" class="form-control" placeholder="البطاقة الضريبيه">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="">مصلحة الضرائب</label>

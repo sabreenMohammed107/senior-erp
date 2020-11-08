@@ -89,6 +89,7 @@
 
                                         <th>البريد الالكتروني</th>
                                         <th>الهاتف</th>
+                                        <th>تاريخ الرصيد الإفتتاحى</th>
                                         <th>الرصيد الإفتتاحى</th>
                                         <th>الاختيارات</th>
                                     </tr>
@@ -102,6 +103,10 @@
 
                                         <td>{{$row->email}}</td>
                                         <td>{{$row->phone1}}</td>
+                                        <td><?php
+                                            $date = null;
+                                            $date = date_create($row->person_open_balance_date) ?>
+                                            @if($date) {{ date_format($date,"d-m-Y") }}@endif</td>
                                         <td>{{$row->person_open_balance}}</td>
                                         <td>
                                             <div class="product-buttons">

@@ -47,10 +47,7 @@
 																	<label class="">رقم التليفون</label>
                                                                     <input name="mobile" type="number"  class="form-control" placeholder="رقم التليفون">
                                                                 </div>
-                                                                <div class="form-group">
-																	<label class="">تاريخ القفل</label>
-                                                                    <input name="lock_date" id="finish" type="date" class="form-control" placeholder="تاريخ القفل">
-                                                                </div>
+                                                              
                                                                 <div class="form-group">
 																	<label class="">  الاسم بالكامل انجليزى</label>
 																	<input name="en_fullName" type="text" class="form-control" placeholder=" الاسم بالكامل">

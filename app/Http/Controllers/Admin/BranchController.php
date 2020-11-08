@@ -186,7 +186,10 @@ class BranchController extends Controller
         $row = Branch::where('id', '=', $id)->first();
 
         try {
-            $row->delete();
+            if ($row) {
+                $row->branch()->detach();
+                $row->delete();
+            }
         } catch (QueryException $q) {
 
             return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');

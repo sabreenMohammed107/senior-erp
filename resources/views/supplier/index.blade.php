@@ -24,7 +24,7 @@
 @section('style')
 <!-- x-editor CSS
 		============================================ -->
-        <link rel="stylesheet" href="{{ asset('webassets/css/editor/select2.css')}}">
+<link rel="stylesheet" href="{{ asset('webassets/css/editor/select2.css')}}">
 <link rel="stylesheet" href="{{ asset('webassets/css/editor/datetimepicker.css')}}">
 <link rel="stylesheet" href="{{ asset('webassets/css/editor/bootstrap-editable.css')}}">
 <link rel="stylesheet" href="{{ asset('webassets/css/editor/x-editor-style.css')}}">
@@ -65,7 +65,7 @@
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
     <div class="container-fluid">
-    <a href="{{ route('supplier.create') }}" title="New" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة عميل </a>
+        <a href="{{ route('supplier.create') }}" title="New" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة مورد </a>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">
@@ -77,10 +77,7 @@
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright" style="direction:rtl">
 
-                            <table class="table-striped" id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true"
-                             data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" 
-                             data-cookie-id-table="saveId" data-show-export="true" data-ajaxed="false" data-click-to-select="true" 
-                             data-toolbar="#toolbar">
+                            <table class="table-striped" id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="true" data-ajaxed="false" data-click-to-select="true" data-toolbar="#toolbar">
                                 <thead>
                                     <tr>
                                         <th data-field="state"></th>
@@ -89,6 +86,7 @@
 
                                         <th>البريد الالكتروني</th>
                                         <th>الهاتف</th>
+                                        <th> تاريخ الرصيد الإفتتاحى</th>
                                         <th>الرصيد الإفتتاحى</th>
                                         <th>الاختيارات</th>
                                     </tr>
@@ -102,6 +100,10 @@
 
                                         <td>{{$row->email}}</td>
                                         <td>{{$row->phone1}}</td>
+                                        <td><?php
+                                            $date = null;
+                                            $date = date_create($row->person_open_balance_date) ?>
+                                            @if($date) {{ date_format($date,"d-m-Y") }}@endif</td>
                                         <td>{{$row->person_open_balance}}</td>
                                         <td>
                                             <div class="product-buttons">
@@ -124,7 +126,7 @@
                                                 <div class="modal-body">
                                                     <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
                                                     <h2>{{$row->ar_name}}</h2>
-                                                    <h4>هل تريد حذف جميع بيانات العميل ؟ </h4>
+                                                    <h4>هل تريد حذف جميع بيانات المورد ؟ </h4>
                                                 </div>
                                                 <div class="modal-footer info-md">
                                                     <a data-dismiss="modal" href="#">إلغــاء</a>
