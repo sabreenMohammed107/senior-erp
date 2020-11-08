@@ -54,7 +54,7 @@
                 <a href="{{ route('item-category.index')}}"> التصنيف<span class="bread-slash"> / </span></a>
             </li>
             <li>
-                <span class="bread-blod"> تصنيفات البنود </span>
+                <span class="bread-blod"> تصنيفات الأصناف </span>
             </li>
         </ul>
     </div>
@@ -121,7 +121,7 @@
                         <a  href="{{ route('item-category.index')}}">رجوع</a>
                     </div>
 </form>
-                            <h3 style="text-align:right">تفاصيل البند</h3>
+                            <h3 style="text-align:right">تفاصيل التصنيفات الفرعية</h3>
 
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mg-b-15">
                                 <div class="add-product">
@@ -132,7 +132,7 @@
                                 <thead>
                                     <tr>
                                         <th data-field="state" data-checkbox="false"></th>
-                                        <th data-field="id">كــود تصـنيف البـنـد</th>
+                                        <th data-field="id">كــود تصـنيف الصنف</th>
                                         <th data-field="name" data-editable="false">إسم التصنيف باللغة العربية</th>
                                         <th data-field="email" data-editable="false">إسم التصنيف باللغة الإنجليزية</th>
                                         <th data-field="date" data-editable="false">وصف التصنيف باللغة العربية</th>

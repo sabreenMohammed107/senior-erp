@@ -56,7 +56,7 @@
                 <a href="#"></a> التصنيف<span class="bread-slash"> / </span>
             </li>
             <li>
-                <span class="bread-blod"> تصنيفات البنود </span>
+                <span class="bread-blod"> تصنيفات الأصناف </span>
             </li>
         </ul>
     </div>
@@ -83,7 +83,7 @@
                                 <thead>
                                     <tr>
                                         <th data-field="state" data-checkbox="false"></th>
-                                        <th>كــود تصـنيف البـنـد</th>
+                                        <th>كــود تصـنيف الصنف</th>
                                         <th>إسم التصنيف باللغة العربية</th>
                                         <th>إسم التصنيف باللغة الإنجليزية</th>
                                         <th>وصف التصنيف باللغة العربية</th>
@@ -95,7 +95,7 @@
                                     @foreach($rows as $index=>$row)
                                     <tr>
                                         <td></td>
-                                        <td>{{$index+1}}</td>
+                                        <td>{{$row->code}}</td>
                                         <td>{{$row->ar_name}}</td>
                                         <td> {{$row->en_name}}</td>
                                         <td> {{$row->ar_description}}</td>
