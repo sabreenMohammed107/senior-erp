@@ -86,27 +86,28 @@
                                         <label class="">كود التصنيف للبند</label>
                                         <input name="code" type="text" class="form-control" value="{{$row->code}}" placeholder="XYZ-102/2036" style="text-align:right" disabled>
                                     </div>
-                               
-                                            <div class="form-group">
-                                                <label class="">إسم التصنيف باللغة العربية</label>
-                                                <input name="ar_name" value="{{$row->ar_name}}" type="text" class="form-control" placeholder="" style="text-align:right">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <div class="form-group">
+                                    <div class="form-group">
                                                 <label class="">إسم التصنيف باللغة الإنجليزية</label>
                                                 <input name="en_name" value="{{$row->en_name}}" type="text" class="form-control" style="text-align:right">
                                             </div>
-                                    
-                                            <div class="form-group">
-                                                <label class="">وصف التصنيف باللغة العربية</label>
-                                                <input name="ar_description" value="{{$row->ar_description}}" type="text" class="form-control" placeholder="" style="text-align:right">
-                                            </div>
+                               
+                                           
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                                <label class="">إسم التصنيف باللغة العربية</label>
+                                                <input name="ar_name" value="{{$row->ar_name}}" type="text" class="form-control" placeholder="" style="text-align:right">
+                                            </div>
                                             <div class="form-group">
                                                 <label class="">وصف التصنيف باللغة الانجليزية</label>
                                                 <input name="en_description" value="{{$row->en_description}}" type="text" class="form-control" style="text-align:right">
+                                            </div>
+                                          
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                                <label class="">وصف التصنيف باللغة العربية</label>
+                                                <input name="ar_description" value="{{$row->ar_description}}" type="text" class="form-control" placeholder="" style="text-align:right">
                                             </div>
                                         </div>
                                     </div>
@@ -122,7 +123,7 @@
 
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mg-b-15">
                                 <div class="add-product">
-                                    <a data-toggle="modal" data-target="#add" href="#" style="direction:ltr;margin-top:-20px">إضافة صنف</a>
+                                    <a data-toggle="modal" data-target="#add" href="#" style="direction:ltr;margin-top:-20px">إضافة تصنيف</a>
                                 </div>
                             </div>
                             <table class="table-striped" id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
