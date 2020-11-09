@@ -356,16 +356,28 @@ class CustomerController extends Controller
 
         $file_name = public_path('uploads/persons/' . $file);
 
+ //Transactions check for open_balance
+ $Transactions =Financial_entry::where('trans_type_id', '<>', 102)->where('person_id', '=', $id)->count();
+ //Actions
+ if ($Transactions == 0) {
+     DB::beginTransaction();
+     try {
 
-        //  }
-        try {
-            $row->delete();
-            File::delete($file_name);
-        } catch (QueryException $q) {
+         Financial_entry::where('trans_type_id', '=', 102)->where('person_id', '=', $id)->delete();
 
-            return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
-        }
-        return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+         $row->delete();
+         File::delete($file_name);
+
+         DB::commit();
+         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+     } catch (QueryException $q) {
+         DB::rollBack();
+         
+         return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
+     }
+ } else {
+     return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
+ }
     }
 
     /**
