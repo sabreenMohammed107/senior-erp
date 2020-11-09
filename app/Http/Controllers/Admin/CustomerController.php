@@ -82,7 +82,7 @@ class CustomerController extends Controller
     {
         $personBranch = Branch::where('id', $request->input('branch_id'))->first();
 
-        $increment = Person::latest('code')->first();
+        $increment = Person::where('person_type_id',101)->latest('code')->first();
 
         $increment = ($increment != null) ? intval($increment['code']) : $personBranch['start_code'] - 1;
 
