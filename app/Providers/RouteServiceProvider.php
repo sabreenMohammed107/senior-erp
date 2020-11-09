@@ -17,6 +17,7 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'App\Http\Controllers';
     protected $namespaceAdmin = 'App\Http\Controllers';
     protected $namespaceFinancial = 'App\Http\Controllers';
+    protected $namespaceReports = 'App\Http\Controllers';
 
     /**
      * The path to the "home" route for your application.
@@ -49,6 +50,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
         $this->mapAdminRoutes();
         $this->mapFinancialRoutes();
+        $this->mapReportsRoutes();
 
         //
     }
@@ -114,6 +116,23 @@ class RouteServiceProvider extends ServiceProvider
 
              ->namespace($this->namespaceFinancial)
              ->group(base_path('routes/financial.php'));
+
+    }
+
+    /**
+    * Define the "admin" routes for the application.
+    *
+    * These routes are typically stateless.
+    *
+    * @return void
+    */
+    protected function mapReportsRoutes()
+    {
+        Route::middleware('web')
+
+
+             ->namespace($this->namespaceReports)
+             ->group(base_path('routes/reports.php'));
 
     }
 }

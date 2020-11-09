@@ -40,4 +40,8 @@ class Item extends Model
      {
          return $this->belongsTo('App\Models\Unit_measure','default_uom_id');
      }
+     public function t_item()
+     {
+         return $this->belongsTo('App\Models\Stocks_transaction','item_id');
+     }
 }

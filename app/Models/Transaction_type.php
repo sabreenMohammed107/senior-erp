@@ -12,5 +12,9 @@ class Transaction_type extends Model
         'name',
       
     ];
+    public function type()
+     {
+         return $this->belongsTo('App\Models\Transaction_type','transaction_type_id');
+     }
 
 }
