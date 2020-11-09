@@ -11,7 +11,7 @@ class Item extends Model
     protected $fillable = [
      
         'code','ar_name','en_name','has_batch','image',
-        'has_expired_date','generated_end_date', 'allowed_serial','has_barcode',
+        'has_expired_date', 'allowed_serial','has_barcode',
         'item_barcode','ar_description','en_description','storage_uom_id','default_uom_id',
         'min_limit','max_limit','request_limit','item_category_id','item_type_id',
         'item_division_type_id','allowed_sale','average_price','wholesale_price',

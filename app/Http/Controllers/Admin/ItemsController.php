@@ -67,7 +67,7 @@ class ItemsController extends Controller
     {
         $parentmax = Item_category::where('id', $request->input('item_category_id'))->first();
 
-        $increment = Item::latest('code')->first();
+        $increment = Item::where('item_category_id',$request->input('item_category_id'))->latest('code')->first();
 
         $increment = ($increment != null) ? intval($increment['code']) : $parentmax['code'] . sprintf("%05d", 0);
         $childmax = sprintf("%05d", $increment);

@@ -7,18 +7,13 @@
 			<img src="{{ asset('uploads/items/'.$row->image)}}" style="height: 200px;">
 			<div class="courses-title">
 				<h2 style="text-align:right"> {{$row->ar_name}}</h2>
-				<p class="all-pro-ad" style="text-align:right ;font-weight:bold;">@if($row->has_batch==1) له باتش@else لا يوجد باتش @endif </p>
 			</div>
 			<div class="course-des">
 				<p><span><i class="fa fa-clock"></i></span> <b>الــكــــود : </b> {{$row->code}}</p>
 				<p><span><i class="fa fa-clock"></i></span> <b>التصنيف : </b> {{$row->category->ar_name ?? ''}}</p>
-				<p><span><i class="fa fa-clock"></i></span> <b>الــنــــوع : </b> {{$row->type->ar_name ?? ''}} </p>
-				<p><span><i class="fa fa-clock"></i></span> <b>تاريخ الصلاحية : </b>
-				<?php
-				   $date = date_create($row->generated_end_date);
-
-				?>{{ date_format($date, 'Y-m-d')}}</p>
-				<p><span><i class="fa fa-clock"></i></span> <b>رصيد المخزن الحالي : </b> {{$row->item_total_cost}}</p>
+			
+				<p><span><i class="fa fa-clock"></i></span> <b>  تكلفة الصنف : </b> {{$row->item_total_cost}}</p>
+				<p><span><i class="fa fa-clock"></i></span> <b>  كمية الصنف : </b> {{$row->item_total_qty}}</p>
 			</div>
 			<div class="product-buttons">
 				<a href="{{ route('items.show',$row->id) }}"><button title="View" type="button" class="pd-setting-ed"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
