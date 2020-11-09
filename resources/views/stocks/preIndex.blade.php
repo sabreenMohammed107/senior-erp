@@ -51,9 +51,9 @@
             <th>إسم المخزن إنجليزي</th>
 
 
-            <th>أخر تاريخ</th>
+            <th> اخر تاريخ جرد</th>
 
-            <th>تاريخ الرصيد</th>
+            <th>تاريخ الرصيد الإفتتاحي</th>
             <th>ملاحظات</th>
             <th>الاختيارات</th>
         </tr>
@@ -103,7 +103,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header header-color-modal bg-color-2">
-                                <h4 class="modal-title" style="text-align:right">حذف بيانات الصنف</h4>
+                                <h4 class="modal-title" style="text-align:right">حذف بيانات المخزن</h4>
                                 <div class="modal-close-area modal-close-df">
                                     <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
                                 </div>

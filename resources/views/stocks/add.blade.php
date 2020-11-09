@@ -129,7 +129,7 @@
 												<select data-placeholder="Choose a charts..."  name="gl_item_id" required class="chosen-select" >
 													<option value="">Select</option>
 													@foreach($charts as $type)
-													<option value="{{$type->id}}">{{$type->code}} - {{$type->ar_name}}</option>
+													<option value="{{$type->id}}"> {{$type->code}} - {{$type->ar_name}} </option>
 													@endforeach
 												</select>
 											</div>

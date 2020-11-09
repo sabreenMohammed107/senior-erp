@@ -11,7 +11,7 @@
 			<div class="course-des">
 				<p><span><i class="fa fa-clock"></i></span> <b>الــكــــود : </b> {{$row->code}}</p>
 				<p><span><i class="fa fa-clock"></i></span> <b>التصنيف : </b> {{$row->category->ar_name ?? ''}}</p>
-			
+				<p><span><i class="fa fa-clock"></i></span> <b>  مورد الصنف : </b> {{$row->person->name ?? ''}}</p>
 				<p><span><i class="fa fa-clock"></i></span> <b>  تكلفة الصنف : </b> {{$row->item_total_cost}}</p>
 				<p><span><i class="fa fa-clock"></i></span> <b>  كمية الصنف : </b> {{$row->item_total_qty}}</p>
 			</div>

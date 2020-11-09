@@ -381,8 +381,9 @@ class ItemsController extends Controller
     public function search(Request $request)
     {
         $name= $request->input('searchData');
+        $code= $request->input('searchData');
       
-        $rows = Item::where('ar_name', 'like', '%' . $name . '%')->orderBy('created_at', 'Desc')->paginate(8);
+        $rows = Item::where('ar_name', 'like', '%' . $name . '%')->orWhere('code', 'like', '%' . $code . '%')->orderBy('created_at', 'Desc')->paginate(8);
         if ($request->ajax()) {
          return view($this->viewName . 'result', compact('rows'))->render();
         }else{
