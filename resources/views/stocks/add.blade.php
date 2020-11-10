@@ -159,8 +159,10 @@
 @section('scripts')
 <script>
 $(document).ready(function(){
-	$('select').chosen();
-    $('form').validate();
+	$('select').chosen({
+		search_contains: true
+	});
+  
 });
 </script>
 @endsection

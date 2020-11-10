@@ -19,10 +19,12 @@ $counterrrr = 1;
     <td>
 
     {{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}
-       
+    <span id="item_search{{$counter}}" style="display:none;"> {{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}</span>
+   
     </td>
     <td id="ar_name{{$counter}}">{{$itemo->item->ar_name ?? ''}} {{$itemo->item->code ?? ''}}</td>
     <td id="uom{{$counter}}">{{$itemo->item->uom->ar_name ?? ''}}</td>
+
     <td>
         <div class="input-mark-inner">
             <?php
@@ -35,6 +37,7 @@ $counterrrr = 1;
         <div class="input-mark-inner">
             <input type="text" id="batchNum{{$counter}}" value="{{$itemo->batch_no}}" name="batchNumup{{$counter}}" oninput="batchItem({{$counter}})" class="form-control" placeholder="" style="width: 130px">
         </div>
+        <span id="batch_search{{$counter}}" style="display:none;">{{ date_format($date, "Y-m-d")}} {{$itemo->item_qty}} {{$itemo->batch_no}} </span>
     </td>
     <td>
         <div class="input-mark-inner">

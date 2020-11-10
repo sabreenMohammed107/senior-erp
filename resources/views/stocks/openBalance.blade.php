@@ -51,12 +51,12 @@
     <div class="container-fluid">
         <form id="formid" action="{{route('store-open-balance')}}" method="POST">
             @csrf
-            <a href="{{route('stocks.index')}}" class="btn btn-primary waves-effect waves-light mg-b-15">إلغاء</a>
+            <a href="{{route('stocks.index')}}" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</a>
             <button class="btn btn-primary waves-effect waves-light mg-b-15" @if($confirmed==1) disabled @endif type="submit" name="action" value="save">حفظ</button>
-            <button class="btn btn-primary waves-effect waves-light mg-b-15" @if($confirmed==1) disabled @endif type="submit" name="action" value="confirm"> الموافقة</button>
+            <button class="btn btn-primary waves-effect waves-light mg-b-15" @if($confirmed==1) disabled @endif type="submit" name="action" value="confirm"> تأكيد وغلق</button>
 
             <input type="hidden" name="primary_stock_id" value="{{$row->id}}">
-            <input type="hidden" name="transUpdate" value="{{$stockTran->id ?? 0}}" >
+            <input type="hidden" name="transUpdate" value="{{$stockTran->id ?? 0}}">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="sparkline13-list">
@@ -128,7 +128,7 @@
 
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mg-b-22">
-                                            <h4 style="text-align:right"> العمليات <i class="fa fa-calculator"></i></h4>
+                                            <h4 style="text-align:right">بيانات الرصيد الإفتتاحي <i class="fa fa-calculator"></i></h4>
 
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
@@ -143,7 +143,7 @@
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                                     <div class="input-mask-title">
-                                                        <label><b> الشخص</b></label>
+                                                        <label><b> المورد</b></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,7 +156,7 @@
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                                     <div class="input-mask-title">
-                                                        <label><b>إجمالي</b></label>
+                                                        <label><b>إجمالى التكلفة</b></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -176,40 +176,40 @@
                                     </div>
                                 </div>
                                 <div class="row res-rtl" style="display: flex ">
-									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
-										<h3 style="text-align:right">الأصناف</h3>
-										<button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
-										<input type="text" id="myInput" placeholder="إبحث  الصنف ..">
-									</div>
-								</div>
-								<div style="overflow-x:auto;">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
+                                        <h3 style="text-align:right">الأصناف</h3>
+                                        <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                        <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
+                                    </div>
+                                </div>
+                                <div style="overflow-x:auto;">
 
 
-									<table class="table  table-bordered" id="table" style="direction:rtl;">
-									    <thead>
-                                        <tr>
-                                        <th>Serial</th>
-                                            <th data-field="id">كود البند</th>
-                                            <th>إسم البند</th>
-                                            <th>UOM</th>
-                                            <th data-field="batchDate">تاريخ الصلاحية</th>
-                                            <th data-field="batch">الباتش</th>
-                                            <th>كمية الصنف</th>
-                                            <th>سعر الصنف</th>
-                                            <th>إجمالي السعر</th>
-                                            <th>ملاحظات</th>
-                                            <th>حذف</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="rows">
-                                        @include('stocks.ajaxEdit')
-                                    </tbody>
-                                </table>
+                                    <table class="table  table-bordered" id="table" style="direction:rtl;">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th data-field="id">كود الصنف</th>
+                                                <th>إسم الصنف</th>
+                                                <th>وحده القياس</th>
+                                                <th data-field="batchDate">تاريخ الصلاحية</th>
+                                                <th data-field="batch">الباتش</th>
+                                                <th>كمية الصنف</th>
+                                                <th>سعر الصنف</th>
+                                                <th>إجمالي السعر</th>
+                                                <th>ملاحظات</th>
+                                                <th>حذف</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="rows">
+                                            @include('stocks.ajaxEdit')
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
     </div>
 </div>
@@ -220,7 +220,7 @@
 <script>
     $(function() {
         debugger;
-     
+
 
         $('#add').on('click', function() {
             var rowCount = 0;
@@ -259,10 +259,25 @@
             debugger;
 
         })
+        //filter
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#table > tbody > tr").filter(function() {
+                var row_num = $(this).attr('data-id');
+                $(this).toggle(
+                    $('#item_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                    $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1
+
+
+                );
+            });
+
+        });
+
 
     })
 
-//adding row
+    //adding row
     function addRow() {
         var rowCount = 0;
 
@@ -309,14 +324,14 @@
             return false;
         }
     });
-//add row on enter
+    //add row on enter
     function enterForRow(e, index) {
         if (e.keyCode == 13) {
             addRow();
 
         }
     }
-//select item
+    //select item
     function editSelectVal(index) {
         debugger;
 
@@ -335,7 +350,7 @@
             success: function(data) {
                 var result = $.parseJSON(data);
 
-                $("#ar_name" + index + "").text(result[0] );
+                $("#ar_name" + index + "").text(result[0]);
                 $("#uom" + index + "").text(result[1]);
 
                 // $('#select' + index + ' option:selected').val(select_value).trigger('chosen:updated');;
@@ -352,17 +367,17 @@
 
 
     }
-//delete Row
+    //delete Row
     function deleteRow(index) {
 
 
         $('tr[data-id=' + index + ']').remove();
-       
+
         headCalculations(index);
 
     }
 
- 
+
     // headCalculations(index);
     function headCalculations(index) {
         $('.no-records-found').remove();
@@ -387,7 +402,7 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
 
         headCalculations(index);
 
@@ -399,7 +414,7 @@
     function itemPrice(index) {
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
     }
@@ -432,7 +447,7 @@
     //--------------------
 
 
-// custom search
+    // custom search
     function myFunction() {
         // Declare variables
         var input, filter, table, tr, td, i, txtValue;
@@ -457,8 +472,8 @@
 
 
 
-     // Delete DB row functions
-     function DeleteStockItem(id, index) {
+    // Delete DB row functions
+    function DeleteStockItem(id, index) {
         debugger;
         $("#del" + index).modal('hide');
         $('.modal-backdrop.fade.in').remove();
