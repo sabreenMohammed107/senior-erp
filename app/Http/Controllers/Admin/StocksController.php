@@ -463,28 +463,28 @@ class StocksController extends Controller
                     Stocks_items_total::create($itmUp);
                 }
                 //Finance Entry add 2 records
-                $finaceStock=Stock::where('id',$request->get('primary_stock_id'))->first();
-              
+                $finaceStock = Stock::where('id', $request->get('primary_stock_id'))->first();
+
                 $firstFinance = new Financial_entry();
                 $firstFinance->trans_type_id = 102;
-                $firstFinance->entry_serial =1;
+                $firstFinance->entry_serial = 1;
                 $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
                 $firstFinance->stock_id = $request->get('primary_stock_id');
-                $firstFinance->branch_id =$finaceStock->branch_id;
-                $firstFinance->credit =$request->get('total_items_price');
+                $firstFinance->branch_id = $finaceStock->branch_id;
+                $firstFinance->credit = $request->get('total_items_price');
                 $firstFinance->debit = 0;
-                $firstFinance->gl_item_id = Financial_subsystem::where('id',106)->first()->gl_item_id ?? '';
+                $firstFinance->gl_item_id = Financial_subsystem::where('id', 106)->first()->gl_item_id;
                 $firstFinance->save();
                 //second row
                 $secondFinance = new Financial_entry();
                 $secondFinance->trans_type_id = 102;
-                $secondFinance->entry_serial =1;
+                $secondFinance->entry_serial = 1;
                 $secondFinance->entry_date = Carbon::parse($request->get('transaction_date'));
                 $secondFinance->stock_id = $request->get('primary_stock_id');
-                $secondFinance->branch_id =$finaceStock->branch_id;
-                $secondFinance->debit =$request->get('total_items_price');
-                $secondFinance->credit =0;
-                $secondFinance->gl_item_id =$finaceStock->gl_item_id;
+                $secondFinance->branch_id = $finaceStock->branch_id;
+                $secondFinance->debit = $request->get('total_items_price');
+                $secondFinance->credit = 0;
+                $secondFinance->gl_item_id = $finaceStock->gl_item_id;
                 $secondFinance->save();
                 //End Finance Entry
                 $request->session()->flash('flash_success', "تم  إضافة رصيد أفتتاحى بنجاح :");
@@ -495,8 +495,12 @@ class StocksController extends Controller
             } catch (\Throwable $e) {
                 // throw $th;
                 DB::rollback();
+                if (!Financial_subsystem::where('id', 106)->first()) {
+                    return redirect()->back()->withInput()->with('flash_danger', "يرجى التأكد من بيانات جدول ال Financial_subsystem");
+                }else{
+                    return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
 
-                return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+                }
             }
         }
     }
