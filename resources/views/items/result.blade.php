@@ -11,7 +11,8 @@ $counter=1;
 				<h2 style="text-align:right"> {{$row->ar_name}}</h2>
 			</div>
 			<div class="course-des">
-				<p><span><i class="fa fa-clock"></i></span> <b>الــكــــود : </b> {{$row->code}}</p>
+				<p><span><i class="fa fa-clock"></i></span> <b>الــكــــود {{$counter}}
+: </b> {{$row->code}}</p>
 				<p><span><i class="fa fa-clock"></i></span> <b>التصنيف : </b> {{$row->category->ar_name ?? ''}}</p>
 				<p><span><i class="fa fa-clock"></i></span> <b>  مورد الصنف : </b> {{$row->person->name ?? ''}}</p>
 				<p><span><i class="fa fa-clock"></i></span> <b>  تكلفة الصنف : </b> {{$row->item_total_cost}}</p>
@@ -52,19 +53,20 @@ $counter=1;
 	</div>
 	<!--/Delete Company-->
 	<?php
-++$counter;
+  
 
-
-    if ($counter = 4) {
+    if ($counter == 4) {
 
 
 ?>
-
-  <br>
+</div>
+<div class="row res-rtl" style="display: flex ;flex-direction: row-reverse ;margin-top:20px">
 <?php 
+$counter =1;
 
 }
-$counter =1;
+$counter = $counter+1;
+
 ?>
 	@endforeach
 
