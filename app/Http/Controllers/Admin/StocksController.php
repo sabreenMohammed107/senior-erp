@@ -473,7 +473,7 @@ class StocksController extends Controller
                 $firstFinance->branch_id = $finaceStock->branch_id;
                 $firstFinance->credit = $request->get('total_items_price');
                 $firstFinance->debit = 0;
-                $firstFinance->gl_item_id = Financial_subsystem::where('id', 106)->first()->gl_item_id;
+                $firstFinance->gl_item_id = Financial_subsystem::where('id', 106)->first()->gl_item_id ?? '';
                 $firstFinance->save();
                 //second row
                 $secondFinance = new Financial_entry();
@@ -495,7 +495,7 @@ class StocksController extends Controller
             } catch (\Throwable $e) {
                 // throw $th;
                 DB::rollback();
-                if (!Financial_subsystem::where('id', 106)->first()) {
+                if (!Financial_subsystem::where('id', 106)->first()->gl_item_id && !empty(Financial_subsystem::where('id', 106)->first()->gl_item_id)) {
                     return redirect()->back()->withInput()->with('flash_danger', "يرجى التأكد من بيانات جدول ال Financial_subsystem");
                 }else{
                     return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
