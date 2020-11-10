@@ -209,6 +209,7 @@ class StocksController extends Controller
 
 
         try {
+            $row->stock()->detach();
             $row->delete();
         } catch (QueryException $q) {
 
@@ -480,7 +481,7 @@ class StocksController extends Controller
                 $secondFinance->gl_item_id = $finaceStock->gl_item_id;
                 $secondFinance->entry_statment = "رصيد إفتتاحى للمخزن";
                 $secondFinance->save();
-                
+
                 //firstFinance row saving second yahia say it
                 $firstFinance = new Financial_entry();
                 $firstFinance->trans_type_id = 102;

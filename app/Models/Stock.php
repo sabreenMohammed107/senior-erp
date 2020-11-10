@@ -46,4 +46,9 @@ class Stock extends Model
     {
         return $this->belongsTo('App\Models\Branch','branch_id');
     }
+    public function stock()
+    {
+
+        return $this->belongsToMany('App\User','users_stocks','stock_id','user_id');
+    }
 }
