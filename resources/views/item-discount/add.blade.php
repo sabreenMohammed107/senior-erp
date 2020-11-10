@@ -379,7 +379,7 @@
         var cat = $("#selectCat" + index);
         var client = $("#selectClient" + index);
 
-        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 'no') {
+        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 1) {
             $(cat).css('display', 'inline-block').attr('disabled', false);
             $(client).addClass("chosen-select");
             $(client).val('').trigger("chosen:updated");

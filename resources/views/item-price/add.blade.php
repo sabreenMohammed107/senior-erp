@@ -377,21 +377,22 @@
         var cat = $("#selectCat" + index);
         var client = $("#selectClient" + index);
 
-        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 'no') {
-            $(cat).css('display', 'inline-block').attr('disabled', false);
+        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 1) {
             $(client).addClass("chosen-select");
             $(client).val('').trigger("chosen:updated");
             $(client).select2();
             $(client).css('display', 'none').attr('disabled', 'disabled');
+            $(cat).css('display', 'inline-block').attr('disabled', false);
+
             $(cat).addClass("chosen-select");
             $(cat).trigger("chosen:updated");
             $(cat).select2();
         } else {
+           
             $(cat).addClass("chosen-select");
             $(cat).val('').trigger("chosen:updated");
             $(cat).select2();
             $(cat).css('display', 'none').attr('disabled', 'disabled');
-
             $(client).css('display', 'inline-block').attr('disabled', false);
             $(client).addClass("chosen-select");
             $(client).trigger("chosen:updated");
