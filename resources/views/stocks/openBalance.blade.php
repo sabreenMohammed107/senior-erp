@@ -168,7 +168,7 @@
                                                         $datez = new DateTime();
                                                         ?>
 
-                                                        <input type="date" name="transaction_date" value="{{date_format($datez,"Y-m-d") }}" class="form-control" placeholder="">
+                                                        <input type="date" @if($confirmed==1) readonly @endif name="transaction_date" value="{{date_format($datez,"Y-m-d") }}" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -185,7 +185,7 @@
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <select id="person_id" name="person_id" data-placeholder="Choose a Country..." class="chosen-select">
+                                                        <select id="person_id" name="person_id" @if($confirmed==1) disabled @endif data-placeholder="Choose a Country..." class="chosen-select">
                                                             <option value="">Select</option>
                                                             @foreach($persons as $person)
                                                             <option value="{{$person->id}}">{{$person->code}} / {{$person->name}}</option>
@@ -215,7 +215,7 @@
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <textarea class="form-control" name="transNote" placeholder="">{{$stockTran->notes ?? ''}}</textarea>
+                                                        <textarea class="form-control" @if($confirmed==1) disabled @endif name="transNote" placeholder="">{{$stockTran->notes ?? ''}}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -230,7 +230,7 @@
                                 <div class="row res-rtl" style="display: flex ">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
                                         <h3 style="text-align:right">الأصناف</h3>
-                                        <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                        <button id="add" @if($confirmed==1) disabled @endif type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
                                         <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
                                     </div>
                                 </div>
