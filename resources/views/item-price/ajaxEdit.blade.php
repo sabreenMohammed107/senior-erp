@@ -20,10 +20,10 @@ $counterrrr = 1;
 
         <div class="bt-df-checkbox">
             <input type="hidden" name="" class="inv_type" value="new">
-            <input class="cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_pricing_type_id=101) checked @endif type="radio" value="no" id="catRadio{{$counter}}" name="optionsRadios{{$counter}}">
-            <label><b> تصنيف </b></label>
-            <input class="radio-checked cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_pricing_type_id=100) checked @endif type="radio" value="yes" id="clientRadio{{$counter}}" name="optionsRadios{{$counter}}">
-            <label><b> عميل </b></label>
+            <input class="cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_pricing_type_id == 101) checked @endif type="radio" value="no" id="catRadio{{$counter}}" name="optionsRadios{{$counter}}">
+            <label><b>  تصنيف عميل </b></label>
+            <input class="radio-checked cat" disabled onclick="radioSelect({{$counter}})" @if($itemo->item_pricing_type_id == 100) checked @endif type="radio" value="yes" id="clientRadio{{$counter}}" name="optionsRadios{{$counter}}">
+            <label><b>  إسم عميل  </b></label>
         </div>
     </td>
 

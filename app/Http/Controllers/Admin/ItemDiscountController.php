@@ -51,7 +51,7 @@ class ItemDiscountController extends Controller
     public function create()
     {
         $items = Item::all();
-        $cats = Person_catrgory::all();
+        $cats =Person_catrgory::where('category_type','=',1)->get();
         $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
 
         return view($this->viewName . 'add', compact('items', 'cats', 'clients'));
@@ -90,6 +90,22 @@ class ItemDiscountController extends Controller
             }
         }
         \Log::info($detail);
+        $counterrrr = $request->get('counterStore');
+
+        $detailsUpdate = [];
+
+        for ($i = 1; $i <= $counterrrr; $i++) {
+
+
+
+            $detailUpdate = [
+                'id' => $request->get('item_price_id' . $i),
+
+                'item_price' => $request->get('item_priceup' . $i),
+
+            ];
+            array_push($detailsUpdate, $detailUpdate);
+        }
         DB::beginTransaction();
         try {
 
@@ -97,6 +113,11 @@ class ItemDiscountController extends Controller
 
                 $Item['item_id'] = $request->get('item_id');
                 Items_discount::create($Item);
+            }
+            foreach ($detailsUpdate as $updates) {
+                $itm = Items_discount::where('id', $updates['id'])->first();
+
+                Items_discount::where('id', $updates['id'])->update($updates);
             }
             DB::commit();
 
@@ -120,7 +141,7 @@ class ItemDiscountController extends Controller
         $row=Item::where('id',$id)->first();
         $items = Item::all();
        $discountItems=Items_discount::where('item_id',$id)->get();
-       $cats = Person_catrgory::all();
+       $cats = Person_catrgory::where('category_type','=',1)->get();
        $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
        return view($this->viewName . 'view', compact('discountItems', 'cats','items', 'clients','row'));
     }
@@ -136,7 +157,7 @@ class ItemDiscountController extends Controller
         $row=Item::where('id',$id)->first();
         $items = Item::all();
        $discountItems=Items_discount::where('item_id',$id)->get();
-       $cats = Person_catrgory::all();
+       $cats = Person_catrgory::where('category_type','=',1)->get();
        $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
        return view($this->viewName . 'edit', compact('discountItems', 'cats','items', 'clients','row'));
     }
@@ -243,7 +264,7 @@ class ItemDiscountController extends Controller
         if ($req->ajax()) {
             $id = $req->id;
             $rowCount = $req->rowcount;
-            $cats = Person_catrgory::all();
+            $cats = Person_catrgory::where('category_type','=',1)->get();
             $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
 
             $ajaxComponent = view('item-discount.ajaxAdd', [
@@ -268,6 +289,26 @@ class ItemDiscountController extends Controller
 
 
             $item->delete();
+        }
+    }
+
+    public function itemDiscount(Request $req)
+    {
+
+        if ($req->ajax()) {
+            $id = $req->item_id;
+            $priceItems = Items_discount::where('item_id', $id)->get();
+            $cats = Person_catrgory::where('category_type','=',1)->get();
+            $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
+            $ajaxComponent = view('item-discount.ajaxEdit', [
+                'priceItems' => $priceItems,
+                'clients' => $clients,
+                'cats' => $cats,
+
+            ]);
+
+
+            return $ajaxComponent->render();
         }
     }
 }

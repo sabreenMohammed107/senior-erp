@@ -419,5 +419,28 @@
         $("#total_item_price" + index).text(price);
     }
     //--------------------
+        // Delete DB row functions
+        function DeletePriceItem(id, index) {
+        debugger;
+        $("#del" + index).modal('hide');
+        $('.modal-backdrop.fade.in').remove();
+        $('.modal-open').css('overflow-y', 'scroll');
+        $.ajax({
+            type: 'GET',
+            url: "{{url('/itemPrice/Remove/Item')}}",
+            data: {
+                id: id,
+
+            },
+            success: function(data) {
+
+                location.reload(true);
+            },
+            error: function(request, status, error) {
+                console.log(request.responseText);
+            }
+        });
+
+    }
 </script>
 @endsection

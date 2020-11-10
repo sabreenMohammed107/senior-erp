@@ -80,7 +80,7 @@ class ItemPricingController extends Controller
 
 
             ];
-            if ($request->get('optionsRadios' . $i) == 'no') {
+            if ($request->get('optionsRadios' . $i) == 1) {
                 $detail['item_pricing_type_id'] = 101;
             } else {
                 $detail['item_pricing_type_id'] = 100;

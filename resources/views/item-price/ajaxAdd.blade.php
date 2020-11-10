@@ -6,9 +6,9 @@
 
         <div class="bt-df-checkbox">
             <input type="hidden" name="" class="inv_type" value="new">
-            <input class="cat" onclick="radioSelect({{$rowCount}})" checked="" type="radio" value="no" id="catRadio{{$rowCount}}" name="optionsRadios{{$rowCount}}">
+            <input class="cat" onclick="radioSelect({{$rowCount}})" checked="" type="radio" value="1" id="catRadio{{$rowCount}}" name="optionsRadios{{$rowCount}}">
             <label><b> تصنيف عميل </b></label>
-            <input class="radio-checked cat" onclick="radioSelect({{$rowCount}})" type="radio" value="yes" id="clientRadio{{$rowCount}}" name="optionsRadios{{$rowCount}}">
+            <input class="radio-checked cat" onclick="radioSelect({{$rowCount}})" type="radio" value="2" id="clientRadio{{$rowCount}}" name="optionsRadios{{$rowCount}}">
             <label><b> إسم عميل  </b></label>
         </div>
     </td>

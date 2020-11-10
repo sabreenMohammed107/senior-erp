@@ -228,6 +228,27 @@
     $(function() {
         debugger;
 
+        $('select[name="item_id"]').on('change', function() {
+			var item = $(this).val();
+
+
+			$.ajax({
+				url: "{{route('item-id-discount.fetch')}}",
+				method: "get",
+				data: {
+					item_id: item,
+
+				},
+				success: function(result) {
+                  
+                    $('#rows').html(result);
+                   
+
+
+				}
+			});
+
+		});
 
         $('#add').on('click', function() {
             var rowCount = 0;
@@ -360,12 +381,17 @@
 
         if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 'no') {
             $(cat).css('display', 'inline-block').attr('disabled', false);
+            $(client).addClass("chosen-select");
+            $(client).val('').trigger("chosen:updated");
+            $(client).select2();
             $(client).css('display', 'none').attr('disabled', 'disabled');
-
             $(cat).addClass("chosen-select");
             $(cat).trigger("chosen:updated");
             $(cat).select2();
         } else {
+            $(cat).addClass("chosen-select");
+            $(cat).val('').trigger("chosen:updated");
+            $(cat).select2();
             $(cat).css('display', 'none').attr('disabled', 'disabled');
             $(client).css('display', 'inline-block').attr('disabled', false);
             $(client).addClass("chosen-select");
@@ -394,5 +420,28 @@
         $("#total_item_price" + index).text(price);
     }
     //--------------------
+     // Delete DB row functions
+     function DeletePriceItem(id, index) {
+        debugger;
+        $("#del" + index).modal('hide');
+        $('.modal-backdrop.fade.in').remove();
+        $('.modal-open').css('overflow-y', 'scroll');
+        $.ajax({
+            type: 'GET',
+            url: "{{url('/itemDiscount/Remove/Item')}}",
+            data: {
+                id: id,
+
+            },
+            success: function(data) {
+
+                location.reload(true);
+            },
+            error: function(request, status, error) {
+                console.log(request.responseText);
+            }
+        });
+
+    }
 </script>
 @endsection
