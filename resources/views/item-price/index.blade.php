@@ -65,7 +65,7 @@
 <!-- Static Table Start -->
 <div class="data-table-area mg-b-15">
     <div class="container-fluid">
-    <a href="{{ route('item-price.create') }}" title="New" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة سعر </a>
+    <a href="{{ route('item-price.create') }}" title="New" class="btn btn-primary waves-effect waves-light mg-b-15">إضافة تسعير </a>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">

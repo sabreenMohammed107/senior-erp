@@ -79,7 +79,7 @@ class ItemDiscountController extends Controller
 
 
             ];
-            if ($request->get('optionsRadios' . $i) == 'no') {
+            if ($request->get('optionsRadios' . $i) == 1) {
                 $detail['item_discount_type_id'] = 101;
             } else {
                 $detail['item_discount_type_id'] = 100;
@@ -185,7 +185,7 @@ class ItemDiscountController extends Controller
 
 
             ];
-            if ($request->get('optionsRadios' . $i) == 'no') {
+            if ($request->get('optionsRadios' . $i) == 1) {
                 $detail['item_discount_type_id'] = 101;
             } else {
                 $detail['item_discount_type_id'] = 100;
