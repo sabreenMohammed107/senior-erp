@@ -1,5 +1,7 @@
 <div class="row res-rtl" style="display: flex ;flex-direction: row-reverse ;">
-
+<?php
+$counter=1;
+?>
 	@foreach($rows as $row)
 
 	<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
@@ -49,6 +51,21 @@
 		</div>
 	</div>
 	<!--/Delete Company-->
+	<?php
+++$counter;
+
+
+    if ($counter = 4) {
+
+
+?>
+
+  <br>
+<?php 
+
+}
+$counter =1;
+?>
 	@endforeach
 
 </div>
