@@ -495,11 +495,12 @@ class StocksController extends Controller
             } catch (\Throwable $e) {
                 // throw $th;
                 DB::rollback();
-                if (!Financial_subsystem::where('id', 106)->first()->gl_item_id && !empty(Financial_subsystem::where('id', 106)->first()->gl_item_id)) {
+              
+                \Log::info([$e->getCode()]);
+                if ($e->getCode()==22007) {
                     return redirect()->back()->withInput()->with('flash_danger', "يرجى التأكد من بيانات جدول ال Financial_subsystem");
-                }else{
+                } else {
                     return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
-
                 }
             }
         }
