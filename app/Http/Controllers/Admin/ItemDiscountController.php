@@ -297,11 +297,11 @@ class ItemDiscountController extends Controller
 
         if ($req->ajax()) {
             $id = $req->item_id;
-            $priceItems = Items_discount::where('item_id', $id)->get();
+            $discountItems = Items_discount::where('item_id', $id)->get();
             $cats = Person_catrgory::where('category_type','=',1)->get();
             $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
             $ajaxComponent = view('item-discount.ajaxEdit', [
-                'priceItems' => $priceItems,
+                'discountItems' => $discountItems,
                 'clients' => $clients,
                 'cats' => $cats,
 
