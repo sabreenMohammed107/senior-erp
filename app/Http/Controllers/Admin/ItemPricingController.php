@@ -11,6 +11,7 @@ use App\Models\Pric_disc_type;
 use Illuminate\Http\Request;
 use DB;
 use Log;
+
 class ItemPricingController extends Controller
 {
     protected $object;
@@ -51,7 +52,7 @@ class ItemPricingController extends Controller
     public function create()
     {
         $items = Item::all();
-        $cats = Person_catrgory::all();
+        $cats = Person_catrgory::where('category_type','=',1)->get();
         $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
 
         return view($this->viewName . 'add', compact('items', 'cats', 'clients'));
@@ -90,6 +91,22 @@ class ItemPricingController extends Controller
             }
         }
         \Log::info($detail);
+        $counterrrr = $request->get('counterStore');
+
+        $detailsUpdate = [];
+
+        for ($i = 1; $i <= $counterrrr; $i++) {
+
+
+
+            $detailUpdate = [
+                'id' => $request->get('item_price_id' . $i),
+
+                'item_price' => $request->get('item_priceup' . $i),
+
+            ];
+            array_push($detailsUpdate, $detailUpdate);
+        }
         DB::beginTransaction();
         try {
 
@@ -97,6 +114,11 @@ class ItemPricingController extends Controller
 
                 $Item['item_id'] = $request->get('item_id');
                 Items_price::create($Item);
+            }
+            foreach ($detailsUpdate as $updates) {
+                $itm = Items_price::where('id', $updates['id'])->first();
+
+                Items_price::where('id', $updates['id'])->update($updates);
             }
             DB::commit();
 
@@ -117,12 +139,12 @@ class ItemPricingController extends Controller
      */
     public function show($id)
     {
-        $row=Item::where('id',$id)->first();
+        $row = Item::where('id', $id)->first();
         $items = Item::all();
-       $priceItems=Items_price::where('item_id',$id)->get();
-       $cats = Person_catrgory::all();
-       $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
-       return view($this->viewName . 'view', compact('priceItems', 'cats','items', 'clients','row'));
+        $priceItems = Items_price::where('item_id', $id)->get();
+        $cats = Person_catrgory::where('category_type','=',1)->get();
+        $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
+        return view($this->viewName . 'view', compact('priceItems', 'cats', 'items', 'clients', 'row'));
     }
 
     /**
@@ -133,12 +155,12 @@ class ItemPricingController extends Controller
      */
     public function edit($id)
     {
-        $row=Item::where('id',$id)->first();
+        $row = Item::where('id', $id)->first();
         $items = Item::all();
-       $priceItems=Items_price::where('item_id',$id)->get();
-       $cats = Person_catrgory::all();
-       $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
-       return view($this->viewName . 'edit', compact('priceItems', 'cats','items', 'clients','row'));
+        $priceItems = Items_price::where('item_id', $id)->get();
+        $cats = Person_catrgory::where('category_type','=',1)->get();
+        $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
+        return view($this->viewName . 'edit', compact('priceItems', 'cats', 'items', 'clients', 'row'));
     }
 
     /**
@@ -180,7 +202,7 @@ class ItemPricingController extends Controller
 
         \Log::info($detail);
 
-        $counterrrr = $request->get('qqq');
+        $counterrrr = $request->get('counterStore');
 
         $detailsUpdate = [];
 
@@ -190,7 +212,7 @@ class ItemPricingController extends Controller
 
             $detailUpdate = [
                 'id' => $request->get('item_price_id' . $i),
-              
+
                 'item_price' => $request->get('item_priceup' . $i),
 
             ];
@@ -243,7 +265,7 @@ class ItemPricingController extends Controller
         if ($req->ajax()) {
             $id = $req->id;
             $rowCount = $req->rowcount;
-            $cats = Person_catrgory::all();
+            $cats = Person_catrgory::where('category_type','=',1)->get();
             $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
 
             $ajaxComponent = view('item-price.ajaxAdd', [
@@ -268,6 +290,26 @@ class ItemPricingController extends Controller
 
 
             $item->delete();
+        }
+    }
+
+    public function itemPrices(Request $req)
+    {
+
+        if ($req->ajax()) {
+            $id = $req->item_id;
+            $priceItems = Items_price::where('item_id', $id)->get();
+            $cats = Person_catrgory::where('category_type','=',1)->get();
+            $clients = Person::where('person_type_id', 101)->orderBy('created_at', 'Desc')->get();
+            $ajaxComponent = view('item-price.ajaxEdit', [
+                'priceItems' => $priceItems,
+                'clients' => $clients,
+                'cats' => $cats,
+
+            ]);
+
+
+            return $ajaxComponent->render();
         }
     }
 }

@@ -43,6 +43,7 @@ Route::namespace('Admin')->group(function () {
   Route::resource('/item-price', 'ItemPricingController');
   Route::get('addRowPrice/fetch', 'ItemPricingController@addRow')->name('addRowPrice.fetch');
   Route::get('/itemPrice/Remove/Item', 'ItemPricingController@DeletePriceItem');
+  Route::get('/item-id-price.fetch', 'ItemPricingController@itemPrices')->name('item-id-price.fetch');
 
   /*********************==item-discount==******************* */
   Route::resource('/item-discount', 'ItemDiscountController');
