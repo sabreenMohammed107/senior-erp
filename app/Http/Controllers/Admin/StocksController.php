@@ -498,7 +498,7 @@ class StocksController extends Controller
               
                 \Log::info([$e->getCode()]);
                 if ($e->getCode()=='HY000') {
-                    return redirect()->back()->withInput()->with('flash_danger', "يرجى التأكد من بيانات جدول ال Financial_subsystem");
+                    return redirect()->back()->withInput()->with('flash_danger', "يرجى التأكد من البيانات المالية ");
                 } else {
                     return redirect()->back()->withInput()->with('flash_danger', $e->getCode());
                 }
