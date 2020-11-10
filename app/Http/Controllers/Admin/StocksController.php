@@ -500,7 +500,7 @@ class StocksController extends Controller
                 if ($e->getCode()==22007) {
                     return redirect()->back()->withInput()->with('flash_danger', "يرجى التأكد من بيانات جدول ال Financial_subsystem");
                 } else {
-                    return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+                    return redirect()->back()->withInput()->with('flash_danger', $e->getCode());
                 }
             }
         }
