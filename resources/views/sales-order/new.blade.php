@@ -245,7 +245,7 @@
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
+                                                        <textarea rows="4" name="notes" id="notes" placeholder="" cols="31"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -272,7 +272,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="decOrder" name="order_description" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
+                                                        <textarea id="decOrder" name="order_description" placeholder="" rows="5" cols="44"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -443,7 +443,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="person_name" value="{{$persons[0]->name ?? ''}}" name="person_name" readonly class="form-control" placeholder="">
+                                                            <input type="text" id="person_name" value=" " name="person_name" readonly class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -457,6 +457,8 @@
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
                                                                 <select id="person_id" name="person_id" data-placeholder="Choose a Country..." class="chosen-select">
+                                                                    <option value=" ">Select</option>
+
                                                                     @foreach($persons as $person)
                                                                     <option value="{{$person->id}}">{{$person->name}} / {{$person->code}}</option>
                                                                     @endforeach
@@ -473,7 +475,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-                                                    <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
+                                                    <!-- <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
                                                             <input type="text" readonly class="form-control" placeholder="">
                                                         </div>
@@ -482,14 +484,14 @@
                                                         <div class="input-mask-title">
                                                             <label><b>سعر التحويل</b></label>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
                                                                 <select data-placeholder="Choose a Country..." name="currency_id" class="chosen-select">
-                                                                    <option value="">Select</option>
+                                                                    <!-- <option value="">Select</option> -->
                                                                     @foreach($currencies as $cur)
                                                                     <option value="{{$cur->id}}">{{$cur->name}}</option>
                                                                     @endforeach
@@ -524,14 +526,14 @@
                                         <thead>
                                             <tr>
                                                 <th data-field="index">#</th>
-                                                <th>كود البند</th>
-                                                <th>UOM</th>
-                                                <th>إسم البند</th>
+                                                <th>كود الصنف</th>
+                                                <th>وحده القياس</th>
+                                                <th>إسم الصنف</th>
                                                 <th>الباتش</th>
                                                 <th> رقم الباتش</th>
                                                 <th>تاريخ الصلاحية</th>
                                                 <th>الكمية الحالية</th>
-                                                <th>كمية الصنف</th>
+                                                <th> الكمية المطلوبة</th>
                                                 <th>سعر الصنف</th>
                                                 <th>الإجمالي</th>
                                                 <th>نسبة الخصم</th>
@@ -835,11 +837,11 @@
         var disval = $("#disval" + index + "").val();
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc);
+        $("#per" + index).val(cc.toFixed(3));
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
 
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
     }
@@ -849,11 +851,11 @@
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
         headCalculations(index);
         $("#per" + index).attr('value', per);
     }
@@ -863,11 +865,11 @@
         var qty = $("#qty" + index + "").val();
         var disval = $("#disval" + index + "").val();
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc);
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#per" + index).val(cc.toFixed(3));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
         headCalculations(index);
         $("#disval" + index).attr('value', disval);
 
@@ -880,11 +882,11 @@
         var disval = $("#disval" + index + "").val();
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc);
+        $("#per" + index).val(cc.toFixed(3));
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
 
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
 
         headCalculations(index);
         $("#qty" + index).attr('value', qty);
@@ -912,12 +914,12 @@
 
 
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
 
         headCalculations(index);
         $("#qty" + index).attr('value', qty);

@@ -152,7 +152,7 @@ class SaleOrderController extends Controller
             'purch_order_no' => $max,
             'person_id' => $request->get('person_id'),
             'stock_id' => $request->get('stock_id'),
-            'person_name' => $request->get('person_name'),
+            'person_name' => $personObj->name ?? '',
             'order_type_id' => 1,
             'order_description' => $request->get('order_description'),
             'order_decision_status_id'=>100,
