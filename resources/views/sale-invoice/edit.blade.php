@@ -594,9 +594,9 @@
 
                                                 <th data-field="index">#</th>
 
-                                                <th>كود البند</th>
-                                                <th>إسم البند</th>
-                                                <th> UOM</th>
+                                                <th>كود الصنف</th>
+                                                <th>إسم الصنف</th>
+                                                <th> وحدة القياس</th>
                                                 <th>الباتش</th>
                                                 <th> رقم الباتش</th>
                                                 <th>تاريخ الصلاحية</th>
@@ -607,7 +607,7 @@
                                                 <th> التكلفة</th>
                                                 <th>نسبة الخصم</th>
                                                 <th>قيمة الخصم</th>
-                                                <th>السعر </th>
+                                                <th>اجمالى بعد الخصم </th>
                                                 <th>نسبة الضريبة</th>
                                                 <th> الضريبة</th>
                                                 <th>الصافى</th>
@@ -615,7 +615,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="rows">
-                                             @include('sale-invoice.editallwithStock')
+                                            @include('sale-invoice.editallwithStock')
                                         </tbody>
                                     </table>
                                 </div>
@@ -846,23 +846,28 @@
                 $('#marketPerson').val('').trigger('chosen:updated');
 
             }
-            if (paytype == 3 || paytype == 4) {
-
-                stocks();
-                $('#optionsRadios1').prop('checked', true);
-                $('#optionsRadios1').prop('disabled', true);
-
-
-            }
             if (paytype == 1) {
                 stocks();
                 $('#optionsRadios1').prop('checked', true);
+                $('#optionsRadios1').prop('disabled', true);
+                $('#optionsRadios2').prop('disabled', true);
             } else {
                 orders();
                 $('#optionsRadios2').prop('checked', true);
                 $('#optionsRadios2').prop('disabled', false);
                 $('#optionsRadios1').prop('disabled', false);
             }
+
+            if (paytype == 3 || paytype == 4) {
+
+                stocks();
+                $('#optionsRadios1').prop('checked', true);
+                $('#optionsRadios1').prop('disabled', true);
+                $('#optionsRadios2').prop('disabled', true);
+
+
+            }
+
             // } else {
             //     $('#pay_type_id').trigger('chosen:updated');
 
@@ -873,6 +878,7 @@
 
 
         });
+
 
 
     });
@@ -1052,13 +1058,13 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
@@ -1077,14 +1083,14 @@
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
 
@@ -1105,14 +1111,14 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
 
@@ -1132,16 +1138,16 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
-        $("#per" + index).attr('value', per);
+        $("#per" + index).attr('value', per.toFixed(3));
     }
     //dis val
     function disval(index) {
@@ -1157,15 +1163,15 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc);
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#per" + index).val(cc.toFixed(3));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
         headCalculations(index);
-        $("#disval" + index).attr('value', disval);
+        $("#disval" + index).attr('value', disval.toFixed(2));
 
     }
 
@@ -1244,19 +1250,18 @@
         var per = $("#per" + index + "").val();
         var sum = parseFloat(qty) + parseFloat(bonas);
 
-        if( jQuery('#qty'+ index).val()+("#itemBonas" + index + "").val() > ( parseInt(jQuery('#qty'+ index).attr('max')) ) ){
+        if (jQuery('#qty' + index).val() + ("#itemBonas" + index + "").val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');
-           
+
             $("#qty" + index).val(1);
             $("#itemBonas" + index).val(1);
 
-                }
-                 else {
-                    $("#qty" + index).val(qty);
+        } else {
+            $("#qty" + index).val(qty);
             $("#itemBonas" + index).val(bonas);
 
-                }
-   
+        }
+
 
 
         $("#total" + index + "").text(price * qty);

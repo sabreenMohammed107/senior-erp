@@ -97,9 +97,9 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         // $orders=Order::where('PERSON_ID',)->get();
-        $saleCodes = Representative::where('rep_type_id', 100)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $id)->get();
 
-        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
         $orderItems = [];
         $orders = [];
         return view($this->viewName . 'new', compact('stocks', 'persons', 'orders', 'branch', 'orderItems', 'saleCodes', 'MarktCodes', 'paytypes', 'currencies'));
@@ -559,8 +559,8 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         $orders = Order::where('id', $invObj->order_id)->first();
-        $saleCodes = Representative::where('rep_type_id', 100)->get();
-        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $id)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
         $saleName = Representative::where('id', $invObj->saleCodes)->first();
         $marketName = Representative::where('id', $invObj->MarktCodes)->first();
@@ -588,8 +588,8 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         $orders = Order::where('id', $invObj->order_id)->first();
-        $saleCodes = Representative::where('rep_type_id', 100)->get();
-        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $id)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
         $saleName = Representative::where('id', $invObj->saleCodes)->first();
         $marketName = Representative::where('id', $invObj->MarktCodes)->first();
@@ -1192,7 +1192,7 @@ class SaleInvoiceController extends Controller
             $output = '<option value="" selected="" disabled="">إختر الباتش</option>';
             foreach ($data as $row) {
                 $date = date_create($row->expired_date);
-                $output .= '<option value="' . $row->id . '">' . $row->batch_no . '-' . date_format($date, "d-m-Y") . '-' . $row->item_total_qty . '</option>';
+                $output .= '<option value="' . $row->id . '">' . $row->batch_no . ' / ' . date_format($date, "d-m-Y") . ' / ' . $row->item_total_qty . '</option>';
             }
 
 

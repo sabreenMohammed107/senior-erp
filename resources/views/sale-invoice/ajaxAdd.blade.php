@@ -14,7 +14,7 @@
 
     </td>
     <td id="uom{{$rowCount}}" class="uom">حبة</td>
-    <td id="ar_name{{$rowCount}}"  class="ar_name">إسم البند</td>
+    <td id="ar_name{{$rowCount}}"  class="ar_name">إسم الصنف</td>
     <td>
         <select id="selectBatch{{$rowCount}}" style="width: 200px" name="selectBatch{{$rowCount}}" qty onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" >
 

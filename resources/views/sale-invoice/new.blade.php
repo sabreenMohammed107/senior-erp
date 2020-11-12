@@ -195,22 +195,12 @@
                                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 shadow">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                                        <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" disabled class="form-control" id="currency-rate" placeholder="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                        <div class="input-mask-title">
-                                                            <label><b>النسبة</b></label>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                             <select data-placeholder="Choose a Country..." id="currency_id" name="currency_id" class="chosen-select" tabindex="-1">
-                                                                <option value="">Select</option>
                                                                 @foreach($currencies as $cur)
                                                                 <option value="{{$cur->id}}">{{$cur->name}}</option>
                                                                 @endforeach
@@ -360,7 +350,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="stock_name" class="form-control" placeholder="">
+                                                            <input type="text" readonly id="stock_name" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -482,7 +472,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="total_items_all"  name="local_net_invoice" readonly class="form-control" placeholder="صافي الفاتورة">
+                                                        <input type="text" id="total_items_all" name="local_net_invoice" readonly class="form-control" placeholder="صافي الفاتورة">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -511,9 +501,9 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                                     <div class="bt-df-checkbox">
-                                                        <input class="radio-checked" checked="" type="radio" onclick="stocks()" value="option1" id="optionsRadios1" name="optionsRadios">
+                                                        <input class="radio-checked" checked="" disabled type="radio" onclick="stocks()" value="option1" id="optionsRadios1" name="optionsRadios">
                                                         <label><b>عام</b></label>
-                                                        <input class="" type="radio" value="option2" onclick="orders()" id="optionsRadios2" name="optionsRadios">
+                                                        <input class="" type="radio" value="option2" disabled onclick="orders()" id="optionsRadios2" name="optionsRadios">
                                                         <label><b>أمر بيع</b></label>
                                                     </div>
                                                 </div>
@@ -576,9 +566,9 @@
 
                                                 <th data-field="index">#</th>
 
-                                                <th>كود البند</th>
-                                                <th>إسم البند</th>
-                                                <th> UOM</th>
+                                                <th>كود الصنف</th>
+                                                <th>إسم الصنف</th>
+                                                <th> وحدة القياس</th>
                                                 <th>الباتش</th>
                                                 <th> رقم الباتش</th>
                                                 <th>تاريخ الصلاحية</th>
@@ -589,7 +579,7 @@
                                                 <th> التكلفة</th>
                                                 <th>نسبة الخصم</th>
                                                 <th>قيمة الخصم</th>
-                                                <th>السعر </th>
+                                                <th>اجمالى بعد الخصم </th>
                                                 <th>نسبة الضريبة</th>
                                                 <th> الضريبة</th>
                                                 <th>الصافى</th>
@@ -774,7 +764,7 @@
         $('select[name="orderPersons"]').on('change', function() {
             var order = $(this).val();
             var index = $('#table > tbody > tr').length;
-           
+
             $.ajax({
                 url: "{{route('dynamicOrderItemsInvoice.fetch')}}",
                 method: "get",
@@ -785,7 +775,7 @@
                 success: function(result) {
 
                     $('#rows').html(result);
-                     headCalculations(index);
+                    headCalculations(index);
 
                 }
             });
@@ -830,23 +820,28 @@
                 $('#marketPerson').val('').trigger('chosen:updated');
 
             }
-            if (paytype == 3 || paytype == 4) {
-
-                stocks();
-                $('#optionsRadios1').prop('checked', true);
-                $('#optionsRadios1').prop('disabled', true);
-
-
-            }
             if (paytype == 1) {
                 stocks();
                 $('#optionsRadios1').prop('checked', true);
+                $('#optionsRadios1').prop('disabled', true);
+                $('#optionsRadios2').prop('disabled', true);
             } else {
                 orders();
                 $('#optionsRadios2').prop('checked', true);
                 $('#optionsRadios2').prop('disabled', false);
                 $('#optionsRadios1').prop('disabled', false);
             }
+
+            if (paytype == 3 || paytype == 4) {
+
+                stocks();
+                $('#optionsRadios1').prop('checked', true);
+                $('#optionsRadios1').prop('disabled', true);
+                $('#optionsRadios2').prop('disabled', true);
+
+
+            }
+
             // } else {
             //     $('#pay_type_id').trigger('chosen:updated');
 
@@ -923,8 +918,8 @@
     }
 
     // list inside table
-      // list inside table
-      function deleteRow(index) {
+    // list inside table
+    function deleteRow(index) {
         //delete Row
 
         $('#table > tbody > tr[data-id=' + index + ']').remove();
@@ -938,14 +933,14 @@
         var select_value = $('#select' + index + ' option:selected').val();
         var select_stock = $('#stock_id option:selected').val();
         order = $('#orderPersons option:selected').val();
-      
+
         $.ajax({
             type: 'GET',
             data: {
 
                 select_value: select_value,
                 select_stock: select_stock,
-                order:order
+                order: order
 
             },
             url: "{{route('editSelectValInvoice.fetch')}}",
@@ -1033,13 +1028,13 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()) );
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
@@ -1058,14 +1053,14 @@
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()) );
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
 
@@ -1086,14 +1081,14 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()) );
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
 
@@ -1113,16 +1108,16 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()) );
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
 
         headCalculations(index);
-        $("#per" + index).attr('value', per);
+        $("#per" + index).attr('value', per.toFixed(3));
     }
     //dis val
     function disval(index) {
@@ -1138,15 +1133,15 @@
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc);
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()) );
+        $("#per" + index).val(cc.toFixed(3));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text())).toFixed(2));
         headCalculations(index);
-        $("#disval" + index).attr('value', disval);
+        $("#disval" + index).attr('value', disval.toFixed(2));
 
     }
 
@@ -1186,7 +1181,7 @@
         $('#total_items_finalqty').val(qty.toFixed(2));
         $('#total_items_all').val(finalAll.toFixed(2));
         //new
-       
+
     }
 
     // bonasDetails(index);
@@ -1221,26 +1216,25 @@
         var max = $("#qty" + index + "").attr('max');
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
-        var bonas =$("#itemBonas" + index + "").val();
+        var bonas = $("#itemBonas" + index + "").val();
         var per = $("#per" + index + "").val();
         var sum = parseFloat(qty) + parseFloat(bonas);
-        if( jQuery('#qty'+ index).val()+("#itemBonas" + index + "").val() > ( parseInt(jQuery('#qty'+ index).attr('max')) ) ){
+        if (jQuery('#qty' + index).val() + ("#itemBonas" + index + "").val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');
-           
+
             $("#qty" + index).val(1);
             $("#itemBonas" + index).val(1);
 
-                }
-                 else {
-                    $("#qty" + index).val(qty);
+        } else {
+            $("#qty" + index).val(qty);
             $("#itemBonas" + index).val(bonas);
 
-                }
-   
+        }
 
 
 
-        $("#total" + index + "").text(price * qty);
+
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
         $("#disval" + index).attr('value', Amount);
         var disval = $("#disval" + index + "").val();
