@@ -900,16 +900,18 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        if (qty > max) {
-            $('#myModal').modal('show');
-            // alert("هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده ");
-            // alert(qty);
+        
+        if( jQuery('#qty'+ index).val() > ( parseInt(jQuery('#qty'+ index).attr('max')) ) ){
+                // if (qty > max) {
+                    $('#myModal').modal('show');
 
-            $("#qty" + index).val(max);
-        } else {
-            $("#qty" + index).val(qty);
-        }
+                    $("#qty" + index).val(max);
 
+                }
+                 else {
+                    $("#qty" + index).val(qty);
+
+                }
 
 
         $("#total" + index + "").text((price * qty).toFixed(2));

@@ -542,7 +542,7 @@ class SaleOrderController extends Controller
             $output = '<option value="" selected="" disabled="">إختر الباتش</option>';
             foreach ($data as $row) {
                 $date = date_create($row->expired_date);
-                $output .= '<option value="' . $row->id . '">' . $row->batch_no . '-' . date_format($date, "d-m-Y") . '-' . $row->item_total_qty . '</option>';
+                $output .= '<option value="' . $row->id . '">' . $row->batch_no . ' / ' . date_format($date, "d-m-Y") . ' / ' . $row->item_total_qty . '</option>';
             }
 
 

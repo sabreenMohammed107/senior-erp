@@ -248,10 +248,8 @@
 
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
-                                                    <div class="input-mark-inner mg-b-22">
-                                                    <textarea rows="4" name="notes" id="notes" placeholder="" cols="31">{{$orderObj->notes}}</textarea>
+                                                    <textarea rows="4" style="width: 100%;" name="notes" id="notes" placeholder="" >{{$orderObj->notes}}</textarea>
 
-                                                    </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="input-mask-title">
@@ -279,10 +277,8 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                    <div class="input-mark-inner mg-b-22">
-                                                    <textarea id="decOrder"  name="order_description" placeholder="" rows="5" cols="44">{{$orderObj->order_description}}</textarea>
+                                                    <textarea id="decOrder" style="width: 100%;"  name="order_description" placeholder="" rows="5" >{{$orderObj->order_description}}</textarea>
 
-                                                    </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="input-mask-title">
@@ -905,16 +901,17 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        if (qty > max) {
-            $('#myModal').modal('show');
-            // alert("هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده ");
-            // alert(qty);
+        if( jQuery('#qty'+ index).val() > ( parseInt(jQuery('#qty'+ index).attr('max')) ) ){
+                // if (qty > max) {
+                    $('#myModal').modal('show');
 
-            $("#qty" + index).val(max);
-        } else {
-            $("#qty" + index).val(qty);
-        }
+                    $("#qty" + index).val(max);
 
+                }
+                 else {
+                    $("#qty" + index).val(qty);
+
+                }
 
 
         $("#total" + index + "").text((price * qty).toFixed(2));
