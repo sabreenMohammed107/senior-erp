@@ -347,7 +347,7 @@
                                                                     <option @if ($orderObj->currency_id == $cur->id)
                                                                         selected="selected"
                                                                         @endif
-                                                                        value="{{$cur->id}}">{{$cur->CURRENCY_NAME}}</option>
+                                                                        value="{{$cur->id}}">{{$cur->name}}</option>
                                                                     @endforeach
                                                                 </select> </div>
                                                         </div>
