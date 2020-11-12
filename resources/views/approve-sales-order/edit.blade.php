@@ -81,8 +81,8 @@
                             <a href="{{route('approve-sales-order.index')}}" class="btn btn-primary waves-effect waves-light">إلغاء</a>
                            
 
-                            <button data-toggle="modal"  @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif  data-target="#reject{{$orderObj->id}}" title="Trash" class="pd-setting-ed">عدم الموافقة</button>
-                            <button data-toggle="modal" @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif data-target="#accept{{$orderObj->id}}" title="Trash" class="btn btn-primary"> موافقه</button>
+                            <button data-toggle="modal"  @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif  data-target="#reject{{$orderObj->id}}" title="Trash" class="btn btn-primary waves-effect waves-light">عدم الموافقة</button>
+                            <button data-toggle="modal" @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif data-target="#accept{{$orderObj->id}}" title="Trash" class="btn btn-primary waves-effect waves-light"> موافقه</button>
 
 
                         </div>
@@ -335,25 +335,20 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-                                                    <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-                                                        <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly class="form-control" placeholder="15.6">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-                                                        <div class="input-mask-title">
-                                                            <label><b>سعر التحويل</b></label>
-                                                        </div>
-                                                    </div>
+                                                   
+                                                    
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select disabled data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+                                                                <select disabled data-placeholder="Choose a currency..." class="chosen-select" tabindex="-1">
                                                                     <option value="">Select</option>
                                                                     @foreach($currencies as $cur)
-                                                                    <option value="{{$cur->id}}">{{$cur->CURRENCY_NAME}}</option>
+                                                                    <option @if ($orderObj->currency_id == $cur->id)
+                                                                        selected="selected"
+                                                                        @endif
+                                                                        value="{{$cur->id}}">{{$cur->CURRENCY_NAME}}</option>
                                                                     @endforeach
                                                                 </select> </div>
                                                         </div>
