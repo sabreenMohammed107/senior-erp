@@ -1224,20 +1224,19 @@
         var bonas =$("#itemBonas" + index + "").val();
         var per = $("#per" + index + "").val();
         var sum = parseFloat(qty) + parseFloat(bonas);
-       
-        if (sum > max) {
-
+        if( jQuery('#qty'+ index).val()+("#itemBonas" + index + "").val() > ( parseInt(jQuery('#qty'+ index).attr('max')) ) ){
             $('#myModal').modal('show');
-            // alert("هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده ");
-            // alert(qty);
-
+           
             $("#qty" + index).val(1);
             $("#itemBonas" + index).val(1);
-        } 
-        else {
-            $("#qty" + index).val(qty);
+
+                }
+                 else {
+                    $("#qty" + index).val(qty);
             $("#itemBonas" + index).val(bonas);
-        }
+
+                }
+   
 
 
 

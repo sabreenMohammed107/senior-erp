@@ -476,7 +476,6 @@
                                                 <th>قيمة الخصم</th>
                                                 <th>السعر النهائي</th>
                                                 <th>ملاحظات</th>
-                                                <th>حذف</th>
                                             </tr>
                                         </thead>
                                         <tbody id="rows">
@@ -496,8 +495,9 @@ $counterrrr = 1;
     <input type="hidden" name="counter" value="{{$counter}}">
     <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}" value="{{$counter}}"></td>
     <td>
+    {{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}
         <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_order_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
-        <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
+        <input type="hidden" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="">
 
         <span id="item_search{{$counter}}" style="display:none;"></span>
 
@@ -516,7 +516,7 @@ $counterrrr = 1;
 
     }
     ?>
-    <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}">
+    {{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}
 
    <span id="batch_search{{$counter}}" style="display:none;"></span>
     </td>
@@ -529,7 +529,7 @@ $counterrrr = 1;
     <td id="batchqty{{$counter}}" class="batchqty">{{$data->item_total_qty ?? ''}} </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px" oninput="itemQty({{$counter}})" value="{{$itemo->item_qty}}" onfocusout="maxQty({{$counter}})" name="upqty{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
+            <input type="number" readonly style="width: 200px" oninput="itemQty({{$counter}})" value="{{$itemo->item_qty}}" onfocusout="maxQty({{$counter}})" name="upqty{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
         </div>
     </td>
 
@@ -557,12 +557,10 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="text" style="width: 200px" onkeypress="enterForRow(event,{{$counter}})" name="updetNote{{$counter}}" value="{{$itemo->notes}}" class="form-control detNote" placeholder="ملاحظات">
+            <input type="text" readonly style="width: 200px" onkeypress="enterForRow(event,{{$counter}})" name="updetNote{{$counter}}" value="{{$itemo->notes}}" class="form-control detNote" placeholder="ملاحظات">
         </div>
     </td>
-    <td>
-       
-    </td>
+   
 </tr>
 
 <?php

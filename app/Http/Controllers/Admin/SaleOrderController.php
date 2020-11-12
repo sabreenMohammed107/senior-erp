@@ -165,6 +165,7 @@ class SaleOrderController extends Controller
             'total_disc_value' => $request->get('total_disc_value'),
             'total_final_cost' => $request->get('total_final_cost'),
             'branch_id' =>  $request->get('branch'),
+            'notes' =>  $request->get('notes')
         ];
         DB::beginTransaction();
         try {
@@ -339,7 +340,6 @@ class SaleOrderController extends Controller
             'person_name' => $request->get('person_name'),
             'order_type_id' => 1,
             'order_description' => $request->get('order_description'),
-
             'currency_id' => $request->get('currency_id'),
             'sales_rep_id' => $saleCode->id ?? 0,
             'marketing_rep_id' => $MarktCode->id ?? 0,
@@ -349,6 +349,7 @@ class SaleOrderController extends Controller
             'total_disc_value' => $request->get('total_disc_value'),
             'total_final_cost' => $request->get('total_final_cost'),
             'branch_id' =>  $request->get('branch'),
+            'notes'=> $request->get('notes'),
         ];
         DB::beginTransaction();
         try {

@@ -100,7 +100,7 @@
                         <button data-toggle="modal" data-target="#cancle" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</button>
 
                         <button data-toggle="modal" data-target="#save" type="button" class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
-                        <button data-toggle="modal" data-target="#confi" type="button" class="btn btn-primary waves-effect waves-light mg-b-15"> الموافقة</button>
+                        <button data-toggle="modal" data-target="#confi" type="button" class="btn btn-primary waves-effect waves-light mg-b-15"> تأكيد وغلق</button>
 
                         <!--save Company-->
                         <div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
@@ -132,7 +132,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header header-color-modal bg-color-2">
-                                        <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
+                                        <h4 class="modal-title" style="text-align:right"> تأكيد وغلق</h4>
                                         <div class="modal-close-area modal-close-df">
                                             <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
                                         </div>
@@ -140,7 +140,7 @@
                                     <div class="modal-body">
                                         <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
 
-                                        <h4>هل تريد حفظ البيانات ؟ </h4>
+                                        <h4>هل تريد تأكيد وغلق أمر البيع  ؟ </h4>
                                     </div>
                                     <div class="modal-footer info-md">
                                         <a data-dismiss="modal" href="#">إلغــاء</a>
