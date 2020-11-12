@@ -343,7 +343,6 @@
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
                                                                 <select disabled data-placeholder="Choose a currency..." class="chosen-select" tabindex="-1">
-                                                                    <option value="">Select</option>
                                                                     @foreach($currencies as $cur)
                                                                     <option @if ($orderObj->currency_id == $cur->id)
                                                                         selected="selected"
