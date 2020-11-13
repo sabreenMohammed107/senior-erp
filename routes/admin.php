@@ -181,4 +181,8 @@ Route::namespace('Admin')->group(function () {
   Route::get('addRow-revert-sale/fetch', 'RevertsSaleController@addRow')->name('addRow-revert-sale.fetch');
   Route::get('/editSelectVal-revert-sale.fetch', 'RevertsSaleController@editSelectVal')->name('editSelectVal-revert-sale.fetch');
   Route::get('/editSelectBatch-revert-sale.fetch', 'RevertsSaleController@editSelectBatch')->name('editSelectBatch-revert-sale.fetch');
+/******************************rep-persons********************************** */
+Route::resource('/rep-persons', 'RepresentativeController');
+Route::get('/branchdetails-rep-persons.fetch', 'RepresentativeController@branchFetch')->name('branchdetails-rep-persons.fetch');
+Route::get('/rep-persons.creation', 'RepresentativeController@creation')->name('rep-persons.creation');
 });
