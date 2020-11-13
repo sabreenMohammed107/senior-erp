@@ -121,10 +121,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label class="">ملاحظات</label>
-                                                <textarea name="notes" disabled type="text" class="form-control" style="text-align:right">{{$row->notes}}</textarea>
-                                            </div>
+                                           
                                         </div>
                                     </div>
     </div>

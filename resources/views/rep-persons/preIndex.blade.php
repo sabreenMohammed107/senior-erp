@@ -54,7 +54,7 @@
             <th> موبايل</th>
 
             <th>النوع</th>
-            <th>ملاحظات</th>
+          
             <th>الاختيارات</th>
         </tr>
     </thead>
@@ -72,7 +72,7 @@
 
             <td>{{$rep->mobile}}</td>
             <td>{{$rep->type->ar_name ?? ''}}</td>
-            <td> {{$rep->notes}}</td>
+           
             <td>
                 <div class="product-buttons">
                   
