@@ -258,11 +258,11 @@ class SupplierController extends Controller
             $data['balance_type'] = 0;
         }
 
-        DB::transaction(function () use ($data,  $id) {
+       
 
 
-            $supplierUpdate = $this->object::findOrFail($id)->update($data);
-        });
+           $this->object::findOrFail($id)->update($data);
+     
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
     }
 

@@ -696,15 +696,20 @@
             var personText = $('select[name="clientPerson"] option:selected').text();
 
             $.ajax({
-                url: "{{route('dynamicOrderInvoice.fetch')}}",
+                url: "{{route('dynamicPersonInvoice.fetch')}}",
                 method: "get",
                 data: {
                     person_id: person,
 
                 },
-                success: function(result) {
+                success: function(data) {
 
+                    var result = $.parseJSON(data);
                     $('#client_name').val(personText);
+
+                    $("#sale_name").val(result[1]);
+
+                    $("#market_name").val(result[3]);
                     $('#orderPersons').html(result).trigger('chosen:updated');
 
 
@@ -807,7 +812,8 @@
                 $('#clientPerson').val('').trigger('chosen:updated');
                 $('#salePerson').val('').trigger('chosen:updated');
                 $('#marketPerson').val('').trigger('chosen:updated');
-
+                $("#sale_name").val('');
+                $("#market_name").val('');
             } else {
 
                 $('select[name="clientPerson"]').prop('disabled', false);
@@ -818,18 +824,23 @@
                 $('#clientPerson').val('').trigger('chosen:updated');
                 $('#salePerson').val('').trigger('chosen:updated');
                 $('#marketPerson').val('').trigger('chosen:updated');
-
+                $("#sale_name").val('');
+                $("#market_name").val('');
             }
             if (paytype == 1) {
                 stocks();
                 $('#optionsRadios1').prop('checked', true);
                 $('#optionsRadios1').prop('disabled', true);
                 $('#optionsRadios2').prop('disabled', true);
+                $("#sale_name").val('');
+                $("#market_name").val('');
             } else {
                 orders();
                 $('#optionsRadios2').prop('checked', true);
                 $('#optionsRadios2').prop('disabled', false);
                 $('#optionsRadios1').prop('disabled', false);
+                $("#sale_name").val('');
+                $("#market_name").val('');
             }
 
             if (paytype == 3 || paytype == 4) {

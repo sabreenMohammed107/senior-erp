@@ -328,17 +328,10 @@ class CustomerController extends Controller
         }
 
 
-
-
-
-
-        DB::transaction(function () use ($data,  $id) {
-
-
-            $customerUpdate = $this->object::findOrFail($id)->update($data);
+           $this->object::findOrFail($id)->update($data);
 
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-        });
+       
     }
 
     /**

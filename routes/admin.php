@@ -75,7 +75,8 @@ Route::namespace('Admin')->group(function () {
   Route::get('/sale-invoice.creation', 'SaleInvoiceController@creation')->name('sale-invoice.creation');
   Route::get('/dynamicOrderInvoice.fetch', 'SaleInvoiceController@orderInvoice')->name('dynamicOrderInvoice.fetch');
   Route::get('/dynamicCurrencyRate.fetch', 'SaleInvoiceController@dynamicCurrencyRate')->name('dynamicCurrencyRate.fetch');
-
+  
+  Route::get('/dynamicPersonInvoice.fetch', 'SaleInvoiceController@personData')->name('dynamicPersonInvoice.fetch');
 
   Route::get('/dynamicOrderItemsInvoice.fetch', 'SaleInvoiceController@orderItemsInvoice')->name('dynamicOrderItemsInvoice.fetch');
 

@@ -1288,4 +1288,22 @@ class SaleInvoiceController extends Controller
             Invoice_item::where('id', $req->id)->delete();
         }
     }
+    public function personData(Request $req)
+   
+    {
+        \Log::info('message');
+        if ($req->ajax()) {
+
+            $select_value = $req->person_id;
+
+
+            $personObj = Person::where('id', $select_value)->first();
+
+            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
+
+            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
+
+            echo json_encode(array($saleCode->code ?? '', $saleCode->ar_name ?? '', $MarktCode->code ?? '', $MarktCode->ar_name ?? '', $personObj->name));
+        }
+    }
 }
