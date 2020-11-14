@@ -332,6 +332,7 @@ class StocksController extends Controller
         $count = $request->get('rowCountStore');
 
         $details = [];
+        $itemsTableUpdates=[];
         for ($i = 1; $i <= $count; $i++) {
 
 
@@ -349,6 +350,18 @@ class StocksController extends Controller
 
             if ($request->get('qty' . $i)) {
                 array_push($details, $detail);
+                $detailItem = [
+               
+                    'item_id' => $request->get('select' . $i),
+                   
+                    'item_total_qty' => $request->get('qty' . $i),
+                    'item_total_cost' => $request->get('itemprice' . $i),
+                    'total_line_cost' => $request->get('itemprice' . $i) * $request->get('qty' . $i),
+
+                    'average_price' => ($request->get('itemprice' . $i) * $request->get('qty' . $i))/$request->get('qty' . $i),
+                  
+                ];
+                array_push($itemsTableUpdates, $detailItem);
             }
         }
         \Log::info($request->get('rowCountStore'));
@@ -371,8 +384,40 @@ class StocksController extends Controller
                 'notes' => $request->get('notesup' . $i),
 
             ];
+            $detailUpdateItem = [
+               
+                'item_id' => $request->get('selectup' . $i),
+               
+                'item_total_qty' => $request->get('qtyup' . $i),
+                'item_total_cost' => $request->get('itempriceup' . $i),
+                'total_line_cost' => $request->get('itempriceup' . $i) * $request->get('qtyup' . $i),
+
+                'average_price' => ($request->get('itempriceup' . $i) * $request->get('qtyup' . $i))/$request->get('qtyup' . $i),
+              
+            ];
             array_push($detailsUpdate, $detailUpdate);
+            array_push($itemsTableUpdates, $detailUpdateItem);
         }
+        \Log::info(['itemsTableUpdates',$itemsTableUpdates]);
+
+        $table_items = array();
+        $all=0;
+        foreach ($itemsTableUpdates as $item) {
+          
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty']*$item['item_total_cost'];
+
+            } 
+            else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products',$table_items]);
+  
         if ($request->get('action') == 'save') {
 
 
@@ -465,11 +510,21 @@ class StocksController extends Controller
 
                     Stocks_items_total::create($itmUp);
                 }
+
+                //update item table
+                foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty=$table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost=$table_item['item_total_qty'];
+                    $itmUpdate->average_price=$table_item['total_line_cost']/$table_item['item_total_qty'];
+                    $itmUpdate->update();
+                }
+            
                 //Finance Entry add 2 records
                 $finaceStock = Stock::where('id', $request->get('primary_stock_id'))->first();
 
 
-                //second row saving first yahia say it
+               // second row saving first yahia say it
                 $secondFinance = new Financial_entry();
                 $secondFinance->trans_type_id = 102;
                 $secondFinance->entry_serial = 1;
