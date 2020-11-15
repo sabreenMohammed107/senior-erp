@@ -102,6 +102,7 @@ class ExpiredItemsController extends Controller
 
         $updateTotals = [];
         $financeArray = [];
+        $itemsTableUpdates = [];
         for ($i = 1; $i <= $count; $i++) {
             $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
             $item = Item::where('id', $request->get('select' . $i))->first();
@@ -134,6 +135,20 @@ class ExpiredItemsController extends Controller
                 'item_total_qty' => $batch->item_total_qty - $request->get('qty' . $i),
             ];
             array_push($updateTotals, $totalQtyUp);
+
+
+            //update items table
+            $detailItem = [
+
+                'item_id' => $detail['item_id'],
+
+                'item_total_qty' => $detail['item_qty'],
+                'item_total_cost' => $detail['item_price'],
+                'total_line_cost' => $detail['item_price'] * $detail['item_qty'],
+
+
+            ];
+            array_push($itemsTableUpdates, $detailItem);
         }
         //from expired item
         $counterrrr = $request->get('counter');
@@ -172,7 +187,36 @@ class ExpiredItemsController extends Controller
                 'item_total_qty' => $upbatch->item_total_qty - $request->get('qty' . $i),
             ];
             array_push($updateTotals, $totalQtyUp);
+
+            //update item table
+            $detailUpdateItem = [
+
+                'item_id' => $detailUpdate['item_id'],
+                'item_total_qty' => $detailUpdate['item_qty'],
+                'item_total_cost' => $detailUpdate['item_price'],
+                'total_line_cost' => $detailUpdate['item_price'] * $detailUpdate['item_qty'],
+
+
+            ];
+            array_push($itemsTableUpdates, $detailUpdateItem);
         }
+
+        //udate items table array 
+        $table_items = array();
+        $all = 0;
+        foreach ($itemsTableUpdates as $item) {
+
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
+            } else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products', $table_items]);
         //insert row in stock-transaction
         $maxCode = Stocks_transaction::where('primary_stock_id',  $request->get('stock_id'))->where('transaction_type_id', 109)->latest('code')->first();
 
@@ -205,47 +249,54 @@ class ExpiredItemsController extends Controller
                 }
 
                 $data['confirmed'] = 1;
+                //update item table
+                foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty = $itmUpdate->item_total_qty - $table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost = $itmUpdate->item_total_qty * $itmUpdate->average_price;
+                    $itmUpdate->update();
+                }
                 //Make Finance Entry
 
-            $stockBranch = Stock::where('id', $request->input('stock_id'))->first();
-            $maxF = Financial_entry::where('trans_type_id', 105)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
+                $stockBranch = Stock::where('id', $request->input('stock_id'))->first();
+                $maxF = Financial_entry::where('trans_type_id', 105)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
 
-            $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
-            $maxF++;
-            //sum of prices
-            $PricesSum = 0.0;
+                $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                $maxF++;
+                //sum of prices
+                $PricesSum = 0.0;
 
-            foreach ($financeArray as $finance) {
+                foreach ($financeArray as $finance) {
 
-                $PricesSum += $finance['totalPrice'];
-            }
-            //Finance Entry add 2 records
+                    $PricesSum += $finance['totalPrice'];
+                }
+                //Finance Entry add 2 records
 
-            $firstFinance = new Financial_entry();
-            $firstFinance->trans_type_id = 105;
-            $firstFinance->entry_serial = $maxF;
-            $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
-            $firstFinance->stock_id =  $request->input('stock_id');
-            $firstFinance->branch_id = $stockBranch->branch_id;
-            $firstFinance->credit = $PricesSum;
-            $firstFinance->debit = 0;
-            $firstFinance->gl_item_id = $stockBranch->gl_item_id;
+                $firstFinance = new Financial_entry();
+                $firstFinance->trans_type_id = 105;
+                $firstFinance->entry_serial = $maxF;
+                $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $firstFinance->stock_id =  $request->input('stock_id');
+                $firstFinance->branch_id = $stockBranch->branch_id;
+                $firstFinance->credit = $PricesSum;
+                $firstFinance->debit = 0;
+                $firstFinance->gl_item_id = $stockBranch->gl_item_id;
 
-            $firstFinance->save();
-            //second row
-            $secondFinance = new Financial_entry();
-            $secondFinance->trans_type_id = 105;
-            $secondFinance->entry_serial = $maxF;
-            $secondFinance->entry_date = Carbon::parse($request->get('transaction_date'));
-            $secondFinance->stock_id =  $request->input('stock_id');
-            $secondFinance->branch_id = $stockBranch->branch_id;
-            $secondFinance->debit = $PricesSum;
-            $secondFinance->credit =0;
-            $secondFinance->gl_item_id = Financial_subsystem::where('id', 103)->first()->gl_item_id ?? 0;
+                $firstFinance->save();
+                //second row
+                $secondFinance = new Financial_entry();
+                $secondFinance->trans_type_id = 105;
+                $secondFinance->entry_serial = $maxF;
+                $secondFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $secondFinance->stock_id =  $request->input('stock_id');
+                $secondFinance->branch_id = $stockBranch->branch_id;
+                $secondFinance->debit = $PricesSum;
+                $secondFinance->credit = 0;
+                $secondFinance->gl_item_id = Financial_subsystem::where('id', 103)->first()->gl_item_id ?? 0;
 
-            $secondFinance->save();
+                $secondFinance->save();
 
-            //End Finance
+                //End Finance
             }
             $trans = Stocks_transaction::create($data);
             foreach ($details as $Item) {
@@ -320,6 +371,7 @@ class ExpiredItemsController extends Controller
 
         $updateTotals = [];
         $financeArray = [];
+        $itemsTableUpdates = [];
         for ($i = 1; $i <= $count; $i++) {
             \Log::info($request->get('count' . $i));
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
@@ -349,47 +401,80 @@ class ExpiredItemsController extends Controller
                 array_push($updateTotals, $totalQtyUp);
             }
 
-              //finance
-              if ($item) {
+            //finance
+            if ($item) {
                 $finance = [
                     'totalPrice' => $request->get('qty' . $i) * $item->average_price,
                 ];
                 array_push($financeArray, $finance);
             }
+            //update items table
+            $detailItem = [
+
+                'item_id' => $detail['item_id'],
+
+                'item_total_qty' => $detail['item_qty'],
+                'item_total_cost' => $detail['item_price'],
+                'total_line_cost' => $detail['item_price'] * $detail['item_qty'],
+
+
+            ];
+            array_push($itemsTableUpdates, $detailItem);
         }
         //from expired item
-        // $counterrrr = $request->get('counter');
+        $counterrrr = $request->get('counter');
 
-        // $detailsUpdate = [];
+        $detailsUpdate = [];
 
-        // for ($i = 1; $i <= $counterrrr; $i++) {
-        //     $upbatch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
-        //     $upitem = Item::where('id', $request->get('item_expired_id' . $i))->first();
-        //     $detailUpdate = [
-        //         'id'=> $request->get('id' . $i),
-        //         'item_id' => $request->get('item_expired_id' . $i),
-        //         'item_qty' => $request->get('upqty' . $i),
-        //         'notes' => $request->get('updetNote' . $i),
-        //     ];
-        //     if ($upbatch) {
-        //         $detailUpdate['batch_no'] = $upbatch->batch_no;
-        //         $detailUpdate['expired_date'] = $upbatch->expired_date;
-        //     }
-        //     if ($upitem) {
-        //         $detailUpdate['item_price'] = $upitem->average_price;
-        //         $detailUpdate['total_line_cost'] = $request->get('upqty' . $i) * $upitem->average_price;
-        //     }
+        for ($i = 1; $i <= $counterrrr; $i++) {
+            $upbatch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
+            $upitem = Item::where('id', $request->get('item_expired_id' . $i))->first();
+            $detailUpdate = [
+                'id' => $request->get('id' . $i),
+                'item_id' => $request->get('item_expired_id' . $i),
+                'item_qty' => $request->get('upqty' . $i),
+                'notes' => $request->get('updetNote' . $i),
+            ];
+            if ($upbatch) {
+                $detailUpdate['batch_no'] = $upbatch->batch_no;
+                $detailUpdate['expired_date'] = $upbatch->expired_date;
+            }
+            if ($upitem) {
+                $detailUpdate['item_price'] = $upitem->average_price;
+                $detailUpdate['total_line_cost'] = $request->get('upqty' . $i) * $upitem->average_price;
+            }
 
-        //     array_push($detailsUpdate, $detailUpdate);
+            array_push($detailsUpdate, $detailUpdate);
 
 
-        //     //this for updating total qty
-        //     $totalQtyUp = [
-        //         'id' => $upbatch->id,
-        //         'item_total_qty' => $upbatch->item_total_qty - $request->get('qty' . $i),
-        //     ];
-        //     array_push($updateTotals, $totalQtyUp);
-        // }
+            //update item table
+            $detailUpdateItem = [
+
+                'item_id' => $detailUpdate['item_id'],
+                'item_total_qty' => $detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
+                'item_total_cost' => $detailUpdate['item_price'],
+                'total_line_cost' => $detailUpdate['item_price'] * ($detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty']),
+
+            ];
+            array_push($itemsTableUpdates, $detailUpdateItem);
+        }
+
+        //udate items table array 
+        $table_items = array();
+        $all = 0;
+        foreach ($itemsTableUpdates as $item) {
+
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
+            } else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products', $table_items]);
         //insert row in stock-transaction
 
         $data = [
@@ -420,47 +505,59 @@ class ExpiredItemsController extends Controller
 
                 $data['confirmed'] = 1;
 
-                  //Make Finance Entry
-                  $finAbdate=Stocks_transaction::where('id', $id)->first();
-            $stockBranch = Stock::where('id', $request->input('stock_id'))->first();
-            $maxF = Financial_entry::where('trans_type_id', 105)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
 
-            $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
-            $maxF++;
-            //sum of prices
-            $PricesSum = 0.0;
 
-            foreach ($financeArray as $finance) {
+                  //update item table
+                  foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty = $itmUpdate->item_total_qty - $table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost = $itmUpdate->item_total_qty * $itmUpdate->average_price;
+                    $itmUpdate->update();
+                }
 
-                $PricesSum += $finance['totalPrice'];
-            }
-            //Finance Entry add 2 records
 
-            $firstFinance = new Financial_entry();
-            $firstFinance->trans_type_id = 105;
-            $firstFinance->entry_serial = $maxF;
-            $firstFinance->entry_date = $finAbdate->transaction_date;
-            $firstFinance->stock_id = $finAbdate->primary_stock_id;
-            $firstFinance->branch_id = $stockBranch->branch_id;
-            $firstFinance->credit = $PricesSum;
-            $firstFinance->debit = 0;
-            $firstFinance->gl_item_id = $stockBranch->gl_item_id;
+                
+                //Make Finance Entry
+                $finAbdate = Stocks_transaction::where('id', $id)->first();
+                $stockBranch = Stock::where('id', $request->input('stock_id'))->first();
+                $maxF = Financial_entry::where('trans_type_id', 105)->where('branch_id', $stockBranch->branch_id)->latest('entry_serial')->first();
 
-            $firstFinance->save();
-            //second row
-            $secondFinance = new Financial_entry();
-            $secondFinance->trans_type_id = 105;
-            $secondFinance->entry_serial = $maxF;
-            $secondFinance->entry_date = $finAbdate->transaction_date;
-            $secondFinance->stock_id = $finAbdate->primary_stock_id;
-            $secondFinance->branch_id = $stockBranch->branch_id;
-            $secondFinance->debit = $PricesSum;
-            $secondFinance->credit =0;
-            $secondFinance->gl_item_id = Financial_subsystem::where('id', 103)->first()->gl_item_id ?? 0;
+                $maxF = ($maxF != null) ? intval($maxF['entry_serial']) : 0;
+                $maxF++;
+                //sum of prices
+                $PricesSum = 0.0;
 
-            $secondFinance->save();
+                foreach ($financeArray as $finance) {
 
-            //End Finance
+                    $PricesSum += $finance['totalPrice'];
+                }
+                //Finance Entry add 2 records
+
+                $firstFinance = new Financial_entry();
+                $firstFinance->trans_type_id = 105;
+                $firstFinance->entry_serial = $maxF;
+                $firstFinance->entry_date = $finAbdate->transaction_date;
+                $firstFinance->stock_id = $finAbdate->primary_stock_id;
+                $firstFinance->branch_id = $stockBranch->branch_id;
+                $firstFinance->credit = $PricesSum;
+                $firstFinance->debit = 0;
+                $firstFinance->gl_item_id = $stockBranch->gl_item_id;
+
+                $firstFinance->save();
+                //second row
+                $secondFinance = new Financial_entry();
+                $secondFinance->trans_type_id = 105;
+                $secondFinance->entry_serial = $maxF;
+                $secondFinance->entry_date = $finAbdate->transaction_date;
+                $secondFinance->stock_id = $finAbdate->primary_stock_id;
+                $secondFinance->branch_id = $stockBranch->branch_id;
+                $secondFinance->debit = $PricesSum;
+                $secondFinance->credit = 0;
+                $secondFinance->gl_item_id = Financial_subsystem::where('id', 103)->first()->gl_item_id ?? 0;
+
+                $secondFinance->save();
+
+                //End Finance
 
             }
             // $trans = Stocks_transaction::create($data);

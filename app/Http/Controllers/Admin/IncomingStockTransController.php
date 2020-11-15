@@ -98,6 +98,7 @@ class IncomingStockTransController extends Controller
         $financeArray = [];
         $detailsUpdate = [];
         $updateTotals = [];
+        $itemsTableUpdates = [];
         for ($i = 1; $i <= $counterrrr; $i++) {
             $itemTrams = Stock_transaction_item::where('id', $request->get('transItem' . $i))->first();
 
@@ -122,10 +123,37 @@ class IncomingStockTransController extends Controller
                     ];
                     array_push($financeArray, $finance);
                 }
-                }
                 
+                //update items table
+            $detailItem = [
+
+                'item_id' => $detailUpdate['item_id'],
+
+                'item_total_qty' => $detailUpdate['item_qty'],
+
+
+            ];
+            array_push($itemsTableUpdates, $detailItem); 
+
+        }
             }
         }
+
+
+                //udate items table array 
+                $table_items = array();
+                $all = 0;
+                foreach ($itemsTableUpdates as $item) {
+        
+                    if (isset($table_items[$item['item_id']])) {
+        
+                        $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                    } else {
+                        $table_items[$item['item_id']] = $item;
+                    }
+                }
+        
+                \Log::info(['order_products', $table_items]);
         // Master
 
         $max = Stocks_transaction::where('transaction_type_id', 106)->where('primary_stock_id', $request->input('stock_id'))->latest('code')->first();
@@ -199,6 +227,14 @@ class IncomingStockTransController extends Controller
                     $outGoing->rcvd_confirmed = 1;
                     $outGoing->update();
                 }
+            }
+
+              //update item table
+              foreach ($table_items as $table_item) {
+                $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                $itmUpdate->item_total_qty = $itmUpdate->item_total_qty + $table_item['item_total_qty'];
+                $itmUpdate->item_total_cost = $itmUpdate->item_total_qty * $itmUpdate->average_price;
+                $itmUpdate->update();
             }
 
             //Make Finance Entry

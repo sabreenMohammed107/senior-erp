@@ -338,7 +338,6 @@
 										</div>
 										<div id="collapse{{$i+1}}" class="panel-collapse panel-ic collapse">
 											<div class="panel-body admin-panel-content animated bounce">
-												<button class="btn btn-primary waves-effect waves-light mg-b-15">تعديل الإستلام</button>
 												<table class="table-striped" id="table" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="false" data-cookie="true" data-cookie-id-table="saveId" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" style="direction:rtl;">
 													<thead>
 														<tr>
