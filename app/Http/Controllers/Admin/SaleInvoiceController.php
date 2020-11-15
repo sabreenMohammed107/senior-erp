@@ -135,6 +135,7 @@ class SaleInvoiceController extends Controller
         $qunty = 1;
         $disc = 0;
         $financeArray = [];
+        $itemsTableUpdates = [];
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
             $item = Item::where('id',  $request->get('select' . $i))->first();
@@ -181,6 +182,19 @@ class SaleInvoiceController extends Controller
                     ];
                     array_push($financeArray, $finance);
                 }
+
+                //update items table
+                $detailItem = [
+
+                    'item_id' => $detail['item_id'],
+
+                    'item_total_qty' => $detail['item_qty']+$detail['item_bonus_qty'],
+                    'item_total_cost' =>$detail['item_price'],
+                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty']+$detail['item_bonus_qty']),
+
+
+                ];
+                array_push($itemsTableUpdates, $detailItem);
             }
         }
         //from order item
@@ -237,9 +251,36 @@ class SaleInvoiceController extends Controller
                 ];
                 array_push($financeArray, $finance);
             }
+
+            //update item table
+            $detailUpdateItem = [
+
+                'item_id' => $detailUpdate['item_id'],
+                'item_total_qty' =>$detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
+                'item_total_cost' => $detailUpdate['item_price'],
+                'total_line_cost' => $detailUpdate['item_price'] * ($detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty']),
+
+
+            ];
+            array_push($itemsTableUpdates, $detailUpdateItem);
         }
         Log::info($counterrrr);
+        //udate items table array 
+        $table_items = array();
+        $all = 0;
+        foreach ($itemsTableUpdates as $item) {
 
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
+            } else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products', $table_items]);
         // Master
         $personObj = Person::where('id', $request->get('clientPerson'))->first();
         $max = Invoice::where('branch_id', $request->input('branch'))->where('invoice_type_id', 1)->latest('invoice_no')->first();
@@ -321,7 +362,14 @@ class SaleInvoiceController extends Controller
                 $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
 
-
+                //update item table qty 
+                //update item table
+                foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty = $itmUpdate->item_total_qty - $table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost = $itmUpdate->item_total_qty * $itmUpdate->average_price;
+                    $itmUpdate->update();
+                }
                 //Make Finance Entry
                 $stockBranch = Stock::where('id',  $data['stock_id'])->first();
                 $maxF = Financial_entry::where('trans_type_id', 110)->where('branch_id', $data['branch_id'])->latest('entry_serial')->first();
@@ -620,6 +668,7 @@ class SaleInvoiceController extends Controller
         $qunty = 1;
         $disc = 0;
         $financeArray = [];
+        $itemsTableUpdates = [];
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
             $item = Item::where('id',  $request->get('select' . $i))->first();
@@ -658,7 +707,7 @@ class SaleInvoiceController extends Controller
                     'item_price' => $detail['item_price'],
                     'total_line_cost' => $detail['total_line_cost'],
                     'item_disc_perc' => $detail['item_disc_perc'],
-                    'item_disc_value' =>$detail['item_disc_value'],
+                    'item_disc_value' => $detail['item_disc_value'],
                     'item_bonus_qty' => $detail['item_bonus_qty'],
                     'item_vat_value' => $detail['item_vat_value'],
                     'final_line_cost' => $detail['final_line_cost'],
@@ -672,6 +721,19 @@ class SaleInvoiceController extends Controller
                     ];
                     array_push($financeArray, $finance);
                 }
+
+                 //update items table
+                 $detailItem = [
+
+                    'item_id' => $detail['item_id'],
+
+                    'item_total_qty' => $detail['item_qty']+$detail['item_bonus_qty'],
+                    'item_total_cost' =>$detail['item_price'],
+                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty']+$detail['item_bonus_qty']),
+
+
+                ];
+                array_push($itemsTableUpdates, $detailItem);
             }
         }
         //from order item
@@ -721,7 +783,7 @@ class SaleInvoiceController extends Controller
                 'item_price' => $detailUpdate['item_price'],
                 'total_line_cost' => $detailUpdate['total_line_cost'],
                 'item_disc_perc' => $detailUpdate['item_disc_perc'],
-                'item_disc_value' =>$detailUpdate['item_disc_value'],
+                'item_disc_value' => $detailUpdate['item_disc_value'],
                 'item_bonus_qty' => $detailUpdate['item_bonus_qty'],
                 'item_vat_value' => $detailUpdate['item_vat_value'],
                 'final_line_cost' => $detailUpdate['final_line_cost'],
@@ -736,8 +798,34 @@ class SaleInvoiceController extends Controller
                 ];
                 array_push($financeArray, $finance);
             }
+             //update item table
+             $detailUpdateItem = [
+
+                'item_id' => $detailUpdate['item_id'],
+                'item_total_qty' =>$detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
+                'item_total_cost' => $detailUpdate['item_price'],
+                'total_line_cost' => $detailUpdate['item_price'] * ($detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty']),
+
+            ];
+            array_push($itemsTableUpdates, $detailUpdateItem);
         }
         Log::info($counterrrr);
+           //udate items table array 
+           $table_items = array();
+           $all = 0;
+           foreach ($itemsTableUpdates as $item) {
+   
+               if (isset($table_items[$item['item_id']])) {
+   
+                   $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                   $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                   $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
+               } else {
+                   $table_items[$item['item_id']] = $item;
+               }
+           }
+   
+           \Log::info(['order_products', $table_items]);
 
         // Master
 
@@ -812,6 +900,20 @@ class SaleInvoiceController extends Controller
 
                 $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
+
+                //update item table
+                foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty = $itmUpdate->item_total_qty - $table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost = $itmUpdate->item_total_qty * $itmUpdate->average_price;
+                    $itmUpdate->update();
+                }
+
+
+
+
+
+
                 //Make Finance Entry
                 $stockBranch = Stock::where('id',  $data['stock_id'])->first();
                 $maxF = Financial_entry::where('trans_type_id', 110)->where('branch_id', $data['branch_id'])->latest('entry_serial')->first();
@@ -1289,7 +1391,7 @@ class SaleInvoiceController extends Controller
         }
     }
     public function personData(Request $req)
-   
+
     {
         \Log::info('message');
         if ($req->ajax()) {
