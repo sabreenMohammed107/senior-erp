@@ -514,9 +514,9 @@ class StocksController extends Controller
                 //update item table
                 foreach ($table_items as $table_item) {
                     $itmUpdate = Item::where('id', $table_item['item_id'])->first();
-                    $itmUpdate->item_total_qty=$table_item['item_total_qty'];
-                    $itmUpdate->item_total_cost=$table_item['item_total_qty'];
-                    $itmUpdate->average_price=$table_item['total_line_cost']/$table_item['item_total_qty'];
+                    $itmUpdate->item_total_qty=$itmUpdate->item_total_qty+$table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost=$itmUpdate->item_total_cost+$table_item['item_total_qty'];
+                    $itmUpdate->average_price=$itmUpdate->item_total_cost/$itmUpdate->item_total_qty;
                     $itmUpdate->update();
                 }
             
