@@ -335,7 +335,6 @@ class SaleOrderController extends Controller
         }
 
         $data = [
-            'purch_order_no' => 4,
             'person_id' => $request->get('person_id'),
             'stock_id' => $request->get('stock_id'),
             'person_name' => $request->get('person_name'),
