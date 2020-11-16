@@ -1409,7 +1409,8 @@ class SaleInvoiceController extends Controller
 
             // $data = Order::where('person_id', $select_value)->where('confirmed', 1)->get();
             $invOrders = Invoice::where('branch_id', $personObj->branch_id)->where('invoice_type_id', 1)->pluck('order_id');
-            $data = Order::where('person_id', $select_value)->where('order_status_id', 101)->whereNotIn('id',$invOrders)->get();
+            
+            $data = Order::where('person_id', $select_value)->where('order_decision_status_id', 101)->whereNotIn('id',$invOrders)->get();
 
 
 
