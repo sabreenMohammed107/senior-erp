@@ -172,7 +172,7 @@ tbody tr td,th{
                     <td>{{$TransItem->batch_no}}</td>
                     <td>{{date('d-m-Y', strtotime($TransItem->expired_date))}}</td>
                     <td>{{$TransItem->item_qty}}</td>
-                    <td>{{$TransItem->item_qty * $TransItem->item->average_price}}جم</td>
+                    <td>{{$TransItem->item_qty * $TransItem->item->average_price}}</td>
                     <td>{{$TransItem->item_bonus_qty}}</td>
                     <td>{{$TransItem->notes}}</td>
                 </tr>
@@ -206,7 +206,7 @@ tbody tr td,th{
                     <td>{{$Batch->batch_no}}</td>
                     <td>{{date('d-m-Y', strtotime($Batch->expired_date))}}</td>
                     <td>{{$Batch->item_total_qty}}</td>
-                    <td>{{$Batch->item->average_price*$Batch->item_total_qty}}جم</td>
+                    <td>{{$Batch->item->average_price*$Batch->item_total_qty}}</td>
                     <td>{{$Batch->item_qty_unconfirmed}}</td>
                     <td>{{$Batch->notes}}</td>
                 </tr>
@@ -229,9 +229,9 @@ tbody tr td,th{
                 <tr>
                     <td>{{$Item->ar_name}}</td>
                     <td>{{$Item->item_total_qty}}</td>
-                    <td>{{$Item->total_item_price}}جم</td>
+                    <td>{{$Item->total_item_price}}</td>
                     <td>{{$Item->item_qty_unconfirmed}}</td>
-                    <td>{{$Item->average_price}}جم</td>
+                    <td>{{$Item->average_price}}</td>
                 </tr>
             @endforeach
         </tbody>
