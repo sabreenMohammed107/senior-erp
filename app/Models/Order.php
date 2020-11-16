@@ -49,5 +49,10 @@ class Order extends Model
         return $this->belongsTo('App\Models\Order_status','order_status_id');
     }
 
+    public function decision()
+    {
+        return $this->belongsTo('App\Models\Order_decision_status','order_decision_status_id');
+    }
+
 
 }

@@ -156,6 +156,7 @@ class SaleOrderController extends Controller
             'order_type_id' => 1,
             'order_description' => $request->get('order_description'),
             'order_decision_status_id'=>100,
+            'order_status_id'=>100,
             'currency_id' => $request->get('currency_id'),
             'sales_rep_id' => $saleCode->id ?? 0,
             'marketing_rep_id' => $MarktCode->id ?? 0,

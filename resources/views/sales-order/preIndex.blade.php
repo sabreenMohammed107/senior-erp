@@ -72,7 +72,7 @@
 			<td>{{$order->order_description}}</td>
 			<td>{{$order->status->ar_name ?? ''}}  </td>
 			<td>{{$order->order_value}}</td>
-			<td> {{$order->order_decision_status_id}}</td>
+			<td> {{$order->decision->ar_name ?? ''}}</td>
 			<td>{{$order->branch->ar_name ?? ''}}</td>
 			<td>
 				<div class="product-buttons">
