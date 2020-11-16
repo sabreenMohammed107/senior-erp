@@ -1272,41 +1272,44 @@
     }
 
     function maxQty(index) {
-        var max = $("#qty" + index + "").attr('max');
-        var price = $("#itemprice" + index + "").val();
-        var qty = $("#qty" + index + "").val();
-        var bonas = $("#itemBonas" + index + "").val();
-        var per = $("#per" + index + "").val();
-        var sum = parseFloat(qty) + parseFloat(bonas);
-        var totalvat = $("#totalvat" + index + "").text();
-        var totBon = (price * qty + price * bonas) - disval;
-        if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
-            $('#myModal').modal('show');
+     
+     var max = $("#qty" + index + "").attr('max');
+          var price = $("#itemprice" + index + "").val();
+     var qty = $("#qty" + index + "").val();
+     var per = $("#per" + index + "").val();
+     var bons = $("#itemBonas" + index + "").val();
+     var totalvat = $("#totalvat" + index + "").text();
+     var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
+     var disval = $("#disval" + index + "").val();
+     var totBon = (price * qty + price * bons) - disval;
+     var sum = parseFloat(qty) + parseFloat(bonas);
+     if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
+         $('#myModal').modal('show');
 
-            $("#qty" + index).val(1);
-            $("#itemBonas" + index).val(1);
+         $("#qty" + index).val(1);
+         $("#itemBonas" + index).val(1);
 
-        } else {
-            $("#qty" + index).val(qty);
-            $("#itemBonas" + index).val(bonas);
+     } else {
+         $("#qty" + index).val(qty);
+         $("#itemBonas" + index).val(bonas);
 
-        }
-
-
+     }
 
 
-        $("#total" + index + "").text((price * qty).toFixed(2));
-        var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
-        var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
-        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
-        headCalculations(index);
-        $("#qty" + index).attr('value', qty);
-    }
+     $("#total" + index + "").text((price * qty).toFixed(2));
+     var Amount = (price * qty) * per;
+     $("#disval" + index).attr('value', Amount.toFixed(2));
+     var disval = $("#disval" + index + "").val();
+
+     $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+     $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+     $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+
+     headCalculations(index);
+     $("#qty" + index).attr('value', qty);
+ }
 
     // Delete DB row functions
     function DeleteInvoiceItem(id, index) {
