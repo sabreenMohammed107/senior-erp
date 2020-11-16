@@ -275,7 +275,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
@@ -493,7 +493,11 @@
                                 </div>
 
                                 <h3 style="text-align:right">الأصناف</h3>
-                                <table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true" data-pagination-pre-text="السابق" data-pagination-next-text="التالي" data-show-export="true" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]" data-sort-name="index" data-sort-order="desc" data-search="true" style="direction:rtl" data-toggle="table" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="true" data-show-fullscreen="true" data-show-columns-toggle-all="true">
+                                <table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true"
+                                 data-pagination-pre-text="السابق" data-pagination-next-text="التالي" 
+                                 data-show-export="true" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]"
+                                  data-sort-name="index" data-sort-order="asc" data-search="true" style="direction:rtl"
+                                   data-toggle="table" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="true" data-show-fullscreen="true" data-show-columns-toggle-all="true">
                                     <thead>
                                         <tr>
                                             <th data-field="state" data-checkbox="false"></th>
