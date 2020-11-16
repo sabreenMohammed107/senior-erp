@@ -848,7 +848,6 @@
         $('select[name="pay_type_id"]').on('change', function(ev) {
             // var previous = currentV();
 
-            // alert(retval);
             var paytype = $(this).val();
 
             // var confirmc = confirm(' هذا التعديل سيقوم بمسح الاصناف بالكامل ');
@@ -1147,7 +1146,6 @@
         var disval = $("#disval" + index + "").val();
 
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        alert(parseFloat((price * ss) - disval) + "vat" + totalvat);
         $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
@@ -1270,7 +1268,6 @@
 
         var retval;
         retval = $('#pay_type_id ').val();
-        // alert(retval);
         return retval;
     }
 
