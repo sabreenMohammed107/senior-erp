@@ -10,6 +10,8 @@ $counterrrr = 1;
 @foreach($transItems as $i=> $itemo)
 
 <tr data-id="{{$counter}}">
+<input type="number" style="display: none;" value="{{$counter}}" name="counterStore" id="counter"  class="form-control" placeholder="">
+
 <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_trans_id{{$counter}}" id="item_trans_id{{$counter}}"  class="form-control " placeholder="">
 <input type="number" style="display: none;" value="{{$itemo->transaction_id}}" name="transaction_id" id="transaction_id"  class="form-control " placeholder="">
 <input type="number" style="display: none;" value="{{$itemo->item_id}}" name="selectup{{$counter}}" id="selectup{{$counter}}"  class="form-control " placeholder="">

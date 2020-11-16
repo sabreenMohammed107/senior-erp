@@ -365,7 +365,7 @@ class StocksController extends Controller
             }
         }
         \Log::info($request->get('rowCountStore'));
-        $counterrrr = $request->get('qqq');
+        $counterrrr = $request->get('counterStore');
 
         $detailsUpdate = [];
 
@@ -392,7 +392,7 @@ class StocksController extends Controller
                 'item_total_cost' => $request->get('itempriceup' . $i),
                 'total_line_cost' => $request->get('itempriceup' . $i) * $request->get('qtyup' . $i),
 
-                'average_price' => ($request->get('itempriceup' . $i) * $request->get('qtyup' . $i))/$request->get('qtyup' . $i),
+                'average_price' => ($request->get('itempriceup' . $i) * $request->get('qtyup' . $i))/ $request->get('qtyup' . $i),
               
             ];
             array_push($detailsUpdate, $detailUpdate);
