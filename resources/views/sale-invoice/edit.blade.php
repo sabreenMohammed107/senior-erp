@@ -718,21 +718,51 @@
 
         })
         //client order
-        $('select[name="clientPerson"]').on('change', function() {
+        // $('select[name="clientPerson"]').on('change', function() {
+        //     var person = $(this).val();
+        //     var personText = $('select[name="clientPerson"] option:selected').text();
+
+        //     $.ajax({
+        //         url: "{{route('dynamicOrderInvoice.fetch')}}",
+        //         method: "get",
+        //         data: {
+        //             person_id: person,
+
+        //         },
+        //         success: function(result) {
+
+        //             $('#client_name').val(personText);
+        //             $('#orderPersons').html(result).trigger('chosen:updated');
+
+
+
+        //         }
+        //     });
+
+        // });
+
+         //client order
+         $('select[name="clientPerson"]').on('change', function() {
             var person = $(this).val();
             var personText = $('select[name="clientPerson"] option:selected').text();
 
             $.ajax({
-                url: "{{route('dynamicOrderInvoice.fetch')}}",
+                url: "{{route('dynamicPersonInvoice.fetch')}}",
                 method: "get",
                 data: {
                     person_id: person,
 
                 },
-                success: function(result) {
+                success: function(data) {
+
+                    var result = $.parseJSON(data);
 
                     $('#client_name').val(personText);
-                    $('#orderPersons').html(result).trigger('chosen:updated');
+
+                    $("#sale_name").val(result[1]);
+
+                    $("#market_name").val(result[3]);
+                    $('#orderPersons').html(result[5]).trigger('chosen:updated');
 
 
 

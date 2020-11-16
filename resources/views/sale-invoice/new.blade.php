@@ -388,11 +388,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                             <select data-placeholder="إختر أمر البيع" id="orderPersons" class="chosen-select" name="orderPersons" tabindex="-1">
-                                                                @foreach($orders as $order)
-                                         
-                                                                <option value="{{$order->id}}">{{$order->purch_order_no}} / {{ date_format( date_create($order->order_date),"d-m-Y")}}</option>
-
-                                                                @endforeach
+                                                               
                                                             </select>
                                                         </div>
                                                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -714,7 +710,8 @@
                     $("#sale_name").val(result[1]);
 
                     $("#market_name").val(result[3]);
-                    $('#orderPersons').html(result).trigger('chosen:updated');
+                    
+                    $('#orderPersons').html(result[5]).trigger('chosen:updated');
 
 
 

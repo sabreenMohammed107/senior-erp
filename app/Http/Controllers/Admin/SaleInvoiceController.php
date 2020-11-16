@@ -101,8 +101,8 @@ class SaleInvoiceController extends Controller
 
         $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
         $orderItems = [];
-        $invOrders=Invoice::where('branch_id', $id)->where('invoice_type_id', 1)->pluck('order_id');
-        $orders = Order::where('order_status_id',101)->whereNotIn( 'id', $invOrders)->get();
+        $invOrders = Invoice::where('branch_id', $id)->where('invoice_type_id', 1)->pluck('order_id');
+        $orders = Order::where('order_status_id', 101)->get();
         return view($this->viewName . 'new', compact('stocks', 'persons', 'orders', 'branch', 'orderItems', 'saleCodes', 'MarktCodes', 'paytypes', 'currencies'));
     }
 
@@ -189,9 +189,9 @@ class SaleInvoiceController extends Controller
 
                     'item_id' => $detail['item_id'],
 
-                    'item_total_qty' => $detail['item_qty']+$detail['item_bonus_qty'],
-                    'item_total_cost' =>$detail['item_price'],
-                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty']+$detail['item_bonus_qty']),
+                    'item_total_qty' => $detail['item_qty'] + $detail['item_bonus_qty'],
+                    'item_total_cost' => $detail['item_price'],
+                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty'] + $detail['item_bonus_qty']),
 
 
                 ];
@@ -257,7 +257,7 @@ class SaleInvoiceController extends Controller
             $detailUpdateItem = [
 
                 'item_id' => $detailUpdate['item_id'],
-                'item_total_qty' =>$detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
+                'item_total_qty' => $detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
                 'item_total_cost' => $detailUpdate['item_price'],
                 'total_line_cost' => $detailUpdate['item_price'] * ($detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty']),
 
@@ -723,14 +723,14 @@ class SaleInvoiceController extends Controller
                     array_push($financeArray, $finance);
                 }
 
-                 //update items table
-                 $detailItem = [
+                //update items table
+                $detailItem = [
 
                     'item_id' => $detail['item_id'],
 
-                    'item_total_qty' => $detail['item_qty']+$detail['item_bonus_qty'],
-                    'item_total_cost' =>$detail['item_price'],
-                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty']+$detail['item_bonus_qty']),
+                    'item_total_qty' => $detail['item_qty'] + $detail['item_bonus_qty'],
+                    'item_total_cost' => $detail['item_price'],
+                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty'] + $detail['item_bonus_qty']),
 
 
                 ];
@@ -799,11 +799,11 @@ class SaleInvoiceController extends Controller
                 ];
                 array_push($financeArray, $finance);
             }
-             //update item table
-             $detailUpdateItem = [
+            //update item table
+            $detailUpdateItem = [
 
                 'item_id' => $detailUpdate['item_id'],
-                'item_total_qty' =>$detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
+                'item_total_qty' => $detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
                 'item_total_cost' => $detailUpdate['item_price'],
                 'total_line_cost' => $detailUpdate['item_price'] * ($detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty']),
 
@@ -811,22 +811,22 @@ class SaleInvoiceController extends Controller
             array_push($itemsTableUpdates, $detailUpdateItem);
         }
         Log::info($counterrrr);
-           //udate items table array 
-           $table_items = array();
-           $all = 0;
-           foreach ($itemsTableUpdates as $item) {
-   
-               if (isset($table_items[$item['item_id']])) {
-   
-                   $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
-                   $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
-                   $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
-               } else {
-                   $table_items[$item['item_id']] = $item;
-               }
-           }
-   
-           \Log::info(['order_products', $table_items]);
+        //udate items table array 
+        $table_items = array();
+        $all = 0;
+        foreach ($itemsTableUpdates as $item) {
+
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
+            } else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products', $table_items]);
 
         // Master
 
@@ -1406,7 +1406,22 @@ class SaleInvoiceController extends Controller
 
             $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
 
-            echo json_encode(array($saleCode->code ?? '', $saleCode->ar_name ?? '', $MarktCode->code ?? '', $MarktCode->ar_name ?? '', $personObj->name));
+
+            // $data = Order::where('person_id', $select_value)->where('confirmed', 1)->get();
+            $invOrders = Invoice::where('branch_id', $personObj->branch_id)->where('invoice_type_id', 1)->pluck('order_id');
+            $data = Order::where('person_id', $select_value)->where('order_status_id', 101)->whereNotIn('id',$invOrders)->get();
+
+
+
+            $output = '<option value="" >إختر أمر البيع</option>';
+            foreach ($data as $row) {
+
+                $output .= '<option value="' . $row->id . '">' . $row->purch_order_no . '-' . $row->person_name . '</option>';
+            }
+
+
+
+            echo json_encode(array($saleCode->code ?? '', $saleCode->ar_name ?? '', $MarktCode->code ?? '', $MarktCode->ar_name ?? '', $personObj->name, $output));
         }
     }
 }
