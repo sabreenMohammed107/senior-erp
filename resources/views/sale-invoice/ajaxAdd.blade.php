@@ -37,7 +37,7 @@
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px"  min="0" value="0"  onfocusout="maxQty({{$rowCount}})"  name="itemBonas{{$rowCount}}" id="itemBonas{{$rowCount}}" class="form-control " placeholder="">
+            <input type="number" style="width: 200px"  min="0" value="0" oninput="itemBons({{$rowCount}})"  onfocusout="maxQty({{$rowCount}})"  name="itemBonas{{$rowCount}}" id="itemBonas{{$rowCount}}" class="form-control " placeholder="">
         </div>
     </td>
     <td>

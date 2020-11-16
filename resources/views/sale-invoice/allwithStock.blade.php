@@ -56,7 +56,7 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px" oninput="itemBonas({{$counter}})" value="0"  name="upitemBonas{{$counter}}" id="itemBonas{{$counter}}" class="form-control " placeholder="">
+            <input type="number" style="width: 200px" oninput="itemBons({{$counter}})" value="0"  name="upitemBonas{{$counter}}" id="itemBonas{{$counter}}" class="form-control " placeholder="">
         </div>
     </td>
     <td>
@@ -92,7 +92,8 @@ $counterrrr = 1;
     
     </td>
     <td id="finalAll{{$counter}}" class="total_item_final">
-        {{ $itemo->final_line_cost - ($itemo->final_line_cost  *  $itemo->item->vat_value)}}
+ 
+        {{ $itemo->final_line_cost + ($itemo->final_line_cost  *  $itemo->item->vat_value)}}
     </td>
    
     <td>
