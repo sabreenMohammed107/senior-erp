@@ -70,10 +70,10 @@
 			</td>
 			<td>{{$order->person_name}}</td>
 			<td>{{$order->order_description}}</td>
-			<td>حالة أمر البيع</td>
+			<td>{{$order->status->ar_name ?? ''}}  </td>
 			<td>{{$order->order_value}}</td>
-			<td>تمت الموافقة</td>
-			<td>فرع القاهرة</td>
+			<td> {{$order->order_decision_status_id}}</td>
+			<td>{{$order->branch->ar_name ?? ''}}</td>
 			<td>
 				<div class="product-buttons">
 					<!-- <button data-toggle="tooltip" title="View" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button> -->

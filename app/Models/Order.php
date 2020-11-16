@@ -39,4 +39,15 @@ class Order extends Model
         return $this->hasMany('App\Models\Order_item','order_id','id');
     }
 
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch','branch_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo('App\Models\Order_status','order_status_id');
+    }
+
+
 }
