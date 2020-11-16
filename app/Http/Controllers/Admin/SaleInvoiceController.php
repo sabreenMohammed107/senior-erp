@@ -101,7 +101,8 @@ class SaleInvoiceController extends Controller
 
         $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
         $orderItems = [];
-        $orders = [];
+        $invOrders=Invoice::where('branch_id', $id)->where('invoice_type_id', 1)->pluck('order_id');
+        $orders = Order::where('order_status_id',101)->whereNotIn( 'id', $invOrders)->get();
         return view($this->viewName . 'new', compact('stocks', 'persons', 'orders', 'branch', 'orderItems', 'saleCodes', 'MarktCodes', 'paytypes', 'currencies'));
     }
 

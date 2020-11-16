@@ -54,5 +54,10 @@ class Order extends Model
         return $this->belongsTo('App\Models\Order_decision_status','order_decision_status_id');
     }
 
+    public function invoice()
+    {
+        return $this->hasMany('App\Models\Invoice','order_id','id');
+    }
+
 
 }

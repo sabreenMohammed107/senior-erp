@@ -61,4 +61,9 @@ class Invoice extends Model
     {
         return $this->belongsTo('App\Models\Person','person_id');
     }
+
+    public function order()
+    {
+        return $this->belongsTo('App\Models\Orders','order_id');
+    }
 }
