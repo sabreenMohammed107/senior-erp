@@ -1080,7 +1080,7 @@
     }
 
     function itemBons(index) {
-        alert('bonaxxxce');
+      
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
@@ -1237,6 +1237,7 @@
         var sum = parseFloat(qty) + parseFloat(bonas);
         var totalvat = $("#totalvat" + index + "").text();
         var totBon = (price * qty + price * bonas) - disval;
+        alert('xx'+sum);
         if (jQuery('#qty' + index).val() + jQuery("#itemBonas" + index).val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');
 
