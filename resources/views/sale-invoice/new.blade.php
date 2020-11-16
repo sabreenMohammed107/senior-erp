@@ -1227,7 +1227,7 @@
     }
 
     function maxQty(index) {
-        alert('bonace');
+     
         var max = $("#qty" + index + "").attr('max');
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
@@ -1238,7 +1238,7 @@
         var totalvat = $("#totalvat" + index + "").text();
         var totBon = (price * qty + price * bonas) - disval;
         alert('xx'+sum);
-        if (jQuery('#qty' + index).val() + jQuery("#itemBonas" + index).val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
+        if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');
 
             $("#qty" + index).val(1);
@@ -1257,7 +1257,6 @@
         var Amount = (price * qty) * per;
         $("#disval" + index).attr('value', Amount);
         var disval = $("#disval" + index + "").val();
-        alert(parseFloat((price * ss)) + "vat" + totalvat);
         $("#final" + index + "").text((price * qty) - disval);
         $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));

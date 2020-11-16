@@ -1283,7 +1283,7 @@
         var sum = parseFloat(qty) + parseFloat(bonas);
         var totalvat = $("#totalvat" + index + "").text();
         var totBon = (price * qty + price * bonas) - disval;
-        if (jQuery('#qty' + index).val() + jQuery("#itemBonas" + index).val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
+        if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');
 
             $("#qty" + index).val(1);
