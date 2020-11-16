@@ -18,7 +18,7 @@ $counterrrr = 1;
         <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
         <input type="hidden" id="upitemId{{$counter}}" name="upitemId{{$counter}}" readonly value="{{$itemo->item_id}}">
 
-        <span id="item_search{{$counter}}" style="display:none;"></span>
+        <span id="item_search{{$counter}}" style="display:none;">{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}</span>
 
     </td>
     <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
@@ -38,7 +38,7 @@ $counterrrr = 1;
     <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}">
     <input type="hidden" id="upitemBatch{{$counter}}" name="upitemBatch{{$counter}}" readonly value="{{$data->id}}">
 
-   <span id="batch_search{{$counter}}" style="display:none;"></span>
+   <span id="batch_search{{$counter}}" style="display:none;">{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}</span>
     </td>
     <td id="batchNum{{$counter}}" class="batchNum">{{$itemo->batch_no}} </td>
     <?php

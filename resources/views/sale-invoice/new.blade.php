@@ -787,6 +787,30 @@
             });
 
         });
+
+      //filter
+      $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#table > tbody > tr").filter(function() {
+                var row_num = $(this).attr('data-id');
+                $(this).toggle(
+                    $('#item_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                    $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1 
+                   
+
+                );
+            });
+
+        });
+
+
+
+
+
+
+
+
+
         //paytype
 
 
@@ -978,7 +1002,7 @@
             }
         });
 
-
+        $('#item_search' + index).text(text);
     }
     /**@abstract */
     function editSelectBatch(index) {
@@ -1022,7 +1046,7 @@
                 console.log(request.responseText);
             }
         });
-
+        $('#batch_search' + index).text(text);
 
     }
     //price
