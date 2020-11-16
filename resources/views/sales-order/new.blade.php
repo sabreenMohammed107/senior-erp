@@ -805,7 +805,7 @@
                 $("#qty" + index).attr('max', result[2]);
 
                 $("#itemprice" + index + "").attr('value', result[3]);
-                $("#disval" + index + "").attr('value', result[4]);
+                $("#per" + index + "").attr('value', result[4]);
 
 
                 //dis 
