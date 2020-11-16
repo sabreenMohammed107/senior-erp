@@ -835,8 +835,9 @@
         var disval = $("#disval" + index + "").val();
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc.toFixed(3));
-
+        // $("#per" + index).val(cc.toFixed(3));
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         $("#total" + index + "").text((price * qty).toFixed(2));
 
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
@@ -880,7 +881,9 @@
         var disval = $("#disval" + index + "").val();
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc.toFixed(3));
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount.toFixed(2));
+        // $("#per" + index).val(cc.toFixed(3));
 
         $("#total" + index + "").text((price * qty).toFixed(2));
 
