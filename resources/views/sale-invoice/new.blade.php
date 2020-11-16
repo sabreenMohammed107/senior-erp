@@ -1031,9 +1031,9 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
 
@@ -1057,9 +1057,9 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
         // if (bons > 0) {
@@ -1086,9 +1086,9 @@
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
 
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
         // if (bons > 0) {
@@ -1105,16 +1105,16 @@
 
         headCalculations(index);
 
-        $("#bonas" + index).attr('value', bons);
+        $("#itemBonas" + index).attr('value', bons);
     }
     //per
     function disPer(index) {
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
 
@@ -1137,9 +1137,9 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var disval = $("#disval" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
 
@@ -1231,6 +1231,7 @@
         var qty = $("#qty" + index + "").val();
         var bonas = $("#itemBonas" + index + "").val();
         var per = $("#per" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var sum = parseFloat(qty) + parseFloat(bonas);
         if (jQuery('#qty' + index).val() + jQuery("#itemBonas" + index ).val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');

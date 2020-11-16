@@ -56,7 +56,7 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px" oninput="itemBonas({{$counter}})" value="{{$itemo->item_qty}}"  name="upitemBonas{{$counter}}" id="itemBonas{{$counter}}" class="form-control " placeholder="">
+            <input type="number" style="width: 200px" oninput="itemBonas({{$counter}})" value="0"  name="upitemBonas{{$counter}}" id="itemBonas{{$counter}}" class="form-control " placeholder="">
         </div>
     </td>
     <td>
