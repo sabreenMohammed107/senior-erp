@@ -275,10 +275,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                                    
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select id="stock_id" disabled name="stock_id" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+                                                                <select id="stock_id" disabled name="stock_id" data-placeholder="Choose a stock..." class="chosen-select" tabindex="-1">
                                                                     @foreach($stocks as $stock)
                                                                     <option @if ($orderObj->stock_id == $stock->id)
                                                                         selected="selected"
@@ -302,7 +303,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="person_name" value="{{$orderObj->person->name ?? ''}}" name="person_name" readonly class="form-control" placeholder="شركة سمارت تك">
+                                                            <input type="text" id="person_name" value="{{$orderObj->person_name ?? ''}}" name="person_name" readonly class="form-control" placeholder=" ">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -458,18 +459,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                    <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control"  placeholder="قيد التنفيذ">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <div class="input-mask-title">
-                                                        <label><b>حالة أمرالبيع</b></label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                         
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
