@@ -770,7 +770,7 @@
                 $("#batchDate" + index + "").text('');
                 $("#batchqty" + index + "").text('');
                 $("#itemprice" + index + "").attr('value', 0);
-                $("#disval" + index + "").attr('value',0);
+                $("#per" + index + "").attr('value',0);
                 headCalculations(index);
 
             },
@@ -809,12 +809,18 @@
                 $("#batchNum" + index + "").text(result[0]);
                 $("#batchDate" + index + "").text(result[1]);
                 $("#batchqty" + index + "").text(result[2]);
+
                 $("#qty" + index).attr('max', result[2]);
-                $("#itemprice" + index + "").attr('value',result[3]);
-                $("#disval" + index + "").attr('value', result[4]);
 
+                $("#itemprice" + index + "").attr('value', result[3]);
+                $("#per" + index + "").attr('value', result[4]);
+
+
+                //dis 
+
+
+                // disval(index);
                 headCalculations(index);
-
 
             },
             error: function(request, status, error) {
@@ -829,6 +835,7 @@
 
 
     }
+
     function itemPrice(index) {
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
@@ -836,8 +843,9 @@
         var disval = $("#disval" + index + "").val();
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc.toFixed(3));
-
+        // $("#per" + index).val(cc.toFixed(3));
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         $("#total" + index + "").text((price * qty).toFixed(2));
 
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
@@ -881,7 +889,9 @@
         var disval = $("#disval" + index + "").val();
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc.toFixed(3));
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount.toFixed(2));
+        // $("#per" + index).val(cc.toFixed(3));
 
         $("#total" + index + "").text((price * qty).toFixed(2));
 
@@ -901,6 +911,7 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
+        
         if( jQuery('#qty'+ index).val() > ( parseInt(jQuery('#qty'+ index).attr('max')) ) ){
                 // if (qty > max) {
                     $('#myModal').modal('show');

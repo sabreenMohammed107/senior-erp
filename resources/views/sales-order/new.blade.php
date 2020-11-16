@@ -762,7 +762,7 @@
                 $("#batchDate" + index + "").text('');
                 $("#batchqty" + index + "").text('');
                 $("#itemprice" + index + "").attr('value', 0);
-                $("#disval" + index + "").attr('value', 0);
+                $("#per" + index + "").attr('value', 0);
 
                 headCalculations(index);
 
