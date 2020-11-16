@@ -741,8 +741,8 @@
 
         // });
 
-         //client order
-         $('select[name="clientPerson"]').on('change', function() {
+        //client order
+        $('select[name="clientPerson"]').on('change', function() {
             var person = $(this).val();
             var personText = $('select[name="clientPerson"] option:selected').text();
 
@@ -1093,7 +1093,7 @@
         $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss)- disval) )* parseFloat(totalvat)).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss) - disval)) * parseFloat(totalvat)).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
@@ -1119,7 +1119,7 @@
         var disval = $("#disval" + index + "").val();
 
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss)- disval) )* parseFloat(totalvat)).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss) - disval)) * parseFloat(totalvat)).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
@@ -1147,162 +1147,161 @@
         var disval = $("#disval" + index + "").val();
 
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-alert(parseFloat(parseFloat((price * ss)- disval) +"vat" +totalvat)
-        $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss)- disval) )* parseFloat(totalvat)).toFixed(2));
-        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+        alert(parseFloat((price * ss) - disval) + "vat" + totalvat);
+         $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss) - disval)) * parseFloat(totalvat)).toFixed(2)); $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
-        headCalculations(index);
+            headCalculations(index);
 
-        $("#itemBonas" + index).attr('value', bons);
-    }
-    //per
-    function disPer(index) {
-        var price = $("#itemprice" + index + "").val();
-        var qty = $("#qty" + index + "").val();
-        var per = $("#per" + index + "").val();
-        var bons = $("#itemBonas" + index + "").val();
-        var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
-        var disval = $("#disval" + index + "").val();
-        var totBon = (price * qty + price * bons) - disval;
+            $("#itemBonas" + index).attr('value', bons);
+        }
+        //per
+        function disPer(index) {
+            var price = $("#itemprice" + index + "").val();
+            var qty = $("#qty" + index + "").val();
+            var per = $("#per" + index + "").val();
+            var bons = $("#itemBonas" + index + "").val();
+            var totalvat = $("#totalvat" + index + "").text();
+            var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
+            var disval = $("#disval" + index + "").val();
+            var totBon = (price * qty + price * bons) - disval;
 
-        // if (bons > 0) {
-        //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
-        // }
-        $("#total" + index + "").text((price * qty).toFixed(2));
-        var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount.toFixed(2));
-        var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss)- disval) )* parseFloat(totalvat)).toFixed(2));
-        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+            // if (bons > 0) {
+            //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
+            // }
+            $("#total" + index + "").text((price * qty).toFixed(2));
+            var Amount = (price * qty) * per;
+            $("#disval" + index).attr('value', Amount.toFixed(2));
+            var disval = $("#disval" + index + "").val();
+            $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+            $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss) - disval)) * parseFloat(totalvat)).toFixed(2));
+            $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
-        headCalculations(index);
-        $("#per" + index).attr('value', per.toFixed(3));
-    }
-    //dis val
-    function disval(index) {
-        var price = $("#itemprice" + index + "").val();
-        var qty = $("#qty" + index + "").val();
-        var disval = $("#disval" + index + "").val();
-        var bons = $("#itemBonas" + index + "").val();
-        var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
-        var disval = $("#disval" + index + "").val();
-        var totBon = (price * qty + price * bons) - disval;
+            headCalculations(index);
+            $("#per" + index).attr('value', per.toFixed(3));
+        }
+        //dis val
+        function disval(index) {
+            var price = $("#itemprice" + index + "").val();
+            var qty = $("#qty" + index + "").val();
+            var disval = $("#disval" + index + "").val();
+            var bons = $("#itemBonas" + index + "").val();
+            var totalvat = $("#totalvat" + index + "").text();
+            var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
+            var disval = $("#disval" + index + "").val();
+            var totBon = (price * qty + price * bons) - disval;
 
-        // if (bons > 0) {
-        //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
-        // }
-        $("#total" + index + "").text((price * qty).toFixed(2));
-        var cc = disval / (price * qty);
+            // if (bons > 0) {
+            //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
+            // }
+            $("#total" + index + "").text((price * qty).toFixed(2));
+            var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc.toFixed(3));
-        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss)- disval) )* parseFloat(totalvat)).toFixed(2));
-        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+            $("#per" + index).val(cc.toFixed(3));
+            $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+            $('#totalcit' + index + "").text((parseFloat(parseFloat((price * ss) - disval)) * parseFloat(totalvat)).toFixed(2));
+            $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
-        headCalculations(index);
-        $("#disval" + index).attr('value', disval.toFixed(2));
-
-    }
-
-    // headCalculations(index);
-    function headCalculations(index) {
-        index = $('#table > tbody > tr').length;
-        var total = 0;
-        var discount = 0;
-        var final = 0;
-        var totalcit = 0;
-        var finalAll = 0
-        var qty = 0
-
-        $('#table > tbody  > tr').each(function() {
-
-
-
-            total += parseFloat($('#total' + index).text());
-
-            discount += parseFloat($('#disval' + index).val());
-
-            final += parseFloat($('#final' + index).text());
-            totalcit += parseFloat($('#totalcit' + index).text());
-            finalAll += parseFloat($('#finalAll' + index).text());
-            qty += parseFloat($('#itemBonas' + index).val());
-
-            --index;
-            console.log(total);
-            console.log(discount);
-
-
-        })
-
-        $('#total_items_price').val(total.toFixed(2));
-        $('#total_items_discount').val(discount.toFixed(2));
-        $('#total_items_vat').val(totalcit.toFixed(2));
-        $('#total_items_finalqty').val(qty.toFixed(2));
-        $('#total_items_all').val(finalAll.toFixed(2));
-        //new
-
-    }
-
-    // bonasDetails(index);
-    function bonasDetails(rowSS) {
-
-        // $('#itemprice' + rowSS).attr("readonly", true);
-        $("#disval" + rowSS).attr("readonly", true);
-        $("#per" + rowSS).attr("readonly", true);
-        $("#qty" + rowSS).attr("readonly", true);
-
-
-    }
-
-    // adsDetails(index);
-    function adsDetails(rowSS) {
-
-        $('#itemBonas' + rowSS).attr("readonly", true);
-
-
-
-    }
-
-    function currentV() {
-
-        var retval;
-        retval = $('#pay_type_id ').val();
-        // alert(retval);
-        return retval;
-    }
-
-    function maxQty(index) {
-        var max = $("#qty" + index + "").attr('max');
-        var price = $("#itemprice" + index + "").val();
-        var qty = $("#qty" + index + "").val();
-        var bonas = $("#itemBonas" + index + "").val();
-        var per = $("#per" + index + "").val();
-        var sum = parseFloat(qty) + parseFloat(bonas);
-        if (jQuery('#qty' + index).val() + jQuery("#itemBonas" + index ).val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
-            $('#myModal').modal('show');
-
-            $("#qty" + index).val(1);
-            $("#itemBonas" + index).val(1);
-
-        } else {
-            $("#qty" + index).val(qty);
-            $("#itemBonas" + index).val(bonas);
+            headCalculations(index);
+            $("#disval" + index).attr('value', disval.toFixed(2));
 
         }
 
+        // headCalculations(index);
+        function headCalculations(index) {
+            index = $('#table > tbody > tr').length;
+            var total = 0;
+            var discount = 0;
+            var final = 0;
+            var totalcit = 0;
+            var finalAll = 0
+            var qty = 0
+
+            $('#table > tbody  > tr').each(function() {
 
 
 
-        $("#total" + index + "").text((price * qty).toFixed(2));
-        var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
-        var disval = $("#disval" + index + "").val();
+                total += parseFloat($('#total' + index).text());
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $('#totalcit' + index + "").text((parseFloat(price * sum)- disval) * parseFloat($("#totalvat" + index).text())).toFixed(2));
+                discount += parseFloat($('#disval' + index).val());
+
+                final += parseFloat($('#final' + index).text());
+                totalcit += parseFloat($('#totalcit' + index).text());
+                finalAll += parseFloat($('#finalAll' + index).text());
+                qty += parseFloat($('#itemBonas' + index).val());
+
+                --index;
+                console.log(total);
+                console.log(discount);
+
+
+            })
+
+            $('#total_items_price').val(total.toFixed(2));
+            $('#total_items_discount').val(discount.toFixed(2));
+            $('#total_items_vat').val(totalcit.toFixed(2));
+            $('#total_items_finalqty').val(qty.toFixed(2));
+            $('#total_items_all').val(finalAll.toFixed(2));
+            //new
+
+        }
+
+        // bonasDetails(index);
+        function bonasDetails(rowSS) {
+
+            // $('#itemprice' + rowSS).attr("readonly", true);
+            $("#disval" + rowSS).attr("readonly", true);
+            $("#per" + rowSS).attr("readonly", true);
+            $("#qty" + rowSS).attr("readonly", true);
+
+
+        }
+
+        // adsDetails(index);
+        function adsDetails(rowSS) {
+
+            $('#itemBonas' + rowSS).attr("readonly", true);
+
+
+
+        }
+
+        function currentV() {
+
+            var retval;
+            retval = $('#pay_type_id ').val();
+            // alert(retval);
+            return retval;
+        }
+
+        function maxQty(index) {
+            var max = $("#qty" + index + "").attr('max');
+            var price = $("#itemprice" + index + "").val();
+            var qty = $("#qty" + index + "").val();
+            var bonas = $("#itemBonas" + index + "").val();
+            var per = $("#per" + index + "").val();
+            var sum = parseFloat(qty) + parseFloat(bonas);
+            if (jQuery('#qty' + index).val() + jQuery("#itemBonas" + index).val() > (parseInt(jQuery('#qty' + index).attr('max')))) {
+                $('#myModal').modal('show');
+
+                $("#qty" + index).val(1);
+                $("#itemBonas" + index).val(1);
+
+            } else {
+                $("#qty" + index).val(qty);
+                $("#itemBonas" + index).val(bonas);
+
+            }
+
+
+
+
+            $("#total" + index + "").text((price * qty).toFixed(2));
+            var Amount = (price * qty) * per;
+            $("#disval" + index).attr('value', Amount);
+            var disval = $("#disval" + index + "").val();
+            alert(parseFloat((price * ss) - disval) + "vat" + totalvat);
+            $("#final" + index + "").text((price * qty) - disval);
+            $('#totalcit' + index + "").text((parseFloat(price * sum) - disval) * parseFloat($("#totalvat" + index).text())).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
