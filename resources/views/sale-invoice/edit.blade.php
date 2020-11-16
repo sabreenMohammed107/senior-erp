@@ -1093,7 +1093,7 @@
         $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(price * ss)- disval) * parseFloat($("#totalvat" + index).text()).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat((price * ss)- disval) * parseFloat($("#totalvat" + index).text())).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
@@ -1119,7 +1119,7 @@
         var disval = $("#disval" + index + "").val();
 
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(price * ss)- disval) * parseFloat($("#totalvat" + index).text()).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat((price * ss)- disval) * parseFloat($("#totalvat" + index).text())).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
@@ -1147,7 +1147,8 @@
         var disval = $("#disval" + index + "").val();
 
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(price * ss)- disval) * parseFloat($("#totalvat" + index).text()).toFixed(2));
+
+        $('#totalcit' + index + "").text((parseFloat((price * ss)- disval) * parseFloat($("#totalvat" + index).text())).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
@@ -1173,7 +1174,7 @@
         $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(price * ss)- disval) * parseFloat($("#totalvat" + index).text()).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat((price * ss)- disval) * parseFloat($("#totalvat" + index).text())).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
@@ -1198,7 +1199,7 @@
 
         $("#per" + index).val(cc.toFixed(3));
         $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-        $('#totalcit' + index + "").text((parseFloat(price * ss)- disval) * parseFloat($("#totalvat" + index).text()).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat((price * ss)- disval) * parseFloat($("#totalvat" + index).text())).toFixed(2));
         $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
