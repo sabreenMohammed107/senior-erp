@@ -1293,7 +1293,7 @@
      var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
      var disval = $("#disval" + index + "").val();
      var totBon = (price * qty + price * bons) - disval;
-     var sum = parseFloat(qty) + parseFloat(bonas);
+     var sum = parseFloat(qty) + parseFloat(bons);
      if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
          $('#myModal').modal('show');
 
@@ -1302,7 +1302,7 @@
 
      } else {
          $("#qty" + index).val(qty);
-         $("#itemBonas" + index).val(bonas);
+         $("#itemBonas" + index).val(bons);
 
      }
 
