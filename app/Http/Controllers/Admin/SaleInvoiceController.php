@@ -1343,22 +1343,21 @@ class SaleInvoiceController extends Controller
             //discount
             Log::info($outs);
 
-            $ClientDis = Items_discount::where('item_id', $row->item_id)->where('client_id', $person)->first();
-            if ($personObj) {
-                $CategoryDis = Items_discount::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
-            }
+          //discount
 
-            if ($ClientDis) {
+          $ClientDis = Items_discount::where('item_id', $row->item_id)->where('client_id', $person)->first();
 
-                $disc = $ClientDis->item_discount_price;
-            } else if ($CategoryDis) {
+          $CategoryDis = Items_discount::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
+          if ($ClientDis) {
 
-                $disc = $CategoryDis->item_discount_price;
-            } else {
+              $disc = $ClientDis->item_discount_price;
+          } elseif ($CategoryDis) {
 
-                $disc = 0;
-            }
+              $disc = $CategoryDis->item_discount_price;
+          } else {
 
+              $disc = 0;
+          }
 
             echo json_encode(array($row->batch_no,  date_format($date, "d-m-Y"), $row->item_total_qty, $outs, $disc));
         }

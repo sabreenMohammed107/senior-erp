@@ -968,7 +968,7 @@
         var select_value = $('#select' + index + ' option:selected').val();
         var select_stock = $('#stock_id option:selected').val();
         order = $('#orderPersons option:selected').val();
-
+        var text = $('#select' + index + ' option:selected').text();
         $.ajax({
             type: 'GET',
             data: {
@@ -1030,12 +1030,14 @@
 
             success: function(data) {
                 var result = $.parseJSON(data);
-
+alert(result[4]);
                 $("#batchNum" + index + "").text(result[0]);
                 $("#batchDate" + index + "").text(result[1]);
                 $("#batchqty" + index + "").text(result[2]);
                 $("#itemprice" + index + "").val(result[3]);
                 $("#qty" + index).attr('max', result[2]);
+                $("#per" + index + "").attr('value', result[4]);
+
 
                 // ("#batchNum1" + index + "").text(result[0]);
                 $("#batchDate1" + index + "").text(result[1]);

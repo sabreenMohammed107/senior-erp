@@ -1009,8 +1009,15 @@
 
                 $("#ar_name" + index + "").text(result[0]);
                 $("#uom" + index + "").text(result[1]);
-                $("#totalvat" + index + "").text(result[3]);
+                if(result[3]==null){
+                    $("#totalvat" + index + "").text(0);
+                $("#totalvat1" + index + "").text(0);
+
+                }else{
+                    $("#totalvat" + index + "").text(result[3]);
                 $("#totalvat1" + index + "").text(result[3]);
+
+                }
 
                 $("#selectBatch" + index + "").html(result[2]);
                 $('#selectBatch' + index).select2();
@@ -1058,6 +1065,7 @@
                 $("#batchDate1" + index + "").text(result[1]);
                 $("#batchqty1" + index + "").text(result[2]);
                 $("#itemprice1" + index + "").val(result[3]);
+                $("#per" + index + "").attr('value', result[4]);
 
 
             },
