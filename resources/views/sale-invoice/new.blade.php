@@ -1020,7 +1020,7 @@
         var select_value = $('#selectBatch' + index + ' option:selected').val();
 
         var person = $('#clientPerson option:selected').val();
-
+        var text = $('#selectBatch' + index + ' option:selected').text();
         $.ajax({
             type: 'GET',
             data: {

@@ -1346,8 +1346,10 @@ class SaleInvoiceController extends Controller
           //discount
 
           $ClientDis = Items_discount::where('item_id', $row->item_id)->where('client_id', $person)->first();
+if($personObj){
+    $CategoryDis = Items_discount::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
 
-          $CategoryDis = Items_discount::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
+}
           if ($ClientDis) {
 
               $disc = $ClientDis->item_discount_price;

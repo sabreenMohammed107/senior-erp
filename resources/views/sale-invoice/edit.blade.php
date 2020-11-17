@@ -1044,7 +1044,7 @@
         var select_value = $('#selectBatch' + index + ' option:selected').val();
 
         var person = $('#clientPerson option:selected').val();
-
+     ]
         $.ajax({
             type: 'GET',
             data: {

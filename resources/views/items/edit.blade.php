@@ -121,7 +121,7 @@
 										<div class="form-group">
 											<div class="chosen-select-single mg-b-20">
 												<label>كود التصنيف <span  style="color:red"> * </span></label>
-												<select data-placeholder="Choose a Country..." name="item_category_id" class="chosen-select">
+												<select data-placeholder="Choose a Category..." disabled name="item_category_id" class="chosen-select">
 													<option value="">Select</option>
                                                     @foreach($category as $type)
                                                 <option @if ($row->item_category_id == $type->id)

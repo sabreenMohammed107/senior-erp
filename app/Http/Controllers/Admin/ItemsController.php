@@ -217,7 +217,7 @@ class ItemsController extends Controller
     public function update(Request $request, $id)
     {
         $data = [
-            'item_category_id' => $request->input('item_category_id'),
+            // 'item_category_id' => $request->input('item_category_id'),
             'ar_name' => $request->input('ar_name'),
             'en_name' => $request->input('en_name'),
             'vat_value' => $request->input('vat_value'),
