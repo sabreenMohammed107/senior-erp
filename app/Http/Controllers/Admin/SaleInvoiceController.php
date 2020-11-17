@@ -140,6 +140,7 @@ class SaleInvoiceController extends Controller
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
             $item = Item::where('id',  $request->get('select' . $i))->first();
+            $totBon = ( $request->get('itemprice' . $i) *  $request->get('qty' . $i) +  $request->get('itemprice' . $i) *  $request->get('itemBonas' . $i)) - $request->get('disval' . $i);
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -149,7 +150,8 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('per' . $i),
                 'item_disc_value' => $request->get('disval' . $i),
                 'item_bonus_qty' => $request->get('itemBonas' . $i),
-                'item_vat_value' => $request->get('totalvat1' . $i),
+                'item_vat_value' => $totBon* $request->get('totalvat1' . $i),
+                'item_vat_perc' =>$request->get('totalvat1' . $i),
                 'final_line_cost' => ($request->get('qty' . $i) * $request->get('itemprice' . $i)) - $request->get('disval' . $i),
 
             ];
@@ -209,6 +211,8 @@ class SaleInvoiceController extends Controller
 
             $batch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
             $itemup = Item::where('id',  $request->get('upitemId' . $i))->first();
+            $totBonup = ( $request->get('upitemprice' . $i) *  $request->get('upqty' . $i) +  $request->get('upitemprice' . $i) *  $request->get('upitemBonas' . $i)) - $request->get('uptotalvat1' . $i);
+
             $detailUpdate = [
                 'item_id' => $request->get('upitemId' . $i),
                 'item_qty' => $request->get('upqty' . $i),
@@ -218,7 +222,8 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('upper' . $i),
                 'item_disc_value' => $request->get('updisval' . $i),
                 'item_bonus_qty' => $request->get('upitemBonas' . $i),
-                'item_vat_value' => $request->get('uptotalvat1' . $i),
+                'item_vat_value' => $totBonup* $request->get('uptotalvat1' . $i),
+                'item_vat_perc' =>$request->get('uptotalvat1' . $i),
                 'final_line_cost' => ($request->get('upqty' . $i) * $request->get('upitemprice' . $i)) - $request->get('updisval' . $i),
 
             ];
@@ -673,6 +678,8 @@ class SaleInvoiceController extends Controller
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
             $item = Item::where('id',  $request->get('select' . $i))->first();
+            $totBon = ( $request->get('itemprice' . $i) *  $request->get('qty' . $i) +  $request->get('itemprice' . $i) *  $request->get('itemBonas' . $i)) - $request->get('disval' . $i);
+
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -682,7 +689,8 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('per' . $i),
                 'item_disc_value' => $request->get('disval' . $i),
                 'item_bonus_qty' => $request->get('itemBonas' . $i),
-                'item_vat_value' => $request->get('totalvat1' . $i),
+                'item_vat_value' => $totBon* $request->get('totalvat1' . $i),
+                'item_vat_perc' =>$request->get('totalvat1' . $i),
                 'final_line_cost' => ($request->get('qty' . $i) * $request->get('itemprice' . $i)) - $request->get('disval' . $i),
 
             ];
@@ -748,6 +756,8 @@ class SaleInvoiceController extends Controller
 
             $batch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
             $itemup = Item::where('id',  $request->get('upitemId' . $i))->first();
+            $totBonup = ( $request->get('upitemprice' . $i) *  $request->get('upqty' . $i) +  $request->get('upitemprice' . $i) *  $request->get('upitemBonas' . $i)) - $request->get('uptotalvat1' . $i);
+
             $detailUpdate = [
                 'id' => $request->get('item_inv_id' . $i),
                 'item_id' => $request->get('upitemId' . $i),
@@ -758,7 +768,10 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('upper' . $i),
                 'item_disc_value' => $request->get('updisval' . $i),
                 'item_bonus_qty' => $request->get('upitemBonas' . $i),
-                'item_vat_value' => $request->get('uptotalvat1' . $i),
+
+                'item_vat_value' => $totBonup* $request->get('uptotalvat1' . $i),
+                'item_vat_perc' =>$request->get('uptotalvat1' . $i),
+
                 'final_line_cost' => ($request->get('upqty' . $i) * $request->get('upitemprice' . $i)) - $request->get('updisval' . $i),
 
             ];

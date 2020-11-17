@@ -258,7 +258,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="client_name" value="{{$invObj->person_name}}" readonly name="person_name" class="form-control" placeholder="">
+                                                            <input type="text" id="client_name" readonly value="{{$invObj->person_name}}" readonly name="person_name" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -1014,11 +1014,11 @@
                 $("#uom" + index + "").text(result[1]);
                 if(result[3]==null){
                     $("#totalvat" + index + "").text(0);
-                $("#totalvat1" + index + "").text(0);
+                $("#totalvat1" + index + "").val(0);
 
                 }else{
                     $("#totalvat" + index + "").text(result[3]);
-                $("#totalvat1" + index + "").text(result[3]);
+                $("#totalvat1" + index + "").val(result[3]);
 
                 }
 
