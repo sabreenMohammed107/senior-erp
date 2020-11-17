@@ -1030,7 +1030,6 @@
 
             success: function(data) {
                 var result = $.parseJSON(data);
-alert(result[4]);
                 $("#batchNum" + index + "").text(result[0]);
                 $("#batchDate" + index + "").text(result[1]);
                 $("#batchqty" + index + "").text(result[2]);
