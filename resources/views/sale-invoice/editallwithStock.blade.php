@@ -83,11 +83,11 @@ $counterrrr = 1;
     </td>
     <td id="totalvat{{$counter}}" class="input-mark-inner mg-b-22 vat_tax_value">
     <input type="hidden" value="" name="uptotalvat1{{$counter}}"> 
-    {{$itemo->item_vat_value ?? ''}}
+    {{$itemo->item_vat_perc}}
     </td>
     <td  id="totalcit{{$counter}}" class="input-mark-inner mg-b-22 comm_industr_tax">
     <input type="hidden" value="" name="totalcit1{{$counter}}"> 
-    {{$itemo->final_line_cost  *  $itemo->vat_value }}
+    {{$itemo->item_vat_value}}
 
     
     </td>

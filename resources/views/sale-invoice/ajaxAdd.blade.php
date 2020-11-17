@@ -58,8 +58,9 @@
         <td id="final{{$rowCount}}" class="total_item_final">
         0
     </td>
+    <input type="hidden" id="totalvat1{{$rowCount}}" value="0" name="totalvat1{{$rowCount}}"> 
     <td id="totalvat{{$rowCount}}" class="input-mark-inner mg-b-22 vat_tax_value">
-    <input type="hidden" value="" name="totalvat1{{$rowCount}}"> 
+ 
      0
     </td>
     <td  id="totalcit{{$rowCount}}"  class="input-mark-inner mg-b-22 comm_industr_tax">

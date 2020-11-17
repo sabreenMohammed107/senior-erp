@@ -990,11 +990,11 @@
                 $("#uom" + index + "").text(result[1]);
                 if(result[3]==null){
                     $("#totalvat" + index + "").text(0);
-                $("#totalvat1" + index + "").val(0);
+                $("#totalvat1" + index ).val(0);
 
                 }else{
                     $("#totalvat" + index + "").text(result[3]);
-                $("#totalvat1" + index + "").val(result[3]);
+                $("#totalvat1" + index ).val(result[3]);
 
                 }
               
