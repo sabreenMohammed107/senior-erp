@@ -932,8 +932,11 @@
                 $("#select" + rowSS).select2();
                 $('#firstTT' + rowSS).focus();
                 if (pay == 3) {
-                    bonasDetails();
-                }
+                        bonasDetails(rowSS);
+                    }
+                    if (pay == 4) {
+                        adsDetails(rowSS);
+                    }
                 console.log(rowSS);
             },
 
