@@ -367,7 +367,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="stock_name" value="{{$stockName->ar_name ?? ''}}" class="form-control" placeholder="">
+                                                            <input type="text" id="stock_name" readonly value="{{$stockName->ar_name ?? ''}}" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
