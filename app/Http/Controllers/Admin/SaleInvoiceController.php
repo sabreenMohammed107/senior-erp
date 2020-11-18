@@ -613,8 +613,8 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         $orders = Order::where('id', $invObj->order_id)->first();
-        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $id)->get();
-        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $invObj->branch_id)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $invObj->branch_id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
         $saleName = Representative::where('id', $invObj->saleCodes)->first();
         $marketName = Representative::where('id', $invObj->MarktCodes)->first();
@@ -642,8 +642,8 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         $orders = Order::where('id', $invObj->order_id)->first();
-        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $id)->get();
-        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $invObj->branch_id)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $invObj->branch_id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
         $saleName = Representative::where('id', $invObj->saleCodes)->first();
         $marketName = Representative::where('id', $invObj->MarktCodes)->first();

@@ -308,7 +308,6 @@
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                             <select data-placeholder="إختر مسئول المبيعات" disabled name="salePerson" id="salePerson" class="chosen-select" tabindex="-1">
-                                                                <option value="0">Select</option>
                                                                 @foreach($saleCodes as $sale)
                                                                 <option @if ($invObj->sales_rep_id == $sale->id)
                                                                     selected="selected"
@@ -345,7 +344,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                             <select data-placeholder="إختر مسئول التسويق" disabled name="marketPerson" id="marketPerson" class="chosen-select" tabindex="-1">
-                                                                <option value="0">Select</option>
+                                                                <option value="">Select</option>
                                                                 @foreach($MarktCodes as $market)
                                                                 <option @if ($invObj->marketing_rep_id == $market->id)
                                                                     selected="selected"
