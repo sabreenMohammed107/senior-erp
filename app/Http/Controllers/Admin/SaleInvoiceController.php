@@ -616,8 +616,8 @@ class SaleInvoiceController extends Controller
         $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $invObj->branch_id)->get();
         $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $invObj->branch_id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
-        $saleName = Representative::where('id', $invObj->saleCodes)->first();
-        $marketName = Representative::where('id', $invObj->MarktCodes)->first();
+        $saleName = Representative::where('id', $invObj->sales_rep_id)->first();
+        $marketName = Representative::where('id', $invObj->marketing_rep_id)->first();
         $stockName = Stock::where('id', $invObj->stock_id)->first();
         $orderItems = [];
 
@@ -645,8 +645,8 @@ class SaleInvoiceController extends Controller
         $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $invObj->branch_id)->get();
         $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $invObj->branch_id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
-        $saleName = Representative::where('id', $invObj->saleCodes)->first();
-        $marketName = Representative::where('id', $invObj->MarktCodes)->first();
+        $saleName = Representative::where('id', $invObj->sales_rep_id)->first();
+        $marketName = Representative::where('id', $invObj->marketing_rep_id)->first();
         $stockName = Stock::where('id', $invObj->stock_id)->first();
         $orderItems = [];
 
