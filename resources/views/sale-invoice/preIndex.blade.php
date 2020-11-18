@@ -90,8 +90,37 @@
                     <a @if($invoice->confirmed == 1) class="isDisabled" @endif href="{{route('sale-invoice.edit',$invoice->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
                     <a @if($invoice->confirmed != 1) class="isDisabled" @endif href="{{route('revert-sale.show',$invoice->id)}}"><button title="Revert" class="pd-setting-ed"><i class="fa fa-undo" aria-hidden="true"></i></button></a>
 
-                    <button data-toggle="modal" @if($invoice->confirmed == 1) class="isDisabled" @endif  data-target="#del" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <button data-toggle="modal" @if($invoice->confirmed == 1) class="isDisabled" @endif  data-target="#delete{{$invoice->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 </div>
+
+                	 <!--Delete-->
+		 <div id="delete{{$invoice->id}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header header-color-modal bg-color-2">
+                        <h4 class="modal-title" style="text-align:right">حذف  فاتورة البيع</h4>
+                        <div class="modal-close-area modal-close-df">
+                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+                        <h2></h2>
+                        <h4>هل تريد حذف جميع بيانات فاتورة البيع ؟ </h4>
+                        <h4>سيتم حذف أمر البيع بجميع أصنافه التي تم تدوينها</h4>
+                    </div>
+                    <div class="modal-footer info-md">
+                        <a data-dismiss="modal" href="#">إلغــاء</a>
+						<form id="delete" style="display: inline;" action="{{route('sale-invoice.destroy',$invoice->id)}}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">حذف</button>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!--/Delete-->
             </td>
         </tr>
         @endforeach

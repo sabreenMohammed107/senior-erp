@@ -1422,7 +1422,7 @@ if($personObj){
 
 
             // $data = Order::where('person_id', $select_value)->where('confirmed', 1)->get();
-            $invOrders = Invoice::where('branch_id', $personObj->branch_id)->where('invoice_type_id', 1)->pluck('order_id');
+            $invOrders = Invoice::where('branch_id', $personObj->branch_id)->where('invoice_type_id', 1)->whereNotNull('order_id')->pluck('order_id');
             
             $data = Order::where('person_id', $select_value)->where('order_decision_status_id', 101)->whereNotIn('id',$invOrders)->get();
 
@@ -1434,7 +1434,7 @@ if($personObj){
                 $output .= '<option value="' . $row->id . '">' . $row->purch_order_no . '-' . $row->person_name . '</option>';
             }
 
-
+\Log::info(['sale oreders :', $output]);
 
             echo json_encode(array($saleCode->code ?? '', $saleCode->ar_name ?? '', $MarktCode->code ?? '', $MarktCode->ar_name ?? '', $personObj->name, $output));
         }
