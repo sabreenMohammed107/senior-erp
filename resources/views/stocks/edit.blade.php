@@ -295,7 +295,7 @@
                                             $date = date_create($total->expired_date) ?>
                                             @if($date) {{ date_format($date,"d-m-Y") }}@endif</td>
                                         <td>{{$total->item_total_qty}}</td>
-                                        <td> {{ $total->item->average_price * $total->item_total_qty}} </td>
+                                        <td> {{ $total->average_price * $total->item_total_qty}} </td>
 
                                         <td> {{$total->item->ar_description}}</td>
                                         <td>{{$total->notes}}</td>
