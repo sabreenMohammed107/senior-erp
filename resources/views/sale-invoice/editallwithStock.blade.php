@@ -70,7 +70,7 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" style="width: 200px" value="{{$itemo->item_disc_perc}}" oninput="disPer({{$counter}})" name="upper{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
+            <input type="number" step="0.001" style="width: 200px" value="{{$itemo->item_disc_perc}}" oninput="disPer({{$counter}})" name="upper{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
         </div>
     </td>
     <td>

@@ -70,7 +70,7 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" style="width: 200px" value="{{$itemo->item_disc_perc}}" oninput="disPer({{$counter}})" name="upper{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
+            <input type="number" step="0.001" style="width: 200px" value="{{$itemo->item_disc_perc}}" oninput="disPer({{$counter}})" name="upper{{$counter}}" id="per{{$counter}}" class="form-control item_dis" placeholder="">
         </div>
     </td>
     <td>
@@ -81,10 +81,10 @@ $counterrrr = 1;
     <td id="final{{$counter}}" class="total_item_final">
         {{$itemo->final_line_cost}}
     </td>
-    <input type="hidden" id="totalvat1{{$counter}}" value="{{$itemo->item->vat_value ?? ''}}" name="uptotalvat1{{$counter}}"> 
+    <input type="hidden" id="totalvat1{{$counter}}" value="{{$itemo->item->vat_value ?? 0}}" name="uptotalvat1{{$counter}}"> 
 
     <td id="totalvat{{$counter}}" class="input-mark-inner mg-b-22 vat_tax_value">
-    {{$itemo->item->vat_value ?? ''}}
+    {{$itemo->item->vat_value ?? 0}}
     </td>
     <td  id="totalcit{{$counter}}" class="input-mark-inner mg-b-22 comm_industr_tax">
     <input type="hidden" value="" name="totalcit1{{$counter}}"> 
