@@ -1195,8 +1195,8 @@
 
     }
 
-    // headCalculations(index);
-    function headCalculations(index) {
+   // headCalculations(index);
+   function headCalculations(index) {
         index = $('#table > tbody > tr').length;
         var total = 0;
         var discount = 0;
@@ -1205,24 +1205,20 @@
         var finalAll = 0
         var qty = 0
 
-        $('#table > tbody  > tr').each(function() {
 
+        $('#table > tbody > tr').each(function() {
+            var row_num = $(this).attr('data-id');
+            total += parseFloat($('#total' + row_num).text());
 
+            discount += parseFloat($('#disval' + row_num).val());
 
-            total += parseFloat($('#total' + index).text());
+            final += parseFloat($('#final' + row_num).text());
+            totalcit += parseFloat($('#totalcit' + row_num).text());
+            finalAll += parseFloat($('#finalAll' + row_num).text());
+            qty += parseFloat($('#itemBonas' + row_num).val());
 
-            discount += parseFloat($('#disval' + index).val());
-
-            final += parseFloat($('#final' + index).text());
-            totalcit += parseFloat($('#totalcit' + index).text());
-            finalAll += parseFloat($('#finalAll' + index).text());
-            qty += parseFloat($('#itemBonas' + index).val());
 
             --index;
-            console.log(total);
-            console.log(discount);
-
-
         })
 
         $('#total_items_price').val(total.toFixed(2));

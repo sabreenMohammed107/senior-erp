@@ -837,15 +837,15 @@
 
         });
 
-         //filter
-      $("#myInput").on("keyup", function() {
+        //filter
+        $("#myInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $("#table > tbody > tr").filter(function() {
                 var row_num = $(this).attr('data-id');
                 $(this).toggle(
                     $('#item_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
-                    $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1 
-                   
+                    $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1
+
 
                 );
             });
@@ -969,11 +969,11 @@
                 $("#select" + rowSS).select2();
                 $('#firstTT' + rowSS).focus();
                 if (pay == 3) {
-                        bonasDetails(rowSS);
-                    }
-                    if (pay == 4) {
-                        adsDetails(rowSS);
-                    }
+                    bonasDetails(rowSS);
+                }
+                if (pay == 4) {
+                    adsDetails(rowSS);
+                }
                 console.log(rowSS);
             },
 
@@ -1023,13 +1023,13 @@
 
                 $("#ar_name" + index + "").text(result[0]);
                 $("#uom" + index + "").text(result[1]);
-                if(result[3]==null){
+                if (result[3] == null) {
                     $("#totalvat" + index + "").text(0);
-                $("#totalvat1" + index + "").val(0);
+                    $("#totalvat1" + index + "").val(0);
 
-                }else{
+                } else {
                     $("#totalvat" + index + "").text(result[3]);
-                $("#totalvat1" + index + "").val(result[3]);
+                    $("#totalvat1" + index + "").val(result[3]);
 
                 }
 
@@ -1055,7 +1055,7 @@
         var select_value = $('#selectBatch' + index + ' option:selected').val();
 
         var person = $('#clientPerson option:selected').val();
-     
+
         $.ajax({
             type: 'GET',
             data: {
@@ -1237,24 +1237,20 @@
         var finalAll = 0
         var qty = 0
 
-        $('#table > tbody  > tr').each(function() {
 
+        $('#table > tbody > tr').each(function() {
+            var row_num = $(this).attr('data-id');
+            total += parseFloat($('#total' + row_num).text());
 
+            discount += parseFloat($('#disval' + row_num).val());
 
-            total += parseFloat($('#total' + index).text());
+            final += parseFloat($('#final' + row_num).text());
+            totalcit += parseFloat($('#totalcit' + row_num).text());
+            finalAll += parseFloat($('#finalAll' + row_num).text());
+            qty += parseFloat($('#itemBonas' + row_num).val());
 
-            discount += parseFloat($('#disval' + index).val());
-
-            final += parseFloat($('#final' + index).text());
-            totalcit += parseFloat($('#totalcit' + index).text());
-            finalAll += parseFloat($('#finalAll' + index).text());
-            qty += parseFloat($('#itemBonas' + index).val());
 
             --index;
-            console.log(total);
-            console.log(discount);
-
-
         })
 
         $('#total_items_price').val(total.toFixed(2));
@@ -1294,44 +1290,44 @@
     }
 
     function maxQty(index) {
-     
-     var max = $("#qty" + index + "").attr('max');
-          var price = $("#itemprice" + index + "").val();
-     var qty = $("#qty" + index + "").val();
-     var per = $("#per" + index + "").val();
-     var bons = $("#itemBonas" + index + "").val();
-     var totalvat = $("#totalvat" + index + "").text();
-     var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
-     var disval = $("#disval" + index + "").val();
-     var totBon = (price * qty + price * bons) - disval;
-     var sum = parseFloat(qty) + parseFloat(bons);
-     if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
-         $('#myModal').modal('show');
 
-         $("#qty" + index).val(0);
-         $("#itemBonas" + index).val(0);
+        var max = $("#qty" + index + "").attr('max');
+        var price = $("#itemprice" + index + "").val();
+        var qty = $("#qty" + index + "").val();
+        var per = $("#per" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
+        var totalvat = $("#totalvat" + index + "").text();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
+        var disval = $("#disval" + index + "").val();
+        var totBon = (price * qty + price * bons) - disval;
+        var sum = parseFloat(qty) + parseFloat(bons);
+        if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
+            $('#myModal').modal('show');
 
-     } else {
-         $("#qty" + index).val(qty);
-         $("#itemBonas" + index).val(bons);
+            $("#qty" + index).val(0);
+            $("#itemBonas" + index).val(0);
 
-     }
+        } else {
+            $("#qty" + index).val(qty);
+            $("#itemBonas" + index).val(bons);
 
-
+        }
 
 
-     $("#total" + index + "").text((price * qty).toFixed(2));
-     var Amount = (price * qty) * per;
-     $("#disval" + index).attr('value', Amount.toFixed(2));
-     var disval = $("#disval" + index + "").val();
 
-     $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
-     $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
-     $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
-     headCalculations(index);
-     $("#qty" + index).attr('value', qty);
- }
+        $("#total" + index + "").text((price * qty).toFixed(2));
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount.toFixed(2));
+        var disval = $("#disval" + index + "").val();
+
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+
+        headCalculations(index);
+        $("#qty" + index).attr('value', qty);
+    }
 
     // Delete DB row functions
     function DeleteInvoiceItem(id, index) {
