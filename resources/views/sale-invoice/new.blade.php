@@ -960,7 +960,9 @@
     function deleteRow(index) {
         //delete Row
 
-        $('#table > tbody > tr[data-id=' + index + ']').remove();
+        $('tr[data-id=' + index + ']').remove();
+
+        headCalculations(index);
 
 
     }
