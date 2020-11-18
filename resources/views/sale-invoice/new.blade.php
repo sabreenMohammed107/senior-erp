@@ -1274,8 +1274,8 @@
         if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');
 
-            $("#qty" + index).val(1);
-            $("#itemBonas" + index).val(1);
+            $("#qty" + index).val(0);
+            $("#itemBonas" + index).val(0);
 
         } else {
             $("#qty" + index).val(qty);

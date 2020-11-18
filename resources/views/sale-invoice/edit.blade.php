@@ -836,6 +836,23 @@
             });
 
         });
+
+         //filter
+      $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#table > tbody > tr").filter(function() {
+                var row_num = $(this).attr('data-id');
+                $(this).toggle(
+                    $('#item_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                    $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1 
+                   
+
+                );
+            });
+
+        });
+
+
         //paytype
 
 
@@ -1296,8 +1313,8 @@
      if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
          $('#myModal').modal('show');
 
-         $("#qty" + index).val(1);
-         $("#itemBonas" + index).val(1);
+         $("#qty" + index).val(0);
+         $("#itemBonas" + index).val(0);
 
      } else {
          $("#qty" + index).val(qty);

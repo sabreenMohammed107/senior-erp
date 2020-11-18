@@ -18,12 +18,12 @@ $counterrrr = 1;
         <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
         <input type="hidden" id="upitemId{{$counter}}" name="upitemId{{$counter}}" readonly value="{{$itemo->item_id}}">
 
-        <span id="item_search{{$counter}}" style="display:none;"></span>
+        <span id="item_search{{$counter}}" style="display:none;">{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}</span>
 
     </td>
-    <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
+  
     <td id="ar_name{{$counter}}" class="ar_name">{{$itemo->item->ar_name ?? ''}}</td>
-
+    <td id="uom{{$counter}}" class="uom">{{$itemo->item->uom->ar_name ?? ''}}</td>
    
     <td>
     <?php
@@ -38,7 +38,7 @@ $counterrrr = 1;
     <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}">
     <input type="hidden" id="upitemBatch{{$counter}}" name="upitemBatch{{$counter}}" readonly value="{{$data->id}}">
 
-   <span id="batch_search{{$counter}}" style="display:none;"></span>
+   <span id="batch_search{{$counter}}" style="display:none;">{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}</span>
     </td>
     <td id="batchNum{{$counter}}" class="batchNum">{{$itemo->batch_no}} </td>
     <?php
@@ -75,7 +75,7 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" style="width: 200px" value="{{$itemo->item_disc_value}}" oninput="disval({{$counter}})" name="updisval{{$counter}}" id="disval{{$counter}}" class="form-control item_disval" placeholder="">
+            <input type="number" step="0.01" style="width: 200px" onkeypress="enterForRow(event,{{$counter}})" value="{{$itemo->item_disc_value}}" oninput="disval({{$counter}})" name="updisval{{$counter}}" id="disval{{$counter}}" class="form-control item_disval" placeholder="">
         </div>
     </td>
     <td id="final{{$counter}}" class="total_item_final">
