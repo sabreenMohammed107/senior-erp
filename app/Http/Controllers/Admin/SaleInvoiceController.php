@@ -856,7 +856,7 @@ class SaleInvoiceController extends Controller
             'notes' => $request->get('notes'),
             'currency_id' => $invObj->currency_id,
             'sales_rep_id' => $invObj->sales_rep_id,
-            'marketing_rep_id' => $request->get('marketPerson'),
+            'marketing_rep_id' => $invObj->marketing_rep_id,
             'invoice_date' => Carbon::parse($request->get('invoice_date')),
             'total_disc_value' => $request->get('total_disc_value'),
             'total_items_price' => $request->get('total_items_price'),
