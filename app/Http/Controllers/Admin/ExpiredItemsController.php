@@ -93,7 +93,7 @@ class ExpiredItemsController extends Controller
      */
     public function store(Request $request)
     {
-        $count = $request->rowCount;
+        $count =$request->get('rowCount');
 
         $details = [];
         /**
@@ -103,9 +103,13 @@ class ExpiredItemsController extends Controller
         $updateTotals = [];
         $financeArray = [];
         $itemsTableUpdates = [];
+        \Log::info(['row',$request->get('rowCount')]);
         for ($i = 1; $i <= $count; $i++) {
-            $batch = $row = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
+            \Log::info(['select message', $request->get('select' . $i)]);
             $item = Item::where('id', $request->get('select' . $i))->first();
+            if($item){
+            
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -115,28 +119,29 @@ class ExpiredItemsController extends Controller
                 $detail['batch_no'] = $batch->batch_no;
                 $detail['expired_date'] = $batch->expired_date;
             }
-            if ($item) {
+          
                 $detail['item_price'] = $item->average_price;
                 $detail['total_line_cost'] = $request->get('qty' . $i) * $item->average_price;
-            }
-            if ($request->get('qty' . $i)) {
+          
+            if ($request->get('select' . $i)) {
                 array_push($details, $detail);
             }
             //finance
-            if ($item) {
+          
                 $finance = [
                     'totalPrice' => $request->get('qty' . $i) * $item->average_price,
                 ];
                 array_push($financeArray, $finance);
-            }
+         
+            if ($batch) {
             //this for updating total qty
             $totalQtyUp = [
                 'id' => $batch->id,
                 'item_total_qty' => $batch->item_total_qty - $request->get('qty' . $i),
             ];
             array_push($updateTotals, $totalQtyUp);
-
-
+        }
+       
             //update items table
             $detailItem = [
 
@@ -149,6 +154,8 @@ class ExpiredItemsController extends Controller
 
             ];
             array_push($itemsTableUpdates, $detailItem);
+       
+    }
         }
         //from expired item
         $counterrrr = $request->get('counter');
@@ -187,7 +194,7 @@ class ExpiredItemsController extends Controller
                 'item_total_qty' => $upbatch->item_total_qty - $request->get('qty' . $i),
             ];
             array_push($updateTotals, $totalQtyUp);
-
+            if ($upitem) {
             //update item table
             $detailUpdateItem = [
 
@@ -199,6 +206,7 @@ class ExpiredItemsController extends Controller
 
             ];
             array_push($itemsTableUpdates, $detailUpdateItem);
+        }
         }
 
         //udate items table array 

@@ -6,17 +6,18 @@
         <select id="select{{$rowCount}}" name="select{{$rowCount}}" name="dropname" style="width: 200px" onchange="editSelectVal({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select">
             <option value="">Select</option>
             @foreach ($items as $Item)
-            <option value="{{$Item->id}}">{{$Item->code}}/{{$Item->ar_name}}</option>
+            <option value="{{$Item->id}}">{{$Item->id}}/{{$Item->code}}/{{$Item->ar_name}}</option>
             @endforeach
         </select>
         <span id="item_search{{$rowCount}}" style="display:none;"></span>
 
 
     </td>
-    <td id="uom{{$rowCount}}" class="uom">حبة</td>
+  
     <td id="ar_name{{$rowCount}}" class="ar_name">إسم البند</td>
+    <td id="uom{{$rowCount}}" class="uom">حبة</td>
     <td>
-        <select id="selectBatch{{$rowCount}}" style="width: 200px" name="selectBatch{{$rowCount}}" qty onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select">
+        <select id="selectBatch{{$rowCount}}" style="width: 200px" name="selectBatch{{$rowCount}}"  onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select">
 
         </select>
         <span id="batch_search{{$rowCount}}" style="display:none;"></span>
