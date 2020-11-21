@@ -258,7 +258,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="client_name" value="{{$invObj->person_name}}" readonly name="person_name" class="form-control" placeholder="">
+                                                            <input type="text" id="client_name" readonly value="{{$invObj->person_name}}" readonly name="person_name" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -308,7 +308,6 @@
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                             <select data-placeholder="إختر مسئول المبيعات" disabled name="salePerson" id="salePerson" class="chosen-select" tabindex="-1">
-                                                                <option value="0">Select</option>
                                                                 @foreach($saleCodes as $sale)
                                                                 <option @if ($invObj->sales_rep_id == $sale->id)
                                                                     selected="selected"
@@ -345,7 +344,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                             <select data-placeholder="إختر مسئول التسويق" disabled name="marketPerson" id="marketPerson" class="chosen-select" tabindex="-1">
-                                                                <option value="0">Select</option>
+                                                                <option value="">Select</option>
                                                                 @foreach($MarktCodes as $market)
                                                                 <option @if ($invObj->marketing_rep_id == $market->id)
                                                                     selected="selected"
@@ -367,7 +366,7 @@
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="stock_name" value="{{$stockName->ar_name ?? ''}}" class="form-control" placeholder="">
+                                                            <input type="text" id="stock_name" readonly value="{{$stockName->ar_name ?? ''}}" class="form-control" placeholder="">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -594,9 +593,9 @@
 
                                                 <th data-field="index">#</th>
 
-                                                <th>كود البند</th>
-                                                <th>إسم البند</th>
-                                                <th> UOM</th>
+                                                <th>كود الصنف</th>
+                                                <th>إسم الصنف</th>
+                                                <th> وحدة القياس</th>
                                                 <th>الباتش</th>
                                                 <th> رقم الباتش</th>
                                                 <th>تاريخ الصلاحية</th>
@@ -607,7 +606,7 @@
                                                 <th> التكلفة</th>
                                                 <th>نسبة الخصم</th>
                                                 <th>قيمة الخصم</th>
-                                                <th>السعر </th>
+                                                <th>اجمالى بعد الخصم </th>
                                                 <th>نسبة الضريبة</th>
                                                 <th> الضريبة</th>
                                                 <th>الصافى</th>
@@ -615,7 +614,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="rows">
-                                             @include('sale-invoice.editallwithStock')
+                                            @include('sale-invoice.editallwithStock')
                                         </tbody>
                                     </table>
                                 </div>
@@ -718,21 +717,51 @@
 
         })
         //client order
+        // $('select[name="clientPerson"]').on('change', function() {
+        //     var person = $(this).val();
+        //     var personText = $('select[name="clientPerson"] option:selected').text();
+
+        //     $.ajax({
+        //         url: "{{route('dynamicOrderInvoice.fetch')}}",
+        //         method: "get",
+        //         data: {
+        //             person_id: person,
+
+        //         },
+        //         success: function(result) {
+
+        //             $('#client_name').val(personText);
+        //             $('#orderPersons').html(result).trigger('chosen:updated');
+
+
+
+        //         }
+        //     });
+
+        // });
+
+        //client order
         $('select[name="clientPerson"]').on('change', function() {
             var person = $(this).val();
             var personText = $('select[name="clientPerson"] option:selected').text();
 
             $.ajax({
-                url: "{{route('dynamicOrderInvoice.fetch')}}",
+                url: "{{route('dynamicPersonInvoice.fetch')}}",
                 method: "get",
                 data: {
                     person_id: person,
 
                 },
-                success: function(result) {
+                success: function(data) {
+
+                    var result = $.parseJSON(data);
 
                     $('#client_name').val(personText);
-                    $('#orderPersons').html(result).trigger('chosen:updated');
+
+                    $("#sale_name").val(result[1]);
+
+                    $("#market_name").val(result[3]);
+                    $('#orderPersons').html(result[5]).trigger('chosen:updated');
 
 
 
@@ -807,6 +836,23 @@
             });
 
         });
+
+        //filter
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#table > tbody > tr").filter(function() {
+                var row_num = $(this).attr('data-id');
+                $(this).toggle(
+                    $('#item_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                    $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1
+
+
+                );
+            });
+
+        });
+
+
         //paytype
 
 
@@ -818,7 +864,6 @@
         $('select[name="pay_type_id"]').on('change', function(ev) {
             // var previous = currentV();
 
-            // alert(retval);
             var paytype = $(this).val();
 
             // var confirmc = confirm(' هذا التعديل سيقوم بمسح الاصناف بالكامل ');
@@ -846,23 +891,28 @@
                 $('#marketPerson').val('').trigger('chosen:updated');
 
             }
-            if (paytype == 3 || paytype == 4) {
-
-                stocks();
-                $('#optionsRadios1').prop('checked', true);
-                $('#optionsRadios1').prop('disabled', true);
-
-
-            }
             if (paytype == 1) {
                 stocks();
                 $('#optionsRadios1').prop('checked', true);
+                $('#optionsRadios1').prop('disabled', true);
+                $('#optionsRadios2').prop('disabled', true);
             } else {
                 orders();
                 $('#optionsRadios2').prop('checked', true);
                 $('#optionsRadios2').prop('disabled', false);
                 $('#optionsRadios1').prop('disabled', false);
             }
+
+            if (paytype == 3 || paytype == 4) {
+
+                stocks();
+                $('#optionsRadios1').prop('checked', true);
+                $('#optionsRadios1').prop('disabled', true);
+                $('#optionsRadios2').prop('disabled', true);
+
+
+            }
+
             // } else {
             //     $('#pay_type_id').trigger('chosen:updated');
 
@@ -873,6 +923,7 @@
 
 
         });
+
 
 
     });
@@ -918,7 +969,10 @@
                 $("#select" + rowSS).select2();
                 $('#firstTT' + rowSS).focus();
                 if (pay == 3) {
-                    bonasDetails();
+                    bonasDetails(rowSS);
+                }
+                if (pay == 4) {
+                    adsDetails(rowSS);
                 }
                 console.log(rowSS);
             },
@@ -942,12 +996,7 @@
     //Start row functions
     function deleteRow(index) {
         $('tr[data-id=' + index + ']').remove();
-        var trs = $('#table > tbody').html();
-        $('#table').bootstrapTable('destroy');
-        $('#rows').html(trs);
-        $('#table').bootstrapTable();
-        console.log(trs);
-        console.log(index);
+
         headCalculations(index);
 
     }
@@ -974,8 +1023,15 @@
 
                 $("#ar_name" + index + "").text(result[0]);
                 $("#uom" + index + "").text(result[1]);
-                $("#totalvat" + index + "").text(result[3]);
-                $("#totalvat1" + index + "").text(result[3]);
+                if (result[3] == null) {
+                    $("#totalvat" + index + "").text(0);
+                    $("#totalvat1" + index + "").val(0);
+
+                } else {
+                    $("#totalvat" + index + "").text(result[3]);
+                    $("#totalvat1" + index + "").val(result[3]);
+
+                }
 
                 $("#selectBatch" + index + "").html(result[2]);
                 $('#selectBatch' + index).select2();
@@ -1019,10 +1075,11 @@
                 $("#itemprice" + index + "").val(result[3]);
                 $("#qty" + index).attr('max', result[2]);
 
-                ("#batchNum1" + index + "").text(result[0]);
+                // ("#batchNum1" + index + "").text(result[0]);
                 $("#batchDate1" + index + "").text(result[1]);
                 $("#batchqty1" + index + "").text(result[2]);
                 $("#itemprice1" + index + "").val(result[3]);
+                $("#per" + index + "").attr('value', result[4]);
 
 
             },
@@ -1043,22 +1100,22 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
 
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
@@ -1068,23 +1125,23 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
 
@@ -1097,75 +1154,76 @@
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
 
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
 
-        $("#bonas" + index).attr('value', bons);
+        $("#itemBonas" + index).attr('value', bons);
     }
     //per
     function disPer(index) {
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
 
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
-        $("#per" + index).attr('value', per);
+        $("#per" + index).attr('value', per.toFixed(3));
     }
     //dis val
     function disval(index) {
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var disval = $("#disval" + index + "").val();
-        var bons = $("#bonas" + index + "").val();
+        var bons = $("#itemBonas" + index + "").val();
         var totalvat = $("#totalvat" + index + "").text();
-        var ss = $("#qty" + index + "").val() + $("#bonas" + index + "").val();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
         var disval = $("#disval" + index + "").val();
         var totBon = (price * qty + price * bons) - disval;
 
         // if (bons > 0) {
         //     $("#totalcit" + index + "").text((totBon.toFixed(2) * totalvat).toFixed(2));
         // }
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc);
-        $("#final" + index + "").text((price * qty) - disval);
-        $("#finalAll" + index + "").text(parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text()));
-        $('#totalcit' + index + "").text(parseFloat($("#final" + index + "").text()) * parseFloat($("#totalvat" + index + "").text()));
+        $("#per" + index).val(cc.toFixed(3));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
+
         headCalculations(index);
-        $("#disval" + index).attr('value', disval);
+        $("#disval" + index).attr('value', disval.toFixed(2));
 
     }
 
@@ -1179,24 +1237,20 @@
         var finalAll = 0
         var qty = 0
 
-        $('#table > tbody  > tr').each(function() {
 
+        $('#table > tbody > tr').each(function() {
+            var row_num = $(this).attr('data-id');
+            total += parseFloat($('#total' + row_num).text());
 
+            discount += parseFloat($('#disval' + row_num).val());
 
-            total += parseFloat($('#total' + index).text());
+            final += parseFloat($('#final' + row_num).text());
+            totalcit += parseFloat($('#totalcit' + row_num).text());
+            finalAll += parseFloat($('#finalAll' + row_num).text());
+            qty += parseFloat($('#itemBonas' + row_num).val());
 
-            discount += parseFloat($('#disval' + index).val());
-
-            final += parseFloat($('#final' + index).text());
-            totalcit += parseFloat($('#totalcit' + index).text());
-            finalAll += parseFloat($('#finalAll' + index).text());
-            qty += parseFloat($('#itemBonas' + index).val());
 
             --index;
-            console.log(total);
-            console.log(discount);
-
-
         })
 
         $('#total_items_price').val(total.toFixed(2));
@@ -1211,7 +1265,7 @@
     // bonasDetails(index);
     function bonasDetails(rowSS) {
 
-        $('#itemprice' + rowSS).attr("readonly", true);
+        // $('#itemprice' + rowSS).attr("readonly", true);
         $("#disval" + rowSS).attr("readonly", true);
         $("#per" + rowSS).attr("readonly", true);
         $("#qty" + rowSS).attr("readonly", true);
@@ -1232,39 +1286,44 @@
 
         var retval;
         retval = $('#pay_type_id ').val();
-        // alert(retval);
         return retval;
     }
 
     function maxQty(index) {
+
         var max = $("#qty" + index + "").attr('max');
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
-        var bonas = $("#itemBonas" + index + "").val();
         var per = $("#per" + index + "").val();
-        var sum = parseFloat(qty) + parseFloat(bonas);
-
-        if (sum > max) {
-
+        var bons = $("#itemBonas" + index + "").val();
+        var totalvat = $("#totalvat" + index + "").text();
+        var ss = $("#qty" + index + "").val() + $("#itemBonas" + index + "").val();
+        var disval = $("#disval" + index + "").val();
+        var totBon = (price * qty + price * bons) - disval;
+        var sum = parseFloat(qty) + parseFloat(bons);
+        if (sum > (parseInt(jQuery('#qty' + index).attr('max')))) {
             $('#myModal').modal('show');
-            // alert("هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده ");
-            // alert(qty);
 
-            $("#qty" + index).val(1);
-            $("#itemBonas" + index).val(1);
+            $("#qty" + index).val(0);
+            $("#itemBonas" + index).val(0);
+
         } else {
             $("#qty" + index).val(qty);
-            $("#itemBonas" + index).val(bonas);
+            $("#itemBonas" + index).val(bons);
+
         }
 
 
 
-        $("#total" + index + "").text(price * qty);
+
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+        $('#totalcit' + index + "").text((parseFloat(totBon) * parseFloat(totalvat)).toFixed(2));
+        $("#finalAll" + index + "").text((parseFloat($("#final" + index + "").text()) + parseFloat($("#totalcit" + index + "").text())).toFixed(2));
 
         headCalculations(index);
         $("#qty" + index).attr('value', qty);

@@ -183,33 +183,32 @@
                                     }
                                 </style>
                                 <div class="row res-rtl" style="display: flex ">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
-                              <h3 style="text-align:right">اضافة</h3>
-                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
-                                <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
-                                        </div>
-                              </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
+                                        <h3 style="text-align:right">اضافة</h3>
+                                        <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة تسعير</button>
+                                        <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
+                                    </div>
+                                </div>
                                 <div style="overflow-x:auto;">
 
-                                <table class="table table-bordered" id="table" style="direction:rtl;">
-                                    <thead>
-                                        <tr>
+                                    <table class="table table-bordered" id="table" style="direction:rtl;">
+                                        <thead>
+                                            <tr>
 
-                                            <th data-field="id">كــود</th>
-                                            <th>نوع الصنف</th>
+                                                <th data-field="id">كــود</th>
+                                                <th>نوع الصنف</th>
 
 
-                                            <th>إسم تصنيف العميل</th>
+                                                <th>إسم تصنيف العميل</th>
 
-                                            <th>إسم العميل</th>
-                                            <th>سعر الصنف</th>
-                                            <th>الاختيارات</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="rows">
-
-                                    </tbody>
-                                </table>
+                                                <th>إسم العميل</th>
+                                                <th>سعر الصنف</th>
+                                                <th>الاختيارات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="rows">
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -227,6 +226,27 @@
     $(function() {
         debugger;
 
+        $('select[name="item_id"]').on('change', function() {
+			var item = $(this).val();
+
+
+			$.ajax({
+				url: "{{route('item-id-price.fetch')}}",
+				method: "get",
+				data: {
+					item_id: item,
+
+				},
+				success: function(result) {
+                  
+                    $('#rows').html(result);
+                   
+
+
+				}
+			});
+
+		});
 
         $('#add').on('click', function() {
             var rowCount = 0;
@@ -324,7 +344,8 @@
 
                 $('#rows').append(data);
                 $("#selectCat" + rowSS).select2();
-                $('#firstTT' + rowSS).focus();            },
+                $('#firstTT' + rowSS).focus();
+            },
 
             error: function(request, status, error) {
                 console.log(request.responseText);
@@ -356,14 +377,21 @@
         var cat = $("#selectCat" + index);
         var client = $("#selectClient" + index);
 
-        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 'no') {
-            $(cat).css('display', 'inline-block').attr('disabled', false);
+        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 1) {
+            $(client).addClass("chosen-select");
+            $(client).val('').trigger("chosen:updated");
+            $(client).select2();
             $(client).css('display', 'none').attr('disabled', 'disabled');
+            $(cat).css('display', 'inline-block').attr('disabled', false);
 
             $(cat).addClass("chosen-select");
             $(cat).trigger("chosen:updated");
             $(cat).select2();
         } else {
+           
+            $(cat).addClass("chosen-select");
+            $(cat).val('').trigger("chosen:updated");
+            $(cat).select2();
             $(cat).css('display', 'none').attr('disabled', 'disabled');
             $(client).css('display', 'inline-block').attr('disabled', false);
             $(client).addClass("chosen-select");
@@ -392,5 +420,28 @@
         $("#total_item_price" + index).text(price);
     }
     //--------------------
+        // Delete DB row functions
+        function DeletePriceItem(id, index) {
+        debugger;
+        $("#del" + index).modal('hide');
+        $('.modal-backdrop.fade.in').remove();
+        $('.modal-open').css('overflow-y', 'scroll');
+        $.ajax({
+            type: 'GET',
+            url: "{{url('/itemPrice/Remove/Item')}}",
+            data: {
+                id: id,
+
+            },
+            success: function(data) {
+
+                location.reload(true);
+            },
+            error: function(request, status, error) {
+                console.log(request.responseText);
+            }
+        });
+
+    }
 </script>
 @endsection

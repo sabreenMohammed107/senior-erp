@@ -186,7 +186,7 @@
                                     <div class="row res-rtl" style="display: flex ">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
                               <h3 style="text-align:right">اضافة</h3>
-                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة خصم</button>
                                 <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
                                         </div>
                               </div>
@@ -228,6 +228,27 @@
     $(function() {
         debugger;
 
+        $('select[name="item_id"]').on('change', function() {
+			var item = $(this).val();
+
+
+			$.ajax({
+				url: "{{route('item-id-discount.fetch')}}",
+				method: "get",
+				data: {
+					item_id: item,
+
+				},
+				success: function(result) {
+                  
+                    $('#rows').html(result);
+                   
+
+
+				}
+			});
+
+		});
 
         $('#add').on('click', function() {
             var rowCount = 0;
@@ -358,14 +379,19 @@
         var cat = $("#selectCat" + index);
         var client = $("#selectClient" + index);
 
-        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 'no') {
+        if ($('input[type=radio][name=optionsRadios' + index + ']:checked').val() == 1) {
             $(cat).css('display', 'inline-block').attr('disabled', false);
+            $(client).addClass("chosen-select");
+            $(client).val('').trigger("chosen:updated");
+            $(client).select2();
             $(client).css('display', 'none').attr('disabled', 'disabled');
-
             $(cat).addClass("chosen-select");
             $(cat).trigger("chosen:updated");
             $(cat).select2();
         } else {
+            $(cat).addClass("chosen-select");
+            $(cat).val('').trigger("chosen:updated");
+            $(cat).select2();
             $(cat).css('display', 'none').attr('disabled', 'disabled');
             $(client).css('display', 'inline-block').attr('disabled', false);
             $(client).addClass("chosen-select");
@@ -394,5 +420,28 @@
         $("#total_item_price" + index).text(price);
     }
     //--------------------
+     // Delete DB row functions
+     function DeletePriceItem(id, index) {
+        debugger;
+        $("#del" + index).modal('hide');
+        $('.modal-backdrop.fade.in').remove();
+        $('.modal-open').css('overflow-y', 'scroll');
+        $.ajax({
+            type: 'GET',
+            url: "{{url('/itemDiscount/Remove/Item')}}",
+            data: {
+                id: id,
+
+            },
+            success: function(data) {
+
+                location.reload(true);
+            },
+            error: function(request, status, error) {
+                console.log(request.responseText);
+            }
+        });
+
+    }
 </script>
 @endsection

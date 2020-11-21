@@ -163,6 +163,7 @@
                                                         <label class="">إيميل المورد</label>
                                                         <input name="email" readonly value="{{$row->email}}" type="text" class="form-control" placeholder="إيميل المورد">
                                                     </div>
+                                                    
                                                     <div class="form-group">
                                                         <label class="">موقع المورد</label>
                                                         <input name="website" readonly value="{{$row->website}}" type="text" class="form-control" placeholder="موقع المورد">

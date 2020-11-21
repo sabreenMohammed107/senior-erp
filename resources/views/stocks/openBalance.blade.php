@@ -51,12 +51,64 @@
     <div class="container-fluid">
         <form id="formid" action="{{route('store-open-balance')}}" method="POST">
             @csrf
-            <a href="{{route('stocks.index')}}" class="btn btn-primary waves-effect waves-light mg-b-15">إلغاء</a>
-            <button class="btn btn-primary waves-effect waves-light mg-b-15" @if($confirmed==1) disabled @endif type="submit" name="action" value="save">حفظ</button>
-            <button class="btn btn-primary waves-effect waves-light mg-b-15" @if($confirmed==1) disabled @endif type="submit" name="action" value="confirm"> الموافقة</button>
+            <a href="{{route('stocks.index')}}" class="btn btn-primary waves-effect waves-light mg-b-15">رجوع</a>
+          
+           
+            <button data-toggle="modal" data-target="#save" type="button" @if($confirmed==1) disabled @endif class="btn btn-primary waves-effect waves-light mg-b-15">حـفـــــظ</button>
+                        <button data-toggle="modal" data-target="#confi" @if($confirmed==1) disabled @endif type="button" class="btn btn-primary waves-effect waves-light mg-b-15">  تأكيد وغلق</button>
+
+                        <!--save Company-->
+                        <div id="save" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header header-color-modal bg-color-2">
+                                        <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
+                                        <div class="modal-close-area modal-close-df">
+                                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+
+                                        <h4>هل تريد حفظ البيانات ؟ </h4>
+                                    </div>
+                                    <div class="modal-footer info-md">
+                                        <a data-dismiss="modal" href="#">إلغــاء</a>
+
+                                        <button class="btn btn-primary waves-effect waves-light" name="action" value="save" onclick="document.getElementById('formid').submit();">حفظ</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/save Company-->
+            <!--confi Company-->
+            <div id="confi" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header header-color-modal bg-color-2">
+                            <h4 class="modal-title" style="text-align:right">تأكيد حفظ البيانات</h4>
+                            <div class="modal-close-area modal-close-df">
+                                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
+
+                            <h4>هل تريد تأكيد حفظ البيانات ؟ </h4>
+                        </div>
+                        <div class="modal-footer info-md">
+                            <a data-dismiss="modal" href="#">إلغــاء</a>
+                            <button class="btn btn-primary waves-effect waves-light" name="action" value="confirm" onclick="document.getElementById('formid').submit();">حفظ</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/conf Company-->
 
             <input type="hidden" name="primary_stock_id" value="{{$row->id}}">
-            <input type="hidden" name="transUpdate" value="{{$stockTran->id ?? 0}}" >
+            <input type="hidden" name="transUpdate" value="{{$stockTran->id ?? 0}}">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="sparkline13-list">
@@ -116,7 +168,7 @@
                                                         $datez = new DateTime();
                                                         ?>
 
-                                                        <input type="date" name="transaction_date" value="{{date_format($datez,"Y-m-d") }}" class="form-control" placeholder="">
+                                                        <input type="date" @if($confirmed==1) readonly @endif name="transaction_date" value="{{date_format($datez,"Y-m-d") }}" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -128,12 +180,12 @@
 
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mg-b-22">
-                                            <h4 style="text-align:right"> العمليات <i class="fa fa-calculator"></i></h4>
+                                            <h4 style="text-align:right">بيانات الرصيد الإفتتاحي <i class="fa fa-calculator"></i></h4>
 
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <select id="person_id" name="person_id" data-placeholder="Choose a Country..." class="chosen-select">
+                                                        <select id="person_id" name="person_id" @if($confirmed==1) disabled @endif data-placeholder="Choose a Country..." class="chosen-select">
                                                             <option value="">Select</option>
                                                             @foreach($persons as $person)
                                                             <option value="{{$person->id}}">{{$person->code}} / {{$person->name}}</option>
@@ -143,7 +195,7 @@
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                                     <div class="input-mask-title">
-                                                        <label><b> الشخص</b></label>
+                                                        <label><b> المورد</b></label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,14 +208,14 @@
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                                     <div class="input-mask-title">
-                                                        <label><b>إجمالي</b></label>
+                                                        <label><b>إجمالى التكلفة</b></label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <textarea class="form-control" name="transNote" placeholder="">{{$stockTran->notes ?? ''}}</textarea>
+                                                        <textarea class="form-control" @if($confirmed==1) disabled @endif name="transNote" placeholder="">{{$stockTran->notes ?? ''}}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
@@ -176,40 +228,40 @@
                                     </div>
                                 </div>
                                 <div class="row res-rtl" style="display: flex ">
-									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
-										<h3 style="text-align:right">الأصناف</h3>
-										<button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
-										<input type="text" id="myInput" placeholder="إبحث  الصنف ..">
-									</div>
-								</div>
-								<div style="overflow-x:auto;">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
+                                        <h3 style="text-align:right">الأصناف</h3>
+                                        <button id="add" @if($confirmed==1) disabled @endif type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                        <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
+                                    </div>
+                                </div>
+                                <div style="overflow-x:auto;">
 
 
-									<table class="table  table-bordered" id="table" style="direction:rtl;">
-									    <thead>
-                                        <tr>
-                                        <th>Serial</th>
-                                            <th data-field="id">كود البند</th>
-                                            <th>إسم البند</th>
-                                            <th>UOM</th>
-                                            <th data-field="batchDate">تاريخ الصلاحية</th>
-                                            <th data-field="batch">الباتش</th>
-                                            <th>كمية الصنف</th>
-                                            <th>سعر الصنف</th>
-                                            <th>إجمالي السعر</th>
-                                            <th>ملاحظات</th>
-                                            <th>حذف</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="rows">
-                                        @include('stocks.ajaxEdit')
-                                    </tbody>
-                                </table>
+                                    <table class="table  table-bordered" id="table" style="direction:rtl;">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th data-field="id">كود الصنف</th>
+                                                <th>إسم الصنف</th>
+                                                <th>وحده القياس</th>
+                                                <th data-field="batchDate">تاريخ الصلاحية</th>
+                                                <th data-field="batch">الباتش</th>
+                                                <th>كمية الصنف</th>
+                                                <th>سعر الصنف</th>
+                                                <th>إجمالي السعر</th>
+                                                <th>ملاحظات</th>
+                                                <th>حذف</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="rows">
+                                            @include('stocks.ajaxEdit')
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
     </div>
 </div>
@@ -220,7 +272,7 @@
 <script>
     $(function() {
         debugger;
-     
+
 
         $('#add').on('click', function() {
             var rowCount = 0;
@@ -259,10 +311,25 @@
             debugger;
 
         })
+        //filter
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#table > tbody > tr").filter(function() {
+                var row_num = $(this).attr('data-id');
+                $(this).toggle(
+                    $('#item_search' + row_num).text().toLowerCase().indexOf(value) > -1 ||
+                    $('#batch_search' + row_num).text().toLowerCase().indexOf(value) > -1
+
+
+                );
+            });
+
+        });
+
 
     })
 
-//adding row
+    //adding row
     function addRow() {
         var rowCount = 0;
 
@@ -309,14 +376,14 @@
             return false;
         }
     });
-//add row on enter
+    //add row on enter
     function enterForRow(e, index) {
         if (e.keyCode == 13) {
             addRow();
 
         }
     }
-//select item
+    //select item
     function editSelectVal(index) {
         debugger;
 
@@ -335,7 +402,7 @@
             success: function(data) {
                 var result = $.parseJSON(data);
 
-                $("#ar_name" + index + "").text(result[0] );
+                $("#ar_name" + index + "").text(result[0]);
                 $("#uom" + index + "").text(result[1]);
 
                 // $('#select' + index + ' option:selected').val(select_value).trigger('chosen:updated');;
@@ -352,17 +419,17 @@
 
 
     }
-//delete Row
+    //delete Row
     function deleteRow(index) {
 
 
         $('tr[data-id=' + index + ']').remove();
-       
+
         headCalculations(index);
 
     }
 
- 
+
     // headCalculations(index);
     function headCalculations(index) {
         $('.no-records-found').remove();
@@ -387,7 +454,7 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
 
         headCalculations(index);
 
@@ -399,7 +466,7 @@
     function itemPrice(index) {
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
     }
@@ -432,7 +499,7 @@
     //--------------------
 
 
-// custom search
+    // custom search
     function myFunction() {
         // Declare variables
         var input, filter, table, tr, td, i, txtValue;
@@ -457,8 +524,8 @@
 
 
 
-     // Delete DB row functions
-     function DeleteStockItem(id, index) {
+    // Delete DB row functions
+    function DeleteStockItem(id, index) {
         debugger;
         $("#del" + index).modal('hide');
         $('.modal-backdrop.fade.in').remove();

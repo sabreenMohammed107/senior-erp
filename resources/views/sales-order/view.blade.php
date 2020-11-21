@@ -157,7 +157,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control" placeholder="">
+                                                        <input type="text" value="{{$orderObj->status->ar_name ?? ''}}" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -169,7 +169,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control" readonly placeholder="">
+                                                        <input type="text" value="{{$orderObj->decision->ar_name ?? ''}}" readonly class="form-control" readonly placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -182,9 +182,8 @@
 
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
-                                                    <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control" value="{{$orderObj->notes}}" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
-                                                    </div>
+                                                    <textarea rows="4" style="width: 100%;" readonly name="notes" id="notes" placeholder="" >{{$orderObj->notes}}</textarea>
+
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="input-mask-title">
@@ -212,9 +211,10 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                    <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly id="decOrder" value="{{$orderObj->order_description}}" name="order_description" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
-                                                    </div>
+                                                  
+                                                        
+                                                    <textarea id="decOrder" style="width: 100%;" readonly name="order_description" placeholder="" rows="5" >{{$orderObj->order_description}}</textarea>
+                                                 
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="input-mask-title">
@@ -419,16 +419,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-                                                    <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-                                                        <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly class="form-control" placeholder="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-                                                        <div class="input-mask-title">
-                                                            <label><b>سعر التحويل</b></label>
-                                                        </div>
-                                                    </div>
+                                                  
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                                     <div class="row">
@@ -471,9 +462,9 @@
                                         <thead>
                                             <tr>
                                                 <th data-field="index">#</th>
-                                                <th>كود البند</th>
-                                                <th>UOM</th>
-                                                <th>إسم البند</th>
+                                                <th>كود الصنف</th>
+                                                <th>وحده القياس</th>
+                                                <th>إسم الصنف</th>
                                                 <th>الباتش</th>
                                                 <th> رقم الباتش</th>
                                                 <th>تاريخ الصلاحية</th>
@@ -485,7 +476,6 @@
                                                 <th>قيمة الخصم</th>
                                                 <th>السعر النهائي</th>
                                                 <th>ملاحظات</th>
-                                                <th>حذف</th>
                                             </tr>
                                         </thead>
                                         <tbody id="rows">
@@ -505,8 +495,9 @@ $counterrrr = 1;
     <input type="hidden" name="counter" value="{{$counter}}">
     <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$counter}}" value="{{$counter}}"></td>
     <td>
+    {{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}
         <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_order_id{{$counter}}" id="item_order_id{{$counter}}" class="form-control " placeholder="">
-        <input type="text" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="{{$itemo->Item->code ?? ''}}/{{$itemo->Item->ar_name ?? ''}}">
+        <input type="hidden" id="upselect{{$counter}}" name="upselect{{$counter}}" readonly value="">
 
         <span id="item_search{{$counter}}" style="display:none;"></span>
 
@@ -525,7 +516,7 @@ $counterrrr = 1;
 
     }
     ?>
-    <input type="text" id="upselectBatch{{$counter}}" name="upselectBatch{{$counter}}" readonly value="{{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}">
+    {{$data->batch_no ?? ''}} /@if($dateBatch){{ date_format($dateBatch, 'Y-m-d')}}@endif /{{$data->item_total_qty ?? ''}}
 
    <span id="batch_search{{$counter}}" style="display:none;"></span>
     </td>
@@ -538,7 +529,7 @@ $counterrrr = 1;
     <td id="batchqty{{$counter}}" class="batchqty">{{$data->item_total_qty ?? ''}} </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px" oninput="itemQty({{$counter}})" value="{{$itemo->item_qty}}" onfocusout="maxQty({{$counter}})" name="upqty{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
+            <input type="number" readonly style="width: 200px" oninput="itemQty({{$counter}})" value="{{$itemo->item_qty}}" onfocusout="maxQty({{$counter}})" name="upqty{{$counter}}" id="qty{{$counter}}" class="form-control item_quantity" placeholder="">
         </div>
     </td>
 
@@ -566,12 +557,10 @@ $counterrrr = 1;
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="text" style="width: 200px" onkeypress="enterForRow(event,{{$counter}})" name="updetNote{{$counter}}" value="{{$itemo->notes}}" class="form-control detNote" placeholder="ملاحظات">
+            <input type="text" readonly style="width: 200px" onkeypress="enterForRow(event,{{$counter}})" name="updetNote{{$counter}}" value="{{$itemo->notes}}" class="form-control detNote" placeholder="ملاحظات">
         </div>
     </td>
-    <td>
-       
-    </td>
+   
 </tr>
 
 <?php

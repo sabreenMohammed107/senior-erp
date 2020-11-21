@@ -46,7 +46,7 @@ class StockEntryController extends Controller
             'Transaction_Batches'=>$Transaction_Batches,
             'Transaction_Items'=>$Transaction_Items,
             'User'=>$User,
-            'Title'=>'قيود المخزن',
+            'Title'=>'حركات المخزن',
             'Today'=>date('d-m-Y', strtotime(now())),
             'from'=>date('d-m-Y', strtotime($request->from_date)),
             'to'=>date('d-m-Y', strtotime($request->to_date)),

@@ -130,5 +130,6 @@
 
 	$(".chosen-select").trigger("chosen:updated");
 
+
    });
    

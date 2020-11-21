@@ -133,7 +133,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header header-color-modal bg-color-2">
-                                        <h4 class="modal-title" style="text-align:right">حفظ البيانات</h4>
+                                        <h4 class="modal-title" style="text-align:right"> تأكيد وغلق</h4>
                                         <div class="modal-close-area modal-close-df">
                                             <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
                                         </div>
@@ -141,7 +141,7 @@
                                     <div class="modal-body">
                                         <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
 
-                                        <h4>هل تريد حفظ البيانات ؟ </h4>
+                                        <h4>هل تريد تأكيد وغلق أمر البيع  ؟ </h4>
                                     </div>
                                     <div class="modal-footer info-md">
                                         <a data-dismiss="modal" href="#">إلغــاء</a>
@@ -223,7 +223,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control" placeholder="">
+                                                        <input type="text" value="{{$orderObj->status->ar_name ?? ''}}" readonly class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -235,7 +235,7 @@
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" readonly placeholder="">
+                                                        <input type="text" value="{{$orderObj->decision->ar_name ?? ''}}" class="form-control" readonly placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -248,9 +248,8 @@
 
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
-                                                    <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" class="form-control" value="{{$orderObj->notes}}" name="notes" id="notes" placeholder="" style="height:80px;margin-bottom:10px;">
-                                                    </div>
+                                                    <textarea rows="4" style="width: 100%;" name="notes" id="notes" placeholder="" >{{$orderObj->notes}}</textarea>
+
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="input-mask-title">
@@ -278,9 +277,8 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                    <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" id="decOrder" value="{{$orderObj->order_description}}" name="order_description" class="form-control" placeholder="" style="height:80px;margin-bottom:10px;">
-                                                    </div>
+                                                    <textarea id="decOrder" style="width: 100%;"  name="order_description" placeholder="" rows="5" >{{$orderObj->order_description}}</textarea>
+
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <div class="input-mask-title">
@@ -485,16 +483,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-                                                    <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-                                                        <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" value="{{$currencies[0]->name ?? ''}}" readonly class="form-control" placeholder="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-                                                        <div class="input-mask-title">
-                                                            <label><b>سعر التحويل</b></label>
-                                                        </div>
-                                                    </div>
+                                                  
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                                     <div class="row">
@@ -538,9 +527,9 @@
                                         <thead>
                                             <tr>
                                                 <th data-field="index">#</th>
-                                                <th>كود البند</th>
-                                                <th>UOM</th>
-                                                <th>إسم البند</th>
+                                                <th>كود الصنف</th>
+                                                <th>وحده القياس</th>
+                                                <th>إسم الصنف</th>
                                                 <th>الباتش</th>
                                                 <th> رقم الباتش</th>
                                                 <th>تاريخ الصلاحية</th>
@@ -781,7 +770,7 @@
                 $("#batchDate" + index + "").text('');
                 $("#batchqty" + index + "").text('');
                 $("#itemprice" + index + "").attr('value', 0);
-                $("#disval" + index + "").attr('value',0);
+                $("#per" + index + "").attr('value',0);
                 headCalculations(index);
 
             },
@@ -820,12 +809,18 @@
                 $("#batchNum" + index + "").text(result[0]);
                 $("#batchDate" + index + "").text(result[1]);
                 $("#batchqty" + index + "").text(result[2]);
+
                 $("#qty" + index).attr('max', result[2]);
-                $("#itemprice" + index + "").attr('value',result[3]);
-                $("#disval" + index + "").attr('value', result[4]);
 
+                $("#itemprice" + index + "").attr('value', result[3]);
+                $("#per" + index + "").attr('value', result[4]);
+
+
+                //dis 
+
+
+                // disval(index);
                 headCalculations(index);
-
 
             },
             error: function(request, status, error) {
@@ -845,12 +840,15 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-
-        $("#total" + index + "").text(price * qty);
-        var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
+        var cc = disval / (price * qty);
+
+        // $("#per" + index).val(cc.toFixed(3));
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount.toFixed(2));
+        $("#total" + index + "").text((price * qty).toFixed(2));
+
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
         headCalculations(index);
         $("#itemprice" + index).attr('value', price);
     }
@@ -860,11 +858,11 @@
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
         headCalculations(index);
         $("#per" + index).attr('value', per);
     }
@@ -874,11 +872,11 @@
         var qty = $("#qty" + index + "").val();
         var disval = $("#disval" + index + "").val();
 
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var cc = disval / (price * qty);
 
-        $("#per" + index).val(cc);
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#per" + index).val(cc.toFixed(3));
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
         headCalculations(index);
         $("#disval" + index).attr('value', disval);
 
@@ -888,13 +886,17 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-
-        $("#total" + index + "").text(price * qty);
-        var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
         var disval = $("#disval" + index + "").val();
+        var cc = disval / (price * qty);
 
-        $("#final" + index + "").text((price * qty) - disval);
+        var Amount = (price * qty) * per;
+        $("#disval" + index).attr('value', Amount.toFixed(2));
+        // $("#per" + index).val(cc.toFixed(3));
+
+        $("#total" + index + "").text((price * qty).toFixed(2));
+
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
+
         headCalculations(index);
         $("#qty" + index).attr('value', qty);
 
@@ -909,24 +911,26 @@
         var price = $("#itemprice" + index + "").val();
         var qty = $("#qty" + index + "").val();
         var per = $("#per" + index + "").val();
-        if (qty > max) {
-            $('#myModal').modal('show');
-            // alert("هذه الكميه اكبر من اعلى قيمه مجوده فى المخزن سوف يتم ارجاعك لاعلى كميه موجوده ");
-            // alert(qty);
+        
+        if( jQuery('#qty'+ index).val() > ( parseInt(jQuery('#qty'+ index).attr('max')) ) ){
+                // if (qty > max) {
+                    $('#myModal').modal('show');
 
-            $("#qty" + index).val(max);
-        } else {
-            $("#qty" + index).val(qty);
-        }
+                    $("#qty" + index).val(max);
+
+                }
+                 else {
+                    $("#qty" + index).val(qty);
+
+                }
 
 
-
-        $("#total" + index + "").text(price * qty);
+        $("#total" + index + "").text((price * qty).toFixed(2));
         var Amount = (price * qty) * per;
-        $("#disval" + index).attr('value', Amount);
+        $("#disval" + index).attr('value', Amount.toFixed(2));
         var disval = $("#disval" + index + "").val();
 
-        $("#final" + index + "").text((price * qty) - disval);
+        $("#final" + index + "").text(((price * qty) - disval).toFixed(2));
 
         headCalculations(index);
         $("#qty" + index).attr('value', qty);

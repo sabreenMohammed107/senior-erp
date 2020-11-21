@@ -76,7 +76,7 @@
             <div class="modal-footer info-md">
                 <a data-dismiss="modal" href="#">إلغــاء</a>
 
-                <a class="btn btn-primary waves-effect waves-light" href="{{route('customer.index')}}">رجــــــوع</a>
+                <a class="btn btn-primary waves-effect waves-light" href="{{route('supplier.index')}}">رجــــــوع</a>
 
             </div>
         </div>

@@ -50,7 +50,7 @@
         0
     </td>
     <td> <div class="input-mark-inner mg-b-22">
-            <input type="number" readonly step="0.01" style="width: 200px" oninput="disPer({{$rowCount}})" name="per{{$rowCount}}" id="per{{$rowCount}}"   class="form-control item_dis" placeholder="">
+            <input type="number" readonly step="0.001" style="width: 200px" oninput="disPer({{$rowCount}})" name="per{{$rowCount}}" id="per{{$rowCount}}"   class="form-control item_dis" placeholder="">
         </div></td>
     <td><div class="input-mark-inner mg-b-22">
             <input type="number" readonly step="0.01" style="width: 200px" onkeypress="enterForRow(event,{{$rowCount}})" oninput="disval({{$rowCount}})" name="disval{{$rowCount}}" id="disval{{$rowCount}}"  class="form-control item_disval" placeholder="">

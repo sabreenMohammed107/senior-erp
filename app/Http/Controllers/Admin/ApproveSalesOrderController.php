@@ -124,6 +124,7 @@ class ApproveSalesOrderController extends Controller
 
             $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
         }
+          \Log::info(['ordersitem',$orderItems]);
         return view($this->viewName . 'edit', compact('stocks','branch', 'persons', 'orderObj','saleCode','MarktCode', 'currencies', 'items', 'orderItems'));
     }
  /**

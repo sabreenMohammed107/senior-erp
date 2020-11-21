@@ -128,7 +128,7 @@
                     <div class="sparkline13-list">
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd">
-                                <h1 style="direction:rtl">أسعار الاصناف</h1>
+                                <h1 style="direction:rtl">خصم أسعار الاصناف</h1>
                             </div>
                         </div>
                         <div class="sparkline13-graph">
@@ -186,7 +186,7 @@
                              <div class="row res-rtl" style="display: flex ">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow">
                               <h3 style="text-align:right">اضافة</h3>
-                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة صنف</button>
+                                <button id="add" type="button" class="btn btn-primary waves-effect waves-light mg-b-15" style="float: left;">إضافة خصم</button>
                                 <input type="text" id="myInput" placeholder="إبحث  الصنف ..">
                                         </div>
                               </div>

@@ -46,77 +46,62 @@
     <thead>
         <tr>
             <th data-field="state"></th>
-            <th data-field="id">كود المخزن</th>
-            <th>إسم المخزن عربي</th>
-            <th>إسم المخزن إنجليزي</th>
+            <th data-field="id">كود المندوب</th>
+            <th>إسم المندوب عربي</th>
+            <th>إسم المندوب إنجليزي</th>
 
 
-            <th> اخر تاريخ جرد</th>
+            <th> موبايل</th>
 
-            <th>تاريخ الرصيد الإفتتاحي</th>
-            <th>ملاحظات</th>
+            <th>النوع</th>
+          
             <th>الاختيارات</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($stocks as $index=>$stock)
+        @foreach($representatives as $index=>$rep)
         <tr>
             <td></td>
 
             <td>
-                {{$stock->code}}
+                {{$rep->code}}
             </td>
-            <td>{{$stock->ar_name}}</td>
-            <td>{{$stock->en_name}}</td>
+            <td>{{$rep->ar_name}}</td>
+            <td>{{$rep->en_name}}</td>
 
 
-            <td><?php
-                $date = null;
-                $date = date_create($stock->stock_taking_last_date) ?>
-                @if($date) {{ date_format($date,"d-m-Y") }}@endif</td>
-            <td><?php
-
-
-
-                $date = null;
-                $date = date_create($stock->open_balance_date) ?>
-                @if($date) {{ date_format($date,"d-m-Y") }}@endif </td>
-            <td> {{$stock->notes}}</td>
+            <td>{{$rep->mobile}}</td>
+            <td>{{$rep->type->ar_name ?? ''}}</td>
+           
             <td>
                 <div class="product-buttons">
                   
-                    <a href="{{ route('stocks.show',$stock->id)}}"><button title="View" class="pd-setting-ed"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                    <a href="{{ route('stocks.edit',$stock->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                    <?php
-                    $open=count($stock->type()->where('transaction_type_id', 100)->get());
-                   
-                    ?>
-                 @if($open == 1) 
-                    <a  href="{{ route('stocks.openBalance',$stock->id)}}"><button title="open balance" class="pd-setting-ed"><i class="fa fa-book" aria-hidden="true"></i></button></a>
-                   @endif
-                    <button data-toggle="modal" data-target="#del{{$stock->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <a href="{{ route('rep-persons.show',$rep->id)}}"><button title="View" class="pd-setting-ed"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                    <a href="{{ route('rep-persons.edit',$rep->id)}}"><button title="Edit" class="pd-setting-ed"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+               
+                    <button data-toggle="modal" data-target="#del{{$rep->id}}" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 </div>
 
                 <!--Delete Company-->
 
-                <div id="del{{$stock->id}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+                <div id="del{{$rep->id}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header header-color-modal bg-color-2">
-                                <h4 class="modal-title" style="text-align:right">حذف بيانات المخزن</h4>
+                                <h4 class="modal-title" style="text-align:right">حذف بيانات المندوب</h4>
                                 <div class="modal-close-area modal-close-df">
                                     <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
                                 </div>
                             </div>
                             <div class="modal-body">
                                 <span class="educate-icon educate-danger modal-check-pro information-icon-pro"> </span>
-                                <h2>{{$stock->ar_name}}</h2>
+                                <h2>{{$rep->ar_name}}</h2>
 
-                                <h4>هل تريد حذف جميع بيانات المخزن ؟ </h4>
+                                <h4>هل تريد حذف جميع بيانات المندوب ؟ </h4>
                             </div>
                             <div class="modal-footer info-md">
                                 <a data-dismiss="modal" href="#">إلغــاء</a>
-                                <form id="delete" style="display: inline;" action="{{route('stocks.destroy',$stock->id)}}" method="POST">
+                                <form id="delete" style="display: inline;" action="{{route('rep-persons.destroy',$rep->id)}}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit">حذف</button>

@@ -82,7 +82,7 @@ class CustomerController extends Controller
     {
         $personBranch = Branch::where('id', $request->input('branch_id'))->first();
 
-        $increment = Person::latest('code')->first();
+        $increment = Person::where('person_type_id',101)->latest('code')->first();
 
         $increment = ($increment != null) ? intval($increment['code']) : $personBranch['start_code'] - 1;
 
@@ -328,17 +328,10 @@ class CustomerController extends Controller
         }
 
 
-
-
-
-
-        DB::transaction(function () use ($data,  $id) {
-
-
-            $customerUpdate = $this->object::findOrFail($id)->update($data);
+           $this->object::findOrFail($id)->update($data);
 
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-        });
+       
     }
 
     /**
@@ -356,16 +349,28 @@ class CustomerController extends Controller
 
         $file_name = public_path('uploads/persons/' . $file);
 
+ //Transactions check for open_balance
+ $Transactions =Financial_entry::where('trans_type_id', '<>', 102)->where('person_id', '=', $id)->count();
+ //Actions
+ if ($Transactions == 0) {
+     DB::beginTransaction();
+     try {
 
-        //  }
-        try {
-            $row->delete();
-            File::delete($file_name);
-        } catch (QueryException $q) {
+         Financial_entry::where('trans_type_id', '=', 102)->where('person_id', '=', $id)->delete();
 
-            return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
-        }
-        return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+         $row->delete();
+         File::delete($file_name);
+
+         DB::commit();
+         return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+     } catch (QueryException $q) {
+         DB::rollBack();
+         
+         return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
+     }
+ } else {
+     return redirect()->back()->with('flash_danger', 'هذا الجدول مرتبط ببيانات أخرى');
+ }
     }
 
     /**

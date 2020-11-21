@@ -209,6 +209,7 @@ class StocksController extends Controller
 
 
         try {
+            $row->stock()->detach();
             $row->delete();
         } catch (QueryException $q) {
 
@@ -331,6 +332,7 @@ class StocksController extends Controller
         $count = $request->get('rowCountStore');
 
         $details = [];
+        $itemsTableUpdates=[];
         for ($i = 1; $i <= $count; $i++) {
 
 
@@ -348,10 +350,22 @@ class StocksController extends Controller
 
             if ($request->get('qty' . $i)) {
                 array_push($details, $detail);
+                $detailItem = [
+               
+                    'item_id' => $request->get('select' . $i),
+                   
+                    'item_total_qty' => $request->get('qty' . $i),
+                    'item_total_cost' => $request->get('itemprice' . $i),
+                    'total_line_cost' => $request->get('itemprice' . $i) * $request->get('qty' . $i),
+
+                    'average_price' => ($request->get('itemprice' . $i) * $request->get('qty' . $i))/$request->get('qty' . $i),
+                  
+                ];
+                array_push($itemsTableUpdates, $detailItem);
             }
         }
         \Log::info($request->get('rowCountStore'));
-        $counterrrr = $request->get('qqq');
+        $counterrrr = $request->get('counterStore');
 
         $detailsUpdate = [];
 
@@ -370,8 +384,40 @@ class StocksController extends Controller
                 'notes' => $request->get('notesup' . $i),
 
             ];
+            $detailUpdateItem = [
+               
+                'item_id' => $request->get('selectup' . $i),
+               
+                'item_total_qty' => $request->get('qtyup' . $i),
+                'item_total_cost' => $request->get('itempriceup' . $i),
+                'total_line_cost' => $request->get('itempriceup' . $i) * $request->get('qtyup' . $i),
+
+                'average_price' => ($request->get('itempriceup' . $i) * $request->get('qtyup' . $i))/ $request->get('qtyup' . $i),
+              
+            ];
             array_push($detailsUpdate, $detailUpdate);
+            array_push($itemsTableUpdates, $detailUpdateItem);
         }
+        \Log::info(['itemsTableUpdates',$itemsTableUpdates]);
+
+        $table_items = array();
+        $all=0;
+        foreach ($itemsTableUpdates as $item) {
+          
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty']*$item['item_total_cost'];
+
+            } 
+            else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products',$table_items]);
+  
         if ($request->get('action') == 'save') {
 
 
@@ -391,6 +437,7 @@ class StocksController extends Controller
                 \Log::info($trans);
                 $trans->confirmed = 0;
                 $trans->notes = $request->get('transNote');
+                $trans->transaction_type_id = 100;
                 $trans->total_items_price = $request->get('total_items_price');
                 $trans->transaction_date = Carbon::parse($request->get('transaction_date'));
                 $trans->save();
@@ -433,6 +480,7 @@ class StocksController extends Controller
                 ];
                 $trans = Stocks_transaction::where('primary_stock_id', $request->get('primary_stock_id'))->firstOrNew($data);
                 $trans->confirmed = 1;
+                $trans->transaction_type_id = 100;
                 $trans->notes = $request->get('transNote');
                 $trans->total_items_price = $request->get('total_items_price');
                 $trans->transaction_date = Carbon::parse($request->get('transaction_date'));
@@ -462,30 +510,45 @@ class StocksController extends Controller
 
                     Stocks_items_total::create($itmUp);
                 }
+
+                //update item table
+                foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty=$itmUpdate->item_total_qty+$table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost=$itmUpdate->item_total_cost+$table_item['total_line_cost'];
+                    $itmUpdate->average_price=$itmUpdate->item_total_cost/$itmUpdate->item_total_qty;
+                    $itmUpdate->update();
+                }
+            
                 //Finance Entry add 2 records
-                $finaceStock=Stock::where('id',$request->get('primary_stock_id'))->first();
-              
-                $firstFinance = new Financial_entry();
-                $firstFinance->trans_type_id = 102;
-                $firstFinance->entry_serial =1;
-                $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
-                $firstFinance->stock_id = $request->get('primary_stock_id');
-                $firstFinance->branch_id =$finaceStock->branch_id;
-                $firstFinance->credit =$request->get('total_items_price');
-                $firstFinance->debit = 0;
-                $firstFinance->gl_item_id = Financial_subsystem::where('id',106)->first()->gl_item_id ?? '';
-                $firstFinance->save();
-                //second row
+                $finaceStock = Stock::where('id', $request->get('primary_stock_id'))->first();
+
+
+               // second row saving first yahia say it
                 $secondFinance = new Financial_entry();
                 $secondFinance->trans_type_id = 102;
-                $secondFinance->entry_serial =1;
+                $secondFinance->entry_serial = 1;
                 $secondFinance->entry_date = Carbon::parse($request->get('transaction_date'));
                 $secondFinance->stock_id = $request->get('primary_stock_id');
-                $secondFinance->branch_id =$finaceStock->branch_id;
-                $secondFinance->debit =$request->get('total_items_price');
-                $secondFinance->credit =0;
-                $secondFinance->gl_item_id =$finaceStock->gl_item_id;
+                $secondFinance->branch_id = $finaceStock->branch_id;
+                $secondFinance->debit = $request->get('total_items_price');
+                $secondFinance->credit = 0;
+                $secondFinance->gl_item_id = $finaceStock->gl_item_id;
+                $secondFinance->entry_statment = "رصيد إفتتاحى للمخزن";
                 $secondFinance->save();
+
+                //firstFinance row saving second yahia say it
+                $firstFinance = new Financial_entry();
+                $firstFinance->trans_type_id = 102;
+                $firstFinance->entry_serial = 1;
+                $firstFinance->entry_date = Carbon::parse($request->get('transaction_date'));
+                $firstFinance->stock_id = $request->get('primary_stock_id');
+                $firstFinance->branch_id = $finaceStock->branch_id;
+                $firstFinance->credit = $request->get('total_items_price');
+                $firstFinance->debit = 0;
+                $firstFinance->gl_item_id = Financial_subsystem::where('id', 106)->first()->gl_item_id ?? '';
+                $firstFinance->entry_statment = "رصيد إفتتاحى للمخزن";
+                $firstFinance->save();
                 //End Finance Entry
                 $request->session()->flash('flash_success', "تم  إضافة رصيد أفتتاحى بنجاح :");
                 DB::commit();
@@ -496,7 +559,12 @@ class StocksController extends Controller
                 // throw $th;
                 DB::rollback();
 
-                return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+                \Log::info([$e->getCode()]);
+                if ($e->getCode() == 'HY000') {
+                    return redirect()->back()->withInput()->with('flash_danger', "يرجى التأكد من البيانات المالية ");
+                } else {
+                    return redirect()->back()->withInput()->with('flash_danger', $e->getCode());
+                }
             }
         }
     }

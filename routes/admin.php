@@ -43,11 +43,14 @@ Route::namespace('Admin')->group(function () {
   Route::resource('/item-price', 'ItemPricingController');
   Route::get('addRowPrice/fetch', 'ItemPricingController@addRow')->name('addRowPrice.fetch');
   Route::get('/itemPrice/Remove/Item', 'ItemPricingController@DeletePriceItem');
+  Route::get('/item-id-price.fetch', 'ItemPricingController@itemPrices')->name('item-id-price.fetch');
 
   /*********************==item-discount==******************* */
   Route::resource('/item-discount', 'ItemDiscountController');
   Route::get('addRowDiscount/fetch', 'ItemDiscountController@addRow')->name('addRowDiscount.fetch');
   Route::get('/itemDiscount/Remove/Item', 'ItemDiscountController@DeletePriceItem');
+  Route::get('/item-id-discount.fetch', 'ItemDiscountController@itemDiscount')->name('item-id-discount.fetch');
+
 
   /*********************==sales-order==******************* */
   Route::resource('/sales-order', 'SaleOrderController');
@@ -72,7 +75,8 @@ Route::namespace('Admin')->group(function () {
   Route::get('/sale-invoice.creation', 'SaleInvoiceController@creation')->name('sale-invoice.creation');
   Route::get('/dynamicOrderInvoice.fetch', 'SaleInvoiceController@orderInvoice')->name('dynamicOrderInvoice.fetch');
   Route::get('/dynamicCurrencyRate.fetch', 'SaleInvoiceController@dynamicCurrencyRate')->name('dynamicCurrencyRate.fetch');
-
+  
+  Route::get('/dynamicPersonInvoice.fetch', 'SaleInvoiceController@personData')->name('dynamicPersonInvoice.fetch');
 
   Route::get('/dynamicOrderItemsInvoice.fetch', 'SaleInvoiceController@orderItemsInvoice')->name('dynamicOrderItemsInvoice.fetch');
 
@@ -177,4 +181,8 @@ Route::namespace('Admin')->group(function () {
   Route::get('addRow-revert-sale/fetch', 'RevertsSaleController@addRow')->name('addRow-revert-sale.fetch');
   Route::get('/editSelectVal-revert-sale.fetch', 'RevertsSaleController@editSelectVal')->name('editSelectVal-revert-sale.fetch');
   Route::get('/editSelectBatch-revert-sale.fetch', 'RevertsSaleController@editSelectBatch')->name('editSelectBatch-revert-sale.fetch');
+/******************************rep-persons********************************** */
+Route::resource('/rep-persons', 'RepresentativeController');
+Route::get('/branchdetails-rep-persons.fetch', 'RepresentativeController@branchFetch')->name('branchdetails-rep-persons.fetch');
+Route::get('/rep-persons.creation', 'RepresentativeController@creation')->name('rep-persons.creation');
 });

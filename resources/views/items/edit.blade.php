@@ -121,7 +121,7 @@
 										<div class="form-group">
 											<div class="chosen-select-single mg-b-20">
 												<label>كود التصنيف <span  style="color:red"> * </span></label>
-												<select data-placeholder="Choose a Country..." name="item_category_id" class="chosen-select">
+												<select data-placeholder="Choose a Category..." disabled name="item_category_id" class="chosen-select">
 													<option value="">Select</option>
                                                     @foreach($category as $type)
                                                 <option @if ($row->item_category_id == $type->id)
@@ -331,7 +331,7 @@
 									</div>
 								</div>
 								<hr style="border-top: 2px solid rgba(139,0,0,.7);" />
-								<div class="row res-rtl"style="display: flex ;flex-direction: row-reverse ;">
+								<!-- {{--<div class="row res-rtl"style="display: flex ;flex-direction: row-reverse ;">
 									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 										<div class="colorpicker-inner ts-forms mg-b-23">
 											<div class="tsbox">
@@ -370,8 +370,8 @@
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="row mg-b-15 res-rtl"style="display: flex ;flex-direction: row-reverse ;">
+								</div>--}} -->
+								<!-- {{--<div class="row mg-b-15 res-rtl"style="display: flex ;flex-direction: row-reverse ;">
 									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 										<div class="colorpicker-inner ts-forms mg-b-23">
 											<div class="tsbox">
@@ -410,7 +410,7 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div>--}} -->
 								<div class="row">
 									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 										<div class="form-group data-custon-pick" style="text-align:right">

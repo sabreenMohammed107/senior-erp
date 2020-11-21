@@ -81,8 +81,8 @@
                             <a href="{{route('approve-sales-order.index')}}" class="btn btn-primary waves-effect waves-light">إلغاء</a>
                            
 
-                            <button data-toggle="modal"  @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif  data-target="#reject{{$orderObj->id}}" title="Trash" class="pd-setting-ed">عدم الموافقة</button>
-                            <button data-toggle="modal" @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif data-target="#accept{{$orderObj->id}}" title="Trash" class="btn btn-primary"> موافقه</button>
+                            <button data-toggle="modal"  @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif  data-target="#reject{{$orderObj->id}}" title="Trash" class="btn btn-primary waves-effect waves-light">عدم الموافقة</button>
+                            <button data-toggle="modal" @if($orderObj->order_decision_status_id ==101 ||$orderObj->order_decision_status_id ==102) disabled @endif data-target="#accept{{$orderObj->id}}" title="Trash" class="btn btn-primary waves-effect waves-light"> موافقه</button>
 
 
                         </div>
@@ -275,10 +275,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select id="stock_id" disabled name="stock_id" data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
+                                                                <select id="stock_id" disabled name="stock_id" data-placeholder="Choose a stock..." class="chosen-select" tabindex="-1">
                                                                     @foreach($stocks as $stock)
                                                                     <option @if ($orderObj->stock_id == $stock->id)
                                                                         selected="selected"
@@ -302,7 +303,7 @@
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                                     <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
                                                         <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" id="person_name" value="{{$orderObj->person->name ?? ''}}" name="person_name" readonly class="form-control" placeholder="شركة سمارت تك">
+                                                            <input type="text" id="person_name" value="{{$orderObj->person_name ?? ''}}" name="person_name" readonly class="form-control" placeholder=" ">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
@@ -335,25 +336,19 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
-                                                    <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-                                                        <div class="input-mark-inner mg-b-22">
-                                                            <input type="text" readonly class="form-control" placeholder="15.6">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-5 col-md-5 col-sm-3 col-xs-12">
-                                                        <div class="input-mask-title">
-                                                            <label><b>سعر التحويل</b></label>
-                                                        </div>
-                                                    </div>
+                                                   
+                                                    
                                                 </div>
                                                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                                     <div class="row">
                                                         <div class="col-lg-7 col-md-9 col-sm-9 col-xs-12">
                                                             <div class="input-mark-inner mg-b-22">
-                                                                <select disabled data-placeholder="Choose a Country..." class="chosen-select" tabindex="-1">
-                                                                    <option value="">Select</option>
+                                                                <select disabled data-placeholder="Choose a currency..." class="chosen-select" tabindex="-1">
                                                                     @foreach($currencies as $cur)
-                                                                    <option value="{{$cur->id}}">{{$cur->CURRENCY_NAME}}</option>
+                                                                    <option @if ($orderObj->currency_id == $cur->id)
+                                                                        selected="selected"
+                                                                        @endif
+                                                                        value="{{$cur->id}}">{{$cur->name}}</option>
                                                                     @endforeach
                                                                 </select> </div>
                                                         </div>
@@ -464,18 +459,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                                    <div class="input-mark-inner mg-b-22">
-                                                        <input type="text" readonly class="form-control"  placeholder="قيد التنفيذ">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <div class="input-mask-title">
-                                                        <label><b>حالة أمرالبيع</b></label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                         
                                             <div class="row">
                                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                                     <div class="input-mark-inner mg-b-22">
@@ -509,7 +493,11 @@
                                 </div>
 
                                 <h3 style="text-align:right">الأصناف</h3>
-                                <table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true" data-pagination-pre-text="السابق" data-pagination-next-text="التالي" data-show-export="true" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]" data-sort-name="index" data-sort-order="desc" data-search="true" style="direction:rtl" data-toggle="table" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="true" data-show-fullscreen="true" data-show-columns-toggle-all="true">
+                                <table class="table-striped" id="puchasetable" data-locale="ar-SA" data-pagination="true"
+                                 data-pagination-pre-text="السابق" data-pagination-next-text="التالي" 
+                                 data-show-export="true" data-minimum-count-columns="2" data-page-list="[10, 25, 50, 100, all]"
+                                  data-sort-name="index" data-sort-order="asc" data-search="true" style="direction:rtl"
+                                   data-toggle="table" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-resizable="true" data-cookie="true" data-toolbar="#toolbar" data-show-toggle="true" data-show-fullscreen="true" data-show-columns-toggle-all="true">
                                     <thead>
                                         <tr>
                                             <th data-field="state" data-checkbox="false"></th>
@@ -526,6 +514,7 @@
                                             <th>نسبة الخصم</th>
                                             <th>قيمة الخصم</th>
                                             <th>السعر النهائي</th>
+                                            <th> ملاحظات</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rows">

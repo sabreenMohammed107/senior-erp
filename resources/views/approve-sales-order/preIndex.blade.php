@@ -71,7 +71,7 @@
 			<td>{{$order->order_description}}</td>
 			<td>{{$order->order_value}}</td>
 			<td>@if($order->order_decision_status_id==100) لم يتم اتخاز قرار @elseif($order->order_decision_status_id==101) تمت الموافقة @elseif($order->ORDER_DECISION_STATUS_ID==102) لم تتم الموافقه@else @endif</td>
-			<td>فرع القاهرة</td>
+			<td> {{$order->branch->ar_name ?? ''}}</td>
 			<td>
 				<div class="product-buttons">
 					<!-- <button data-toggle="tooltip" title="View" class="pd-setting-ed"><i class="fa fa-file" aria-hidden="true"></i></button> -->

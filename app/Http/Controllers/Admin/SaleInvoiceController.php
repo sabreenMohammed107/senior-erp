@@ -97,11 +97,12 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         // $orders=Order::where('PERSON_ID',)->get();
-        $saleCodes = Representative::where('rep_type_id', 100)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $id)->get();
 
-        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $id)->get();
         $orderItems = [];
-        $orders = [];
+        $invOrders = Invoice::where('branch_id', $id)->where('invoice_type_id', 1)->pluck('order_id');
+        $orders = Order::where('order_status_id', 101)->get();
         return view($this->viewName . 'new', compact('stocks', 'persons', 'orders', 'branch', 'orderItems', 'saleCodes', 'MarktCodes', 'paytypes', 'currencies'));
     }
 
@@ -135,9 +136,11 @@ class SaleInvoiceController extends Controller
         $qunty = 1;
         $disc = 0;
         $financeArray = [];
+        $itemsTableUpdates = [];
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
             $item = Item::where('id',  $request->get('select' . $i))->first();
+            $totBon = ( $request->get('itemprice' . $i) *  $request->get('qty' . $i) +  $request->get('itemprice' . $i) *  $request->get('itemBonas' . $i)) - $request->get('disval' . $i);
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -147,7 +150,8 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('per' . $i),
                 'item_disc_value' => $request->get('disval' . $i),
                 'item_bonus_qty' => $request->get('itemBonas' . $i),
-                'item_vat_value' => $request->get('totalvat1' . $i),
+                'item_vat_value' => $totBon* $request->get('totalvat1' . $i),
+                'item_vat_perc' =>$request->get('totalvat1' . $i),
                 'final_line_cost' => ($request->get('qty' . $i) * $request->get('itemprice' . $i)) - $request->get('disval' . $i),
 
             ];
@@ -181,6 +185,19 @@ class SaleInvoiceController extends Controller
                     ];
                     array_push($financeArray, $finance);
                 }
+
+                //update items table
+                $detailItem = [
+
+                    'item_id' => $detail['item_id'],
+
+                    'item_total_qty' => $detail['item_qty'] + $detail['item_bonus_qty'],
+                    'item_total_cost' => $detail['item_price'],
+                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty'] + $detail['item_bonus_qty']),
+
+
+                ];
+                array_push($itemsTableUpdates, $detailItem);
             }
         }
         //from order item
@@ -194,6 +211,8 @@ class SaleInvoiceController extends Controller
 
             $batch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
             $itemup = Item::where('id',  $request->get('upitemId' . $i))->first();
+            $totBonup = ( $request->get('upitemprice' . $i) *  $request->get('upqty' . $i) +  $request->get('upitemprice' . $i) *  $request->get('upitemBonas' . $i)) - $request->get('uptotalvat1' . $i);
+
             $detailUpdate = [
                 'item_id' => $request->get('upitemId' . $i),
                 'item_qty' => $request->get('upqty' . $i),
@@ -203,7 +222,8 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('upper' . $i),
                 'item_disc_value' => $request->get('updisval' . $i),
                 'item_bonus_qty' => $request->get('upitemBonas' . $i),
-                'item_vat_value' => $request->get('uptotalvat1' . $i),
+                'item_vat_value' => $totBonup* $request->get('uptotalvat1' . $i),
+                'item_vat_perc' =>$request->get('uptotalvat1' . $i),
                 'final_line_cost' => ($request->get('upqty' . $i) * $request->get('upitemprice' . $i)) - $request->get('updisval' . $i),
 
             ];
@@ -237,9 +257,36 @@ class SaleInvoiceController extends Controller
                 ];
                 array_push($financeArray, $finance);
             }
+
+            //update item table
+            $detailUpdateItem = [
+
+                'item_id' => $detailUpdate['item_id'],
+                'item_total_qty' => $detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
+                'item_total_cost' => $detailUpdate['item_price'],
+                'total_line_cost' => $detailUpdate['item_price'] * ($detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty']),
+
+
+            ];
+            array_push($itemsTableUpdates, $detailUpdateItem);
         }
         Log::info($counterrrr);
+        //udate items table array 
+        $table_items = array();
+        $all = 0;
+        foreach ($itemsTableUpdates as $item) {
 
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
+            } else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products', $table_items]);
         // Master
         $personObj = Person::where('id', $request->get('clientPerson'))->first();
         $max = Invoice::where('branch_id', $request->input('branch'))->where('invoice_type_id', 1)->latest('invoice_no')->first();
@@ -259,8 +306,8 @@ class SaleInvoiceController extends Controller
             'invoice_type_id' => 1,
             'notes' => $request->get('notes'),
             'currency_id' => $request->get('currency_id'),
-            'sales_rep_id' => $request->get('salePerson'),
-            'marketing_rep_id' => $request->get('marketPerson'),
+            'sales_rep_id' =>  $personObj->sales_rep_id ?? $request->get('salePerson')  ,
+            'marketing_rep_id' => $personObj->marketing_rep_id ?? $request->get('marketPerson'),
             'invoice_date' => Carbon::parse($request->get('invoice_date')),
             'total_disc_value' => $request->get('total_disc_value'),
             'total_items_price' => $request->get('total_items_price'),
@@ -321,7 +368,14 @@ class SaleInvoiceController extends Controller
                 $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
 
-
+                //update item table qty 
+                //update item table
+                foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty = $itmUpdate->item_total_qty - $table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost = $itmUpdate->item_total_qty * $itmUpdate->average_price;
+                    $itmUpdate->update();
+                }
                 //Make Finance Entry
                 $stockBranch = Stock::where('id',  $data['stock_id'])->first();
                 $maxF = Financial_entry::where('trans_type_id', 110)->where('branch_id', $data['branch_id'])->latest('entry_serial')->first();
@@ -559,11 +613,11 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         $orders = Order::where('id', $invObj->order_id)->first();
-        $saleCodes = Representative::where('rep_type_id', 100)->get();
-        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $invObj->branch_id)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $invObj->branch_id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
-        $saleName = Representative::where('id', $invObj->saleCodes)->first();
-        $marketName = Representative::where('id', $invObj->MarktCodes)->first();
+        $saleName = Representative::where('id', $invObj->sales_rep_id)->first();
+        $marketName = Representative::where('id', $invObj->marketing_rep_id)->first();
         $stockName = Stock::where('id', $invObj->stock_id)->first();
         $orderItems = [];
 
@@ -588,11 +642,11 @@ class SaleInvoiceController extends Controller
         $currencies = Currency::get();
         $paytypes = Sales_invoice_pay_type::get();
         $orders = Order::where('id', $invObj->order_id)->first();
-        $saleCodes = Representative::where('rep_type_id', 100)->get();
-        $MarktCodes = Representative::where('rep_type_id', 101)->get();
+        $saleCodes = Representative::where('rep_type_id', 100)->where('branch_id', $invObj->branch_id)->get();
+        $MarktCodes = Representative::where('rep_type_id', 101)->where('branch_id', $invObj->branch_id)->get();
         $currencyRate = Currency::where('id', $invObj->currency_id)->first();
-        $saleName = Representative::where('id', $invObj->saleCodes)->first();
-        $marketName = Representative::where('id', $invObj->MarktCodes)->first();
+        $saleName = Representative::where('id', $invObj->sales_rep_id)->first();
+        $marketName = Representative::where('id', $invObj->marketing_rep_id)->first();
         $stockName = Stock::where('id', $invObj->stock_id)->first();
         $orderItems = [];
 
@@ -620,9 +674,12 @@ class SaleInvoiceController extends Controller
         $qunty = 1;
         $disc = 0;
         $financeArray = [];
+        $itemsTableUpdates = [];
         for ($i = 1; $i <= $count; $i++) {
             $batch = Stocks_items_total::where('id', $request->get('selectBatch' . $i))->first();
             $item = Item::where('id',  $request->get('select' . $i))->first();
+            $totBon = ( $request->get('itemprice' . $i) *  $request->get('qty' . $i) +  $request->get('itemprice' . $i) *  $request->get('itemBonas' . $i)) - $request->get('disval' . $i);
+
             $detail = [
                 'item_id' => $request->get('select' . $i),
                 'item_qty' => $request->get('qty' . $i),
@@ -632,7 +689,8 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('per' . $i),
                 'item_disc_value' => $request->get('disval' . $i),
                 'item_bonus_qty' => $request->get('itemBonas' . $i),
-                'item_vat_value' => $request->get('totalvat1' . $i),
+                'item_vat_value' => $totBon* $request->get('totalvat1' . $i),
+                'item_vat_perc' =>$request->get('totalvat1' . $i),
                 'final_line_cost' => ($request->get('qty' . $i) * $request->get('itemprice' . $i)) - $request->get('disval' . $i),
 
             ];
@@ -658,7 +716,7 @@ class SaleInvoiceController extends Controller
                     'item_price' => $detail['item_price'],
                     'total_line_cost' => $detail['total_line_cost'],
                     'item_disc_perc' => $detail['item_disc_perc'],
-                    'item_disc_value' =>$detail['item_disc_value'],
+                    'item_disc_value' => $detail['item_disc_value'],
                     'item_bonus_qty' => $detail['item_bonus_qty'],
                     'item_vat_value' => $detail['item_vat_value'],
                     'final_line_cost' => $detail['final_line_cost'],
@@ -672,6 +730,19 @@ class SaleInvoiceController extends Controller
                     ];
                     array_push($financeArray, $finance);
                 }
+
+                //update items table
+                $detailItem = [
+
+                    'item_id' => $detail['item_id'],
+
+                    'item_total_qty' => $detail['item_qty'] + $detail['item_bonus_qty'],
+                    'item_total_cost' => $detail['item_price'],
+                    'total_line_cost' => $detail['item_price'] * ($detail['item_qty'] + $detail['item_bonus_qty']),
+
+
+                ];
+                array_push($itemsTableUpdates, $detailItem);
             }
         }
         //from order item
@@ -685,6 +756,8 @@ class SaleInvoiceController extends Controller
 
             $batch = Stocks_items_total::where('id', $request->get('upitemBatch' . $i))->first();
             $itemup = Item::where('id',  $request->get('upitemId' . $i))->first();
+            $totBonup = ( $request->get('upitemprice' . $i) *  $request->get('upqty' . $i) +  $request->get('upitemprice' . $i) *  $request->get('upitemBonas' . $i)) - $request->get('uptotalvat1' . $i);
+
             $detailUpdate = [
                 'id' => $request->get('item_inv_id' . $i),
                 'item_id' => $request->get('upitemId' . $i),
@@ -695,7 +768,10 @@ class SaleInvoiceController extends Controller
                 'item_disc_perc' =>  $request->get('upper' . $i),
                 'item_disc_value' => $request->get('updisval' . $i),
                 'item_bonus_qty' => $request->get('upitemBonas' . $i),
-                'item_vat_value' => $request->get('uptotalvat1' . $i),
+
+                'item_vat_value' => $totBonup* $request->get('uptotalvat1' . $i),
+                'item_vat_perc' =>$request->get('uptotalvat1' . $i),
+
                 'final_line_cost' => ($request->get('upqty' . $i) * $request->get('upitemprice' . $i)) - $request->get('updisval' . $i),
 
             ];
@@ -721,7 +797,7 @@ class SaleInvoiceController extends Controller
                 'item_price' => $detailUpdate['item_price'],
                 'total_line_cost' => $detailUpdate['total_line_cost'],
                 'item_disc_perc' => $detailUpdate['item_disc_perc'],
-                'item_disc_value' =>$detailUpdate['item_disc_value'],
+                'item_disc_value' => $detailUpdate['item_disc_value'],
                 'item_bonus_qty' => $detailUpdate['item_bonus_qty'],
                 'item_vat_value' => $detailUpdate['item_vat_value'],
                 'final_line_cost' => $detailUpdate['final_line_cost'],
@@ -736,8 +812,34 @@ class SaleInvoiceController extends Controller
                 ];
                 array_push($financeArray, $finance);
             }
+            //update item table
+            $detailUpdateItem = [
+
+                'item_id' => $detailUpdate['item_id'],
+                'item_total_qty' => $detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty'],
+                'item_total_cost' => $detailUpdate['item_price'],
+                'total_line_cost' => $detailUpdate['item_price'] * ($detailUpdate['item_qty'] + $detailUpdate['item_bonus_qty']),
+
+            ];
+            array_push($itemsTableUpdates, $detailUpdateItem);
         }
         Log::info($counterrrr);
+        //udate items table array 
+        $table_items = array();
+        $all = 0;
+        foreach ($itemsTableUpdates as $item) {
+
+            if (isset($table_items[$item['item_id']])) {
+
+                $table_items[$item['item_id']]['item_total_qty'] += $item['item_total_qty'];
+                $table_items[$item['item_id']]['item_total_cost'] += $item['item_total_cost'];
+                $table_items[$item['item_id']]['total_line_cost'] += $item['item_total_qty'] * $item['item_total_cost'];
+            } else {
+                $table_items[$item['item_id']] = $item;
+            }
+        }
+
+        \Log::info(['order_products', $table_items]);
 
         // Master
 
@@ -754,7 +856,7 @@ class SaleInvoiceController extends Controller
             'notes' => $request->get('notes'),
             'currency_id' => $invObj->currency_id,
             'sales_rep_id' => $invObj->sales_rep_id,
-            'marketing_rep_id' => $request->get('marketPerson'),
+            'marketing_rep_id' => $invObj->marketing_rep_id,
             'invoice_date' => Carbon::parse($request->get('invoice_date')),
             'total_disc_value' => $request->get('total_disc_value'),
             'total_items_price' => $request->get('total_items_price'),
@@ -812,6 +914,20 @@ class SaleInvoiceController extends Controller
 
                 $data['stk_transaction_id'] = $stocks_transaction->id;
                 $data['confirmed'] = 1;
+
+                //update item table
+                foreach ($table_items as $table_item) {
+                    $itmUpdate = Item::where('id', $table_item['item_id'])->first();
+                    $itmUpdate->item_total_qty = $itmUpdate->item_total_qty - $table_item['item_total_qty'];
+                    $itmUpdate->item_total_cost = $itmUpdate->item_total_qty * $itmUpdate->average_price;
+                    $itmUpdate->update();
+                }
+
+
+
+
+
+
                 //Make Finance Entry
                 $stockBranch = Stock::where('id',  $data['stock_id'])->first();
                 $maxF = Financial_entry::where('trans_type_id', 110)->where('branch_id', $data['branch_id'])->latest('entry_serial')->first();
@@ -1192,7 +1308,7 @@ class SaleInvoiceController extends Controller
             $output = '<option value="" selected="" disabled="">إختر الباتش</option>';
             foreach ($data as $row) {
                 $date = date_create($row->expired_date);
-                $output .= '<option value="' . $row->id . '">' . $row->batch_no . '-' . date_format($date, "d-m-Y") . '-' . $row->item_total_qty . '</option>';
+                $output .= '<option value="' . $row->id . '">' . $row->batch_no . ' / ' . date_format($date, "d-m-Y") . ' / ' . $row->item_total_qty . '</option>';
             }
 
 
@@ -1240,22 +1356,23 @@ class SaleInvoiceController extends Controller
             //discount
             Log::info($outs);
 
-            $ClientDis = Items_discount::where('item_id', $row->item_id)->where('client_id', $person)->first();
-            if ($personObj) {
-                $CategoryDis = Items_discount::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
-            }
+          //discount
 
-            if ($ClientDis) {
+          $ClientDis = Items_discount::where('item_id', $row->item_id)->where('client_id', $person)->first();
+if($personObj){
+    $CategoryDis = Items_discount::where('item_id', $row->item_id)->where('client_category_id', $personObj->person_category_id)->first();
 
-                $disc = $ClientDis->item_discount_price;
-            } else if ($CategoryDis) {
+}
+          if ($ClientDis) {
 
-                $disc = $CategoryDis->item_discount_price;
-            } else {
+              $disc = $ClientDis->item_discount_price;
+          } elseif ($CategoryDis) {
 
-                $disc = 0;
-            }
+              $disc = $CategoryDis->item_discount_price;
+          } else {
 
+              $disc = 0;
+          }
 
             echo json_encode(array($row->batch_no,  date_format($date, "d-m-Y"), $row->item_total_qty, $outs, $disc));
         }
@@ -1286,6 +1403,40 @@ class SaleInvoiceController extends Controller
             Invoice::where('id', $obo->invoice_id)->update($ss);
 
             Invoice_item::where('id', $req->id)->delete();
+        }
+    }
+    public function personData(Request $req)
+
+    {
+        \Log::info('message');
+        if ($req->ajax()) {
+
+            $select_value = $req->person_id;
+
+
+            $personObj = Person::where('id', $select_value)->first();
+
+            $saleCode = Representative::where('id', $personObj->sales_rep_id)->first();
+
+            $MarktCode = Representative::where('id', $personObj->marketing_rep_id)->first();
+
+
+            // $data = Order::where('person_id', $select_value)->where('confirmed', 1)->get();
+            $invOrders = Invoice::where('branch_id', $personObj->branch_id)->where('invoice_type_id', 1)->whereNotNull('order_id')->pluck('order_id');
+            
+            $data = Order::where('person_id', $select_value)->where('order_decision_status_id', 101)->whereNotIn('id',$invOrders)->get();
+
+
+
+            $output = '<option value="" >إختر أمر البيع</option>';
+            foreach ($data as $row) {
+
+                $output .= '<option value="' . $row->id . '">' . $row->purch_order_no . '-' . $row->person_name . '</option>';
+            }
+
+\Log::info(['sale oreders :', $output]);
+
+            echo json_encode(array($saleCode->code ?? '', $saleCode->ar_name ?? '', $MarktCode->code ?? '', $MarktCode->ar_name ?? '', $personObj->name, $output));
         }
     }
 }

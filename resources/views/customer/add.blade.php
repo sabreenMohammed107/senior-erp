@@ -137,7 +137,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود الفرع</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="branch_id" class="chosen-select branch" tabindex="-1">
+                                                <select data-placeholder="Select ...." name="branch_id" class="chosen-select branch" >
                                                     <option value="">Select</option>
                                                     @foreach($branches as $obj)
                                                     <option value="{{$obj->id}}">{{$obj->ar_name}} - {{$obj->code}}</option>
@@ -149,7 +149,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود تصنيف العميل</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="person_category_id" class="chosen-select" tabindex="-1">
+                                                <select data-placeholder="Select ...." name="person_category_id" class="chosen-select" >
                                                     <option value="">Select</option>
                                                     @foreach($person_categories as $obj)
                                                     <option value="{{$obj->id}}">{{$obj->ar_name}} - {{$obj->code}}</option>
@@ -163,7 +163,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود التسويق</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="marketing_rep_id" id="marketing_rep_id" class="chosen-select" tabindex="-1">
+                                                <select data-placeholder="Select ...." name="marketing_rep_id" id="marketing_rep_id" class="chosen-select" >
                                                    
                                                 </select>
                                             </div>
@@ -171,7 +171,7 @@
                                         <div class="form-group">
                                             <div class="chosen-select-single mg-b-20">
                                                 <label><b>كود المبيعات</b> </label>
-                                                <select data-placeholder="Choose a Country..." name="sales_rep_id" id="sales_rep_id" class="chosen-select" tabindex="-1">
+                                                <select data-placeholder="Select ...." name="sales_rep_id" id="sales_rep_id" class="chosen-select" >
                                                    
                                                 </select>
                                             </div>
@@ -209,7 +209,7 @@
                                                     <div class="form-group">
                                                         <div class="chosen-select-single mg-b-20">
                                                             <label><b>كود البلد</b> </label>
-                                                            <select data-placeholder="Choose a Country..." name="country_id" id="country" class="chosen-select dynamic" tabindex="-1">
+                                                            <select data-placeholder="Select ...." name="country_id" id="country" class="chosen-select dynamic" >
                                                                 <option value="">Select</option>
                                                                 @foreach($countries as $obj)
                                                                 <option value="{{$obj->id}}">{{$obj->ar_name}}</option>
@@ -220,7 +220,7 @@
                                                     <div class="form-group">
                                                         <div class="chosen-select-single mg-b-20">
                                                             <label><b>كود المنطقة</b> </label>
-                                                            <select data-placeholder="Choose a city..." name="city_id" id="city" class="chosen-select city" tabindex="-1">
+                                                            <select data-placeholder="Choose a city..." name="city_id" id="city" class="chosen-select city" >
 
                                                             </select>
                                                         </div>
@@ -228,7 +228,7 @@
                                                     <div class="form-group">
                                                         <div class="chosen-select-single mg-b-20">
                                                             <label><b>كود الموقع</b> </label>
-                                                            <select data-placeholder="Choose a location..." name="location_id" id="location" class="chosen-select" tabindex="-1">
+                                                            <select data-placeholder="Choose a location..." name="location_id" id="location" class="chosen-select" >
 
 
                                                             </select>
@@ -237,7 +237,7 @@
                                                     <div class="form-group">
                                                         <div class="chosen-select-single mg-b-20">
                                                             <label><b>كود العملة</b> </label>
-                                                            <select data-placeholder="Choose a Country..." name="person_currency_id" class="chosen-select" tabindex="-1">
+                                                            <select data-placeholder="Select ...." name="person_currency_id" class="chosen-select" >
                                                                 <option value="">Select</option>
                                                                 @foreach($currencies as $obj)
                                                                 <option value="{{$obj->id}}">{{$obj->name}}</option>
@@ -247,7 +247,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label>
-                                                            <input type="checkbox" name="balance_type" class="i-checks" checked> مدين
+                                                            <input type="checkbox" name="balance_type" class="i-checks" > مدين
                                                         </label>
                                                     </div>
                                                     <div class="form-group">
@@ -258,10 +258,10 @@
                                                         <label class="">تاريخ رصيد العميل</label>
                                                         <input name="person_open_balance_date" type="date" class="form-control" placeholder="تاريخ رصيد العميل" style="text-align:right">
                                                     </div>
-                                                    <div class="form-group">
+                                                    <!-- <div class="form-group">
                                                         <label class="">حد رصيد العميل</label>
                                                         <input name="person_limit_balance" type="text" class="form-control" placeholder="حد رصيد العميل">
-                                                    </div>
+                                                    </div> -->
 
 
 
@@ -269,22 +269,22 @@
 
 
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="direction:rtl">
-                                                    <div class="form-group">
+                                                    <!-- <div class="form-group">
                                                         <label class="">تاريخ أخر فاتورة</label>
                                                         <input name="last_invoice_date" type="date" class="form-control" placeholder="تاريخ أخر فاتورة">
-                                                    </div>
+                                                    </div> -->
                                                     <div class="form-group">
                                                         <label class="">رقم الموبايل</label>
                                                         <input name="phone2" type="text" class="form-control" placeholder="السجل تجاري">
                                                     </div>
 
                                                     <div class="form-group res-mg-t-15">
-                                                        <label class="">إيميل العميل</label>
-                                                        <input name="email" type="text" class="form-control" placeholder="إيميل العميل">
+                                                        <label class="">البريد الإلكترونى </label>
+                                                        <input name="email" type="text" class="form-control" placeholder=" البريد الإالكترونى">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="">موقع العميل</label>
-                                                        <input name="website" type="text" class="form-control" placeholder="موقع العميل">
+                                                        <label class="">الموقع الإالكترونى</label>
+                                                        <input name="website" type="text" class="form-control" placeholder="الموقع الإالكترونى">
                                                     </div>
 
                                                     <div class="form-group">
@@ -296,8 +296,8 @@
                                                         <input name="commercial_register" type="text" class="form-control" placeholder="السجل التجاري">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="">كارت الضرائب</label>
-                                                        <input name="tax_card" type="text" class="form-control" placeholder="كارت الضرائب">
+                                                        <label class="">البطاقة الضريبية</label>
+                                                        <input name="tax_card" type="text" class="form-control" placeholder="البطاقة الضريبية">
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="">مصلحة الضرائب</label>

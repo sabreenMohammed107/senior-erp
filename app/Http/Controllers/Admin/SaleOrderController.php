@@ -152,10 +152,11 @@ class SaleOrderController extends Controller
             'purch_order_no' => $max,
             'person_id' => $request->get('person_id'),
             'stock_id' => $request->get('stock_id'),
-            'person_name' => $request->get('person_name'),
+            'person_name' => $personObj->name ?? '',
             'order_type_id' => 1,
             'order_description' => $request->get('order_description'),
             'order_decision_status_id'=>100,
+            'order_status_id'=>100,
             'currency_id' => $request->get('currency_id'),
             'sales_rep_id' => $saleCode->id ?? 0,
             'marketing_rep_id' => $MarktCode->id ?? 0,
@@ -165,6 +166,7 @@ class SaleOrderController extends Controller
             'total_disc_value' => $request->get('total_disc_value'),
             'total_final_cost' => $request->get('total_final_cost'),
             'branch_id' =>  $request->get('branch'),
+            'notes' =>  $request->get('notes')
         ];
         DB::beginTransaction();
         try {
@@ -333,13 +335,11 @@ class SaleOrderController extends Controller
         }
 
         $data = [
-            'purch_order_no' => 4,
             'person_id' => $request->get('person_id'),
             'stock_id' => $request->get('stock_id'),
             'person_name' => $request->get('person_name'),
             'order_type_id' => 1,
             'order_description' => $request->get('order_description'),
-
             'currency_id' => $request->get('currency_id'),
             'sales_rep_id' => $saleCode->id ?? 0,
             'marketing_rep_id' => $MarktCode->id ?? 0,
@@ -349,6 +349,7 @@ class SaleOrderController extends Controller
             'total_disc_value' => $request->get('total_disc_value'),
             'total_final_cost' => $request->get('total_final_cost'),
             'branch_id' =>  $request->get('branch'),
+            'notes'=> $request->get('notes'),
         ];
         DB::beginTransaction();
         try {
@@ -542,7 +543,7 @@ class SaleOrderController extends Controller
             $output = '<option value="" selected="" disabled="">إختر الباتش</option>';
             foreach ($data as $row) {
                 $date = date_create($row->expired_date);
-                $output .= '<option value="' . $row->id . '">' . $row->batch_no . '-' . date_format($date, "d-m-Y") . '-' . $row->item_total_qty . '</option>';
+                $output .= '<option value="' . $row->id . '">' . $row->batch_no . ' / ' . date_format($date, "d-m-Y") . ' / ' . $row->item_total_qty . '</option>';
             }
 
 

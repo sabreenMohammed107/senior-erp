@@ -67,7 +67,7 @@ class ItemsController extends Controller
     {
         $parentmax = Item_category::where('id', $request->input('item_category_id'))->first();
 
-        $increment = Item::latest('code')->first();
+        $increment = Item::where('item_category_id',$request->input('item_category_id'))->latest('code')->first();
 
         $increment = ($increment != null) ? intval($increment['code']) : $parentmax['code'] . sprintf("%05d", 0);
         $childmax = sprintf("%05d", $increment);
@@ -217,7 +217,7 @@ class ItemsController extends Controller
     public function update(Request $request, $id)
     {
         $data = [
-            'item_category_id' => $request->input('item_category_id'),
+            // 'item_category_id' => $request->input('item_category_id'),
             'ar_name' => $request->input('ar_name'),
             'en_name' => $request->input('en_name'),
             'vat_value' => $request->input('vat_value'),
@@ -381,8 +381,9 @@ class ItemsController extends Controller
     public function search(Request $request)
     {
         $name= $request->input('searchData');
+        $code= $request->input('searchData');
       
-        $rows = Item::where('ar_name', 'like', '%' . $name . '%')->orderBy('created_at', 'Desc')->paginate(8);
+        $rows = Item::where('ar_name', 'like', '%' . $name . '%')->orWhere('code', 'like', '%' . $code . '%')->orderBy('created_at', 'Desc')->paginate(8);
         if ($request->ajax()) {
          return view($this->viewName . 'result', compact('rows'))->render();
         }else{

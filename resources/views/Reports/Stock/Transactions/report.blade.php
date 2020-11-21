@@ -145,21 +145,21 @@ tbody tr td,th{
     </div>
     @foreach ($Transactions as $Entry)
     <div class="from-to" style="margin-top:20px;text-align:right;">
-        <span style="font-size:14px;" dir="rtl"><b>نوع القيد</b> : {{$Entry->type->name}}</span>
+        <span style="font-size:14px;" dir="rtl"><b>نوع الحركة</b> : {{$Entry->type->name}}</span>
     </div>
     <div class="from-to" style="margin:10px 0px;text-align:right;">
-        <span style="font-size:14px;" dir="rtl"><b>نوع القيد</b> : {{date('d-m-Y', strtotime($Entry->transaction_date))}}</span>
+        <span style="font-size:14px;" dir="rtl"><b>تاريخ الحركة</b> : {{date('d-m-Y', strtotime($Entry->transaction_date))}}</span>
     </div>
         <table dir="rtl" style="width:100%;border-collapse: collapse;border:1px solid #000;">
             <thead>
                 <tr style="background-color: #cecece;">
                     <th>اسم الصنف</th>
                     <th>وحدة القياس</th>
-                    <th>رقم الدفعة</th>
+                    <th>رقم الباتش</th>
                     <th>تاريخ انتهاء الصلاحية</th>
                     <th>الكمية</th>
                     <th>اجمالي السعر</th>
-                    <th>كمية اضافية</th>
+                    <th>كمية بونص</th>
                     <th>الملاحظات</th>
                 </tr>
             </thead>
@@ -172,7 +172,7 @@ tbody tr td,th{
                     <td>{{$TransItem->batch_no}}</td>
                     <td>{{date('d-m-Y', strtotime($TransItem->expired_date))}}</td>
                     <td>{{$TransItem->item_qty}}</td>
-                    <td>{{$TransItem->item_qty * $TransItem->item->average_price}}جم</td>
+                    <td>{{$TransItem->item_qty * $TransItem->item->average_price}}</td>
                     <td>{{$TransItem->item_bonus_qty}}</td>
                     <td>{{$TransItem->notes}}</td>
                 </tr>
@@ -190,7 +190,7 @@ tbody tr td,th{
             <tr style="background-color: #cecece;">
                 <th>اسم الصنف</th>
                 <th>وحدة القياس</th>
-                <th>رقم الدفعة</th>
+                <th>رقم الباتش</th>
                 <th>تاريخ انتهاء الصلاحية</th>
                 <th>الكمية</th>
                 <th>اجمالي السعر</th>
@@ -206,7 +206,7 @@ tbody tr td,th{
                     <td>{{$Batch->batch_no}}</td>
                     <td>{{date('d-m-Y', strtotime($Batch->expired_date))}}</td>
                     <td>{{$Batch->item_total_qty}}</td>
-                    <td>{{$Batch->item->average_price*$Batch->item_total_qty}}جم</td>
+                    <td>{{$Batch->item->average_price*$Batch->item_total_qty}}</td>
                     <td>{{$Batch->item_qty_unconfirmed}}</td>
                     <td>{{$Batch->notes}}</td>
                 </tr>
@@ -229,9 +229,9 @@ tbody tr td,th{
                 <tr>
                     <td>{{$Item->ar_name}}</td>
                     <td>{{$Item->item_total_qty}}</td>
-                    <td>{{$Item->total_item_price}}جم</td>
+                    <td>{{$Item->total_item_price}}</td>
                     <td>{{$Item->item_qty_unconfirmed}}</td>
-                    <td>{{$Item->average_price}}جم</td>
+                    <td>{{$Item->average_price}}</td>
                 </tr>
             @endforeach
         </tbody>

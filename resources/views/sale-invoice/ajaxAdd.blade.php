@@ -1,5 +1,5 @@
 <tr data-id="{{$rowCount}}">
-    <input type="hidden" name="rowCount" value="{{$rowCount}}" >
+    <input type="hidden" name="rowCountNew" value="{{$rowCount}}" >
     <td> <input style="width: 30px;" type="number" readonly id="firstTT{{$rowCount}}"  value="{{$rowCount}}" ></td>
     <td>
    
@@ -14,7 +14,7 @@
 
     </td>
     <td id="uom{{$rowCount}}" class="uom">حبة</td>
-    <td id="ar_name{{$rowCount}}"  class="ar_name">إسم البند</td>
+    <td id="ar_name{{$rowCount}}"  class="ar_name">إسم الصنف</td>
     <td>
         <select id="selectBatch{{$rowCount}}" style="width: 200px" name="selectBatch{{$rowCount}}" qty onchange="editSelectBatch({{$rowCount}})" data-placeholder="Choose a Country..." class="chosen-select" >
 
@@ -37,7 +37,7 @@
     </td>
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number" style="width: 200px"  min="0" value="0"  onfocusout="maxQty({{$rowCount}})"  name="itemBonas{{$rowCount}}" id="itemBonas{{$rowCount}}" class="form-control " placeholder="">
+            <input type="number" style="width: 200px"  min="0" value="0" oninput="itemBons({{$rowCount}})"  onfocusout="maxQty({{$rowCount}})"  name="itemBonas{{$rowCount}}" id="itemBonas{{$rowCount}}" class="form-control " placeholder="">
         </div>
     </td>
     <td>
@@ -50,7 +50,7 @@
         0
     </td>
     <td> <div class="input-mark-inner mg-b-22">
-            <input type="number" step="0.01" style="width: 200px" oninput="disPer({{$rowCount}})" name="per{{$rowCount}}" id="per{{$rowCount}}"   class="form-control item_dis" placeholder="">
+            <input type="number" step="0.001" style="width: 200px" oninput="disPer({{$rowCount}})" name="per{{$rowCount}}" id="per{{$rowCount}}"   class="form-control item_dis" placeholder="">
         </div></td>
     <td><div class="input-mark-inner mg-b-22">
             <input type="number" step="0.01" style="width: 200px" onkeypress="enterForRow(event,{{$rowCount}})" oninput="disval({{$rowCount}})" name="disval{{$rowCount}}" id="disval{{$rowCount}}"  class="form-control item_disval" placeholder="">
@@ -58,8 +58,9 @@
         <td id="final{{$rowCount}}" class="total_item_final">
         0
     </td>
+    <input type="hidden" id="totalvat1{{$rowCount}}" value="0" name="totalvat1{{$rowCount}}"> 
     <td id="totalvat{{$rowCount}}" class="input-mark-inner mg-b-22 vat_tax_value">
-    <input type="hidden" value="" name="totalvat1{{$rowCount}}"> 
+ 
      0
     </td>
     <td  id="totalcit{{$rowCount}}"  class="input-mark-inner mg-b-22 comm_industr_tax">
