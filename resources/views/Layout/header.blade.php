@@ -175,8 +175,8 @@
 												<div role="menu" class="dropdown-menu animated zoomIn">
 													<a href="{{url('/Reports/Financial/Transactions/Create')}}" class="dropdown-item">تقرير القيود المحاسبية</a>
 													<a href="{{url('/Reports/Stock/Transactions/Create')}}" class="dropdown-item">تقرير حركة المخزن</a>
-													<a href="#" class="dropdown-item">التقارير</a>
-													<a href="#" class="dropdown-item">التقارير</a>
+													<a href="{{url('/Reports/CashBox/Account/Create')}}" class="dropdown-item">تقرير حركة الخزينة</a>
+													<a href="{{url('Reports/Supplier/Account/Create')}}" class="dropdown-item">تقرير حركة المورد</a>
 													<a href="#" class="dropdown-item">التقارير</a>
 												</div>
 											</li>
@@ -335,8 +335,8 @@
 										<ul class="collapse dropdown-header-top">
 											<li><a href="{{url('/Reports/Financial/Transactions/Create')}}" class="dropdown-item">تقرير القيود المحاسبية</a></li>
 											<li><a href="{{url('/Reports/Stock/Transactions/Create')}}" class="dropdown-item">تقرير حركة المخزن</a></li>
-											<li><a href="#" class="dropdown-item">التقارير</a></li>
-											<li><a href="#" class="dropdown-item">التقارير</a></li>
+											<li><a href="{{url('/Reports/CashBox/Account/Create')}}" class="dropdown-item">تقرير حركة الخزينة</a></li>
+											<li><a href="{{url('Reports/Supplier/Account/Create')}}" class="dropdown-item">تقرير حركة المورد</a></li>
 											<li><a href="#" class="dropdown-item">التقارير</a></li>
 										</ul>
 									</li>
